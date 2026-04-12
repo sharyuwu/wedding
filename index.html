@@ -17,8 +17,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body, html {
-            height: 100%;
-            width: 100%;
+            height: 100%; width: 100%;
             background-color: #fdfdfd;
             overflow: hidden;
             font-family: var(--handwriting);
@@ -27,10 +26,8 @@
         /* 背景底層內容 */
         .content-layer {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -40,44 +37,32 @@
             z-index: 1;
             background-repeat: no-repeat;
             background-position: center center;
-            
-            /* --- 圖片設定為 contain 不裁切 --- */
-            background-size: contain; 
-            background-image: url('main-background-new.png');
+            background-size: contain; /* 確保圖片不被切到 */
+            background-image: url('main-background.png');
         }
 
-        /* --- 手機版背景與樣式修正 (768px) --- */
+        /* 手機版背景切換 */
         @media screen and (max-width: 768px) {
             .content-layer {
-                background-image: url('main-background-phone-new.png') !important;
+                background-image: url('main-background-phone.png') !important;
                 background-size: contain !important;
-                background-position: center center !important;
             }
-            
-            /* 手機版文字大小與位置微調 */
-            .welcome-text { 
-                font-size: 2.8rem !important; 
-                margin-top: -60px !important; /* 手機版通常不需要往上移那麼多，可自行調整 */
-            }
-            .date-text { font-size: 1.2rem; margin-bottom: 40px; }
-            .names { font-size: 1.8rem; }
-            .enter-button { padding: 10px 40px; margin-top: 40px; }
+            .welcome-text { font-size: 2.8rem !important; margin-top: -60px !important; }
+            .date-text { font-size: 1.2rem; margin-bottom: 30px; }
+            .names { font-size: 1.8rem; margin-top: 50px !important; }
         }
 
         /* 紗簾動畫 */
         .curtain-wrapper {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: 100;
             pointer-events: none;
             display: flex;
         }
         .curtain {
-            flex: 1;
-            height: 100%;
+            flex: 1; height: 100%;
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -87,58 +72,63 @@
         .curtain.right { transform: translateX(0); }
         .opened .curtain.left { transform: translateX(-100%); }
         .opened .curtain.right { transform: translateX(100%); }
-        
         .seal-wrapper {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             z-index: 101;
             transition: opacity 1.2s ease;
         }
         .opened .seal-wrapper { opacity: 0; }
         .seal {
-            width: 80px;
-            height: 80px;
+            width: 80px; height: 80px;
             background: var(--accent-gold);
             border-radius: 50%;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.8rem;
+            justify-content: center; align-items: center;
+            color: white; font-size: 1.8rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        /* --- 歡迎標題樣式 (同步你的最新設定) --- */
+        /* --- 文字樣式與位置 --- */
+
         .welcome-text {
             font-weight: 600;
             font-size: 3.8rem;
             color: var(--text-color);
-            margin-top: -80px; /* 向上移動 100px */
+            margin-top: -100px; /* 向上移動 100px */
             margin-bottom: 10px;
         }
 
         .date-text {
             font-size: 1.5rem;
             letter-spacing: 5px;
-            margin-bottom: 80px;
+            margin-bottom: 40px;
         }
 
         .names {
             font-weight: 600;
             font-size: 2.2rem;
-            margin-top: 150px;
+            margin-top: 80px; /* 名字下移 */
         }
 
+        /* 動態文字容器 */
         .tagline {
-            font-size: 1.3rem;
-            letter-spacing: 3px;
-            margin-top: 8px;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            margin-top: 15px;
+            color: #5d6d7e;
+            min-height: 1.6em; /* 固定高度防止跳動 */
+            opacity: 0; /* 預設隱藏 */
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .tagline.visible {
+            opacity: 1; /* 顯示狀態 */
         }
 
         .enter-button {
-            margin-top: 60px;
+            margin-top: 50px;
             padding: 12px 50px;
             background: white;
             border: 1px solid var(--accent-gold);
@@ -166,15 +156,51 @@
     <div class="content-layer">
         <h1 class="welcome-text">歡迎來參加</h1>
         <div class="date-text">10 - 10 - 2026</div>
+        
         <div class="names">凱翔與禹萱</div>
-        <div class="tagline">我們要結婚了！</div>
+        
+        <div id="dynamicTagline" class="tagline"></div>
+
         <a href="schedule.html" class="enter-button">開啟邀請函</a>
     </div>
 
     <script>
+        // 設定動態文字內容
+        const phrases = [
+            "我們要結婚了！",
+            "我們的婚禮分為下午與晚上場",
+            "『下午是教堂婚禮』，『晚上是兄弟飯店喜宴』",
+            "為了統計人數，請幫忙選擇以下選項",
+            "『只參加下午場』『只參加晚上場』『下午晚上都參加』",
+            "我們當天見，感謝大家的祝福"
+        ];
+
+        let currentIndex = 0;
+        const taglineEl = document.getElementById('dynamicTagline');
+
+        function updateTagline() {
+            // 1. 先淡出
+            taglineEl.classList.remove('visible');
+            
+            setTimeout(() => {
+                // 2. 更換文字
+                taglineEl.innerText = phrases[currentIndex];
+                // 3. 再淡入
+                taglineEl.classList.add('visible');
+                
+                // 4. 計算下一句索引
+                currentIndex = (currentIndex + 1) % phrases.length;
+            }, 800); // 這裡的 800ms 要配合 CSS 的 transition 時間
+        }
+
         window.onload = function() {
+            // 1 秒後開啟紗簾
             setTimeout(function() {
                 document.body.classList.add('opened');
+                
+                // 紗簾開啟後啟動文字輪播
+                updateTagline(); // 顯示第一句
+                setInterval(updateTagline, 3500); // 每 3.5 秒跑一次流程 (2秒顯示 + 1.5秒切換動畫)
             }, 1000);
         };
     </script>
