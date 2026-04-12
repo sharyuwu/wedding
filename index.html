@@ -127,7 +127,7 @@
             font-size: 3.8rem;
             color: var(--text-color);
             margin-top: 0px;
-            margin-bottom: 10px;
+            margin-bottom: 0px;
         }
 
         .date-text {
@@ -209,7 +209,12 @@
             
             .tagline {
                 font-size: 1.0rem;
-        }
+            }
+            .enter-button {
+        font-size: 1.0rem;       /* 稍微放大字體，讓手機更好點擊 */
+        width: 50%;              /* 如果希望按鈕變成滿版寬度，可以取消註解這行 */
+        max-width: 300px;        /* 限制最大寬度，避免在寬螢幕手機上太長 */
+    }
         }
     </style>
 </head>
