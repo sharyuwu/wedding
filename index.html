@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="format-detection" content="telephone=no">
-    
+
     <title>凱翔 & 禹萱 Wedding</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Noto+Serif+TC:wght@300;500;700&display=swap" rel="stylesheet">
@@ -202,22 +202,23 @@
             }
 
             .names {
-                font-size: 1.0rem;
+                font-size: 1.5rem;
                 padding-top: 200px !important;
                 margin-top: 0 !important;
             }
-            
+
             .tagline {
                 font-size: 1.0rem;
             }
+
             .enter-button {
-        font-size: 1.0rem;       /* 稍微放大字體，讓手機更好點擊 */
-        padding: 8px 10px;      /* 前者是上下高度，後者是左右寬度 */
-        margin-top: 20px;        /* 調整按鈕與上方動態文字的距離 */
-        border-radius: 25px;     /* 如果想改變圓角弧度也可以在這裡調 */
-        width: 80%;              /* 如果希望按鈕變成滿版寬度，可以取消註解這行 */
-        max-width: 300px;        /* 限制最大寬度，避免在寬螢幕手機上太長 */
-    }
+                font-size: 1.0rem;
+                padding: 8px 10px; /* 扁平化處理 */
+                margin-top: 20px;
+                border-radius: 25px;
+                width: 80%;
+                max-width: 300px;
+            }
         }
     </style>
 </head>
@@ -271,14 +272,14 @@
                 // 3. 再淡入
                 taglineEl.classList.add('visible');
 
-                // 4. 檢查是否到達最後一句 (第 6 句，索引 5)
+                // 4. 檢查是否到達最後一句，若到達則停止計時器
                 if (currentIndex === phrases.length - 1) {
                     clearInterval(taglineInterval);
                     console.log("已到達最後一句，動畫停止。");
                 } else {
                     currentIndex++;
                 }
-            }, 800);
+            }, 800); // 配合 CSS transition 的時間
         }
 
         window.onload = function() {
@@ -287,8 +288,8 @@
                 document.body.classList.add('opened');
 
                 // 啟動文字輪播
-                updateTagline();
-                taglineInterval = setInterval(updateTagline, 5000); // 每 5 秒切換
+                updateTagline(); // 顯示第一句
+                taglineInterval = setInterval(updateTagline, 5000); // 每 5 秒切換一次流程
             }, 1000);
         };
     </script>
