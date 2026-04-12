@@ -8,102 +8,194 @@
     <style>
         :root {
             --text-color: #2c3e50;
-            --accent-color: #5d6d7e;
+            --accent-gold: #a67c52;
+            --bg-paper: #fdfdfd;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body, html {
             height: 100%;
-            background-color: #fdfdfd; /* 配合圖片底色 */
+            background-color: #e0e0e0; /* 底色，模擬桌面感 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1500px; /* 3D 透視深度 */
+            overflow: hidden;
             font-family: 'Noto Serif TC', serif;
         }
 
-        /* 主容器：確保內容垂直水平置中 */
-        .main-container {
+        /* 卡片容器 */
+        .card {
+            width: 90vw;
+            max-width: 450px;
+            height: 80vh;
+            max-height: 650px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 當加入 .open 類別時翻開 */
+        .card.open {
+            transform: rotateY(0deg); /* 這裡控制整體卡片位置 */
+        }
+
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backface-visibility: hidden;
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 封面 (正面) */
+        .cover {
+            background-color: #fffaf5;
+            z-index: 2;
+            transform-origin: left;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            width: 100%;
-            position: relative;
-            background: url('main-background.png') no-repeat center center/contain; 
-            /* 備註：請將你的附圖命名為 main-background.png 上傳到 GitHub */
+            border: 1px solid #eee;
+            padding: 20px;
+        }
+
+        /* 封面裝飾圖案 */
+        .cover::after {
+            content: "Wedding Invitation";
+            font-family: serif;
+            letter-spacing: 5px;
+            font-size: 0.8rem;
+            margin-top: 20px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+        }
+
+        .cover-seal {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(166,124,82,0.3);
+        }
+
+        /* 內頁 (你提供的水彩主視覺) */
+        .inner-page {
+            background: white url('main-background.png') no-repeat center center/cover;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             padding: 40px 20px;
             text-align: center;
         }
 
-        /* 歡迎標題 (手寫風) */
+        /* 翻開後的封面背面 */
+        .cover-back {
+            background-color: #f9f9f9;
+            transform: rotateY(-180deg);
+            z-index: 0;
+            transform-origin: left;
+        }
+
+        /* 翻頁動畫觸發 */
+        .card.opened .cover {
+            transform: rotateY(-130deg); /* 向左翻開 130 度 */
+        }
+        .card.opened .cover-back {
+            transform: rotateY(-130deg);
+        }
+
+        /* 內容樣式 */
         .welcome-text {
             font-family: 'Ma Shan Zheng', cursive;
-            font-size: 4rem;
+            font-size: 3.5rem;
             color: var(--text-color);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        /* 日期 */
         .date-text {
-            font-size: 1.5rem;
-            letter-spacing: 5px;
-            margin-bottom: 30px;
-            font-weight: 300;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            margin-bottom: 100px; /* 留出空間給插圖 */
         }
 
-        /* 名字與標語 */
         .names {
             font-family: 'Ma Shan Zheng', cursive;
             font-size: 2rem;
-            margin-top: 20px;
         }
 
         .tagline {
-            font-size: 1.4rem;
-            letter-spacing: 3px;
-            margin-top: 10px;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-top: 8px;
         }
 
-        /* 按鈕預留位置 (稍後你會補充需求，我先做個簡單的跳轉按鈕) */
         .enter-button {
-            margin-top: 50px;
-            padding: 12px 40px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid var(--accent-color);
+            margin-top: 40px;
+            padding: 10px 35px;
+            background: white;
+            border: 1px solid var(--accent-gold);
             color: var(--text-color);
             text-decoration: none;
-            border-radius: 30px;
-            font-size: 1.1rem;
+            border-radius: 25px;
+            font-size: 1rem;
             transition: 0.3s;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            z-index: 10;
         }
 
         .enter-button:hover {
-            background-color: var(--accent-color);
+            background: var(--accent-gold);
             color: white;
-            letter-spacing: 2px;
         }
 
-        /* 響應式調整 */
         @media (max-width: 600px) {
             .welcome-text { font-size: 2.8rem; }
-            .date-text { font-size: 1.2rem; }
-            .main-container { background-size: cover; } /* 手機端圖片鋪滿 */
+            .card { height: 75vh; }
         }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <h1 class="welcome-text">歡迎來參加</h1>
-        
-        <div class="date-text">10 - 10 - 2026</div>
+    <div class="card" id="weddingCard">
+        <div class="page cover-back"></div>
 
-        <div class="names">凱翔與禹萱</div>
-        <div class="tagline">我們要結婚了！</div>
+        <div class="page cover">
+            <div class="cover-seal">囍</div>
+            <p style="margin-top: 30px; font-weight: 300;">Kai-Xiang & Yu-Shiuan</p>
+        </div>
 
-        <a href="schedule" class="enter-button">點擊進入</a>
+        <div class="page inner-page">
+            <h1 class="welcome-text">歡迎來參加</h1>
+            <div class="date-text">10 - 10 - 2026</div>
+            
+            <div class="names">凱翔與禹萱</div>
+            <div class="tagline">我們要結婚了！</div>
+
+            <a href="schedule.html" class="enter-button">開啟邀請函</a>
+        </div>
     </div>
+
+    <script>
+        // 頁面載入 0.8 秒後自動翻開卡片
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('weddingCard').classList.add('opened');
+            }, 800);
+        };
+    </script>
 
 </body>
 </html>
