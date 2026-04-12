@@ -107,9 +107,24 @@
         }
 
         .names {
-            font-weight: 600;
-            font-size: 2.2rem;
-            margin-top: 80px; /* 名字下移 */
+        font-weight: 600;
+        font-size: 2.2rem;
+        margin-top: 150px; /* 從 80px 增加到 150px，數字越大越靠下 */
+        }
+
+        /* 手機版也要同步調整 */
+        @media screen and (max-width: 768px) {
+        .content-layer {
+        background-image: url('main-background-phone-new.png') !important;
+        background-size: contain !important;
+        }
+        .welcome-text { font-size: 2.8rem !important; margin-top: -60px !important; }
+        .date-text { font-size: 1.2rem; margin-bottom: 30px; }
+    
+        .names { 
+        font-size: 1.8rem; 
+        margin-top: 120px !important; /* 手機版也從 50px 增加到 120px */
+        }
         }
 
         /* 動態文字容器 */
@@ -117,7 +132,7 @@
             font-size: 1.4rem;
             letter-spacing: 2px;
             margin-top: 15px;
-            color: #5d6d7e;
+            color: var(--text-color);
             min-height: 1.6em; /* 固定高度防止跳動 */
             opacity: 0; /* 預設隱藏 */
             transition: opacity 0.8s ease-in-out;
