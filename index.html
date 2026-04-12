@@ -164,45 +164,55 @@
         <a href="schedule.html" class="enter-button">開啟邀請函</a>
     </div>
 
-    <script>
-        // 設定動態文字內容
-        const phrases = [
-            "我們要結婚了！",
-            "我們的婚禮分為下午與晚上場",
-            "『下午是教堂婚禮』，『晚上是兄弟飯店喜宴』",
-            "為了統計人數，請幫忙選擇以下選項",
-            "『只參加下午場』『只參加晚上場』『下午晚上都參加』",
-            "我們當天見，感謝大家的祝福"
-        ];
+  
+  <script>
+    // 設定動態文字內容
+    const phrases = [
+        "我們要結婚了！",
+        "我們的婚禮分為下午與晚上場",
+        "『下午是教堂婚禮』，『晚上是兄弟飯店喜宴』",
+        "為了統計人數，請幫忙選擇以下選項",
+        "『只參加下午場』『只參加晚上場』『下午晚上都參加』",
+        "我們當天見，感謝大家的祝福" // 第 6 句話 (索引為 5)
+    ];
 
-        let currentIndex = 0;
-        const taglineEl = document.getElementById('dynamicTagline');
+    let currentIndex = 0;
+    const taglineEl = document.getElementById('dynamicTagline');
+    let taglineInterval; // 用來存放計時器
 
-        function updateTagline() {
-            // 1. 先淡出
-            taglineEl.classList.remove('visible');
+    function updateTagline() {
+        // 1. 先淡出
+        taglineEl.classList.remove('visible');
+        
+        setTimeout(() => {
+            // 2. 更換文字
+            taglineEl.innerText = phrases[currentIndex];
             
-            setTimeout(() => {
-                // 2. 更換文字
-                taglineEl.innerText = phrases[currentIndex];
-                // 3. 再淡入
-                taglineEl.classList.add('visible');
-                
-                // 4. 計算下一句索引
-                currentIndex = (currentIndex + 1) % phrases.length;
-            }, 800); // 這裡的 800ms 要配合 CSS 的 transition 時間
-        }
+            // 3. 再淡入
+            taglineEl.classList.add('visible');
+            
+            // 4. 檢查是否已經顯示到最後一句（第 6 句，索引為 5）
+            if (currentIndex === phrases.length - 1) {
+                clearInterval(taglineInterval); // 停止計時器，畫面會停在最後一句
+                console.log("已到達最後一句，動畫停止。");
+            } else {
+                currentIndex++; // 否則繼續增加索引
+            }
+        }, 800); // 配合 CSS transition 的時間
+    }
 
-        window.onload = function() {
-            // 1 秒後開啟紗簾
-            setTimeout(function() {
-                document.body.classList.add('opened');
-                
-                // 紗簾開啟後啟動文字輪播
-                updateTagline(); // 顯示第一句
-                setInterval(updateTagline, 3500); // 每 3.5 秒跑一次流程 (2秒顯示 + 1.5秒切換動畫)
-            }, 1000);
-        };
-    </script>
+    window.onload = function() {
+        // 1 秒後開啟紗簾
+        setTimeout(function() {
+            document.body.classList.add('opened');
+            
+            // 紗簾開啟後啟動第一句話
+            updateTagline(); 
+
+            // 設定每 5 秒執行一次切換流程
+            taglineInterval = setInterval(updateTagline, 5000); 
+        }, 1000);
+    };
+</script>
 </body>
 </html>
