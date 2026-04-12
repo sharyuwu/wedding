@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>凱翔 & 禹萱 Wedding</title>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chenyuluoyan-font@1.0.0/dist/chenyuluoyan.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --text-color: #2c3e50;
             --accent-gold: #a67c52;
+            /* 定義字體變數方便修改 */
+            --handwriting: "Chenyuluoyan", "Noto Serif TC", serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -18,17 +23,18 @@
             width: 100%;
             background-color: #fdfdfd;
             overflow: hidden;
-            font-family: 'Noto Serif TC', serif;
+            font-family: var(--handwriting);
         }
 
-        /* 背景底層內容 (邀請函主視覺) */
+        /* 背景底層內容 */
         .content-layer {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: white url('main-background.png') no-repeat center center/contain;
+            /* 這裡你可以依照需求改為 contain 或 cover */
+            background: white url('main-background.png') no-repeat center center/cover;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -46,54 +52,35 @@
             width: 100%;
             height: 100%;
             z-index: 100;
-            pointer-events: none; /* 防止遮擋點擊 */
+            pointer-events: none;
             display: flex;
         }
 
-        /* 紗簾本體 (左、右兩片) */
         .curtain {
             flex: 1;
             height: 100%;
-            background: rgba(255, 255, 255, 0.6); /* 半透明白色 */
-            backdrop-filter: blur(8px); /* 磨砂玻璃/薄紗感 */
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); /* 緩慢開簾 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
         }
 
-        .curtain.left {
-            transform: translateX(0);
-            border-right: 1px solid rgba(255,255,255,0.3);
-        }
+        .curtain.left { transform: translateX(0); border-right: 1px solid rgba(255,255,255,0.1); }
+        .curtain.right { transform: translateX(0); }
 
-        .curtain.right {
-            transform: translateX(0);
-        }
+        .opened .curtain.left { transform: translateX(-100%); }
+        .opened .curtain.right { transform: translateX(100%); }
 
-        /* 開啟動畫狀態 */
-        .opened .curtain.left {
-            transform: translateX(-100%);
-        }
-
-        .opened .curtain.right {
-            transform: translateX(100%);
-        }
-
-        /* 紗簾中心的小裝飾 (例如 囍 字) */
         .seal-wrapper {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 101;
-            transition: opacity 1s ease;
+            transition: opacity 1.2s ease;
         }
 
-        .opened .seal-wrapper {
-            opacity: 0; /* 開簾時印記淡出 */
-        }
+        .opened .seal-wrapper { opacity: 0; }
 
         .seal {
             width: 80px;
@@ -108,30 +95,30 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        /* 文字與按鈕樣式 */
+        /* --- 文字與按鈕位置設定區 --- */
+
         .welcome-text {
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 4.5rem;
+            font-size: 4rem; /* 辰宇落雁體稍微偏小，建議設大一點 */
             color: var(--text-color);
-            margin-top: -10px; /* 負值向上移動，正值向下移動 */
+            margin-top: 0px; /* 你可以在這裡調整位置 */
             margin-bottom: 10px;
         }
 
         .date-text {
             font-size: 1.6rem;
-            letter-spacing: 6px;
-            margin-bottom: 80px;
+            letter-spacing: 4px;
+            margin-bottom: 80px; /* 你可以在這裡調整位置 */
         }
 
         .names {
-            font-family: 'Ma Shan Zheng', cursive;
             font-size: 2.5rem;
+            margin-top: 20px; /* 你可以在這裡調整位置 */
         }
 
         .tagline {
             font-size: 1.4rem;
-            letter-spacing: 4px;
-            margin-top: 10px;
+            letter-spacing: 2px;
+            margin-top: 10px; /* 你可以在這裡調整位置 */
         }
 
         .enter-button {
@@ -146,7 +133,8 @@
             transition: 0.3s;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            pointer-events: auto; /* 確保按鈕可點擊 */
+            pointer-events: auto;
+            font-family: var(--handwriting); /* 按鈕字體也同步 */
         }
 
         .enter-button:hover {
@@ -154,7 +142,6 @@
             color: white;
         }
 
-        /* RWD */
         @media (max-width: 600px) {
             .welcome-text { font-size: 3rem; }
             .date-text { font-size: 1.2rem; margin-bottom: 40px; }
@@ -167,7 +154,6 @@
     <div class="curtain-wrapper" id="curtainLayer">
         <div class="curtain left"></div>
         <div class="curtain right"></div>
-        
         <div class="seal-wrapper">
             <div class="seal">囍</div>
         </div>
@@ -175,16 +161,17 @@
 
     <div class="content-layer">
         <h1 class="welcome-text">歡迎來參加</h1>
+        
         <div class="date-text">10 - 10 - 2026</div>
         
         <div class="names">凱翔與禹萱</div>
+        
         <div class="tagline">我們要結婚了！</div>
 
         <a href="schedule.html" class="enter-button">開啟邀請函</a>
     </div>
 
     <script>
-        // 頁面載入 1 秒後，緩慢滑開紗簾
         window.onload = function() {
             setTimeout(function() {
                 document.body.classList.add('opened');
