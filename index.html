@@ -6,13 +6,14 @@
     <meta name="format-detection" content="telephone=no">
     <title>凱翔 & 禹萱 Wedding</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Noto+Serif+TC:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --text-color: #2c3e50;
             --accent-gold: #a67c52;
-            --handwriting: "Klee One", "Noto Serif TC", serif;
+            /* 將 Noto Serif TC 放在最前面，確保「啟」字等繁體中文顯示優雅 */
+            --handwriting: "Noto Serif TC", "Klee One", serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -61,23 +62,30 @@
         }
         .content-layer.visible { opacity: 1; }
 
-        /* --- 調整文字位置的關鍵：空白間距元件 --- */
+        /* --- 調整文字位置：空白間距元件 --- */
         .desktop-spacer {
             width: 100%;
-            height: 350px; /* 您可以在這裡調整「空白行」的高度，數字越大，名字越往下推 */
+            height: 350px; /* 電腦版間距 */
         }
         
         /* --- 手機版底部推手 (預設隱藏) --- */
         .mobile-bottom-push {
             display: none;
         }
-        .welcome-text { font-size: 3.5rem; color: var(--text-color); margin-bottom: 5px; margin-top: 50px;}
+
+        .welcome-text { 
+            font-size: 3.5rem; 
+            color: var(--text-color); 
+            margin-bottom: 5px; 
+            margin-top: 50px; /* 電腦版頂部間距 */
+        }
+        
         .date-text { font-size: 1.5rem; letter-spacing: 5px; margin-bottom: 20px; }
         
         .names {
             font-weight: 600;
             font-size: 2.2rem;
-            margin-top: 0; /* 移除原本的 margin-top */
+            margin-top: 0;
         }
 
         .tagline {
@@ -88,13 +96,20 @@
         .tagline.visible { opacity: 1; visibility: visible; }
 
         .enter-button {
-            margin-top: 15px; padding: 12px 50px; background: white;
-            border: 1px solid var(--accent-gold); color: var(--text-color);
-            text-decoration: none; border-radius: 30px; font-size: 1.1rem;
-            transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 15px; 
+            padding: 12px 50px; 
+            background: white;
+            border: 1px solid var(--accent-gold); 
+            color: var(--text-color);
+            text-decoration: none; 
+            border-radius: 30px; 
+            font-size: 1.1rem;
+            transition: 0.3s; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-family: var(--handwriting); /* 強制按鈕套用修正後的字體 */
         }
 
-        /* --- 紗簾與囍字樣式 (保持之前優化過的版本) --- */
+        /* --- 紗簾與囍字樣式 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { flex: 1; height: 100%; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); }
         .opened .curtain.left { transform: translateX(-100%); }
@@ -103,38 +118,37 @@
         .opened .seal-wrapper { opacity: 0; pointer-events: none; }
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: seal-breathe 2.5s infinite; }
         .click-prompt { margin-top: 15px; color: var(--accent-gold); font-size: 1rem; animation: click-prompt-fade 2.5s infinite; }
-        @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+        
+        @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         @keyframes click-prompt-fade { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 
-        /* --- 手機版適配 (調整圖片與間距) --- */
+        /* --- 手機版適配區 --- */
         @media screen and (max-width: 768px) {
-            /* 1. 更換手機版圖層檔案 */
             .layer-base { background-image: url('base-background-mobile.png'); }
             .layer-mid { 
                 background-image: url('main-image-layer-mid-mobile-V4.png'); 
-                background-size: auto; /* 依照要求不縮放 */
+                background-size: 70% auto; /* 調整人像比例避免過大 */
+                background-position: center 35%;
             }
-            /* 針對最上層裝飾圖的縮放設定 */
             .layer-top {        
                 background-image: url('main-image-layer-top-mobile-V4.png');
                 background-size: cover;
                 background-position: center center;
-                background-repeat: no-repeat;
             }
             
-            /* 2. 排版向上移：透過底部推手與中間縮小間距 */
+            /* 手機版底部推手：將整組文字往上頂 */
             .mobile-bottom-push {
                 display: block;
-                height: 180px; /* 這個值越高，文字就越往上推 */
+                height: 180px; 
             }
 
             .desktop-spacer {
-                height: 120px; /* 縮小標題與人像之間的距離 */
+                height: 120px; /* 縮小中間距離讓排版緊湊 */
             }
 
             .welcome-text {
                 font-size: 1.8rem;
-                margin-top: 20px; /* 手機版不加 80px */
+                margin-top: 20px; /* 取消電腦版的 50px */
             }
 
             .names { font-size: 1.6rem; }
@@ -168,7 +182,10 @@
 
         <div class="names">凱翔 & 禹萱</div>
         <div id="dynamicTagline" class="tagline"></div>
+        
         <a href="schedule.html" class="enter-button">打開邀請函</a>
+
+        <div class="mobile-bottom-push"></div>
     </div>
 
     <script>
