@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no">
-
     <title>凱翔 & 禹萱 Wedding</title>
+
+    <link rel="preload" as="image" href="base-background-V1.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Noto+Serif+TC:wght@300;500;700&display=swap" rel="stylesheet">
 
@@ -17,282 +16,146 @@
             --handwriting: "Klee One", "Noto Serif TC", serif;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* 1. 底層背景：滿版佔滿螢幕 */
-        body,
-        html {
-            height: 100%;
-            width: 100%;
-            background-image: url('base-background-V1.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+        body, html {
+            height: 100%; width: 100%;
             overflow: hidden;
             font-family: var(--handwriting);
+            background-color: #fdfaf7; /* 預設底色防止閃白 */
         }
 
-        /* 2. 中層內容：透明疊加主圖 */
+        /* --- 三層背景架構 --- */
+
+        /* 1. 底層：佔滿全版面 */
+        .layer-base {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('base-background-V1.png') center center / cover no-repeat;
+            z-index: -3;
+        }
+
+        /* 2. 中層：不被縮放 (保持原圖比例並居中) */
+        .layer-mid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('main-image-layer-mid.png') center center / auto no-repeat;
+            z-index: -2;
+            /* 如果圖片太大，手機版會自動裁切邊緣而非縮放 */
+        }
+
+        /* 3. 頂層：佔滿全版面 (覆蓋在最上面) */
+        .layer-top {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('main-image-layer-top.png') center center / cover no-repeat;
+            z-index: -1;
+            pointer-events: none; /* 避免頂層圖層擋住按鈕點擊 */
+        }
+
+        /* --- 內容層 (文字與按鈕) --- */
         .content-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            position: relative;
+            z-index: 10; /* 確保在背景之上 */
+            height: 100vh;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
             text-align: center;
-            padding: 20px;
-            z-index: 1;
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: contain;
-            background-image: url('main-background-new.png');
-            background-color: transparent;
+            opacity: 0;
+            transition: opacity 1.5s ease-in;
         }
 
-        /* 紗簾動畫層 */
+        .content-layer.visible { opacity: 1; }
+
+        /* 紗簾部分保持邏輯，但優化 z-index */
         .curtain-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 100;
-            pointer-events: none;
-            display: flex;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 100; display: flex;
         }
 
         .curtain {
-            flex: 1;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            flex: 1; height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
         }
 
-        .curtain.left {
-            transform: translateX(0);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        .opened .curtain.left { transform: translateX(-100%); }
+        .opened .curtain.right { transform: translateX(100%); }
 
-        .curtain.right {
-            transform: translateX(0);
-        }
-
-        .opened .curtain.left {
-            transform: translateX(-100%);
-        }
-
-        .opened .curtain.right {
-            transform: translateX(100%);
-        }
-
-        .seal-wrapper {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 101;
-            transition: opacity 1.2s ease;
-        }
-
-        .opened .seal-wrapper {
-            opacity: 0;
-        }
-
-        .seal {
-            width: 80px;
-            height: 80px;
-            background: var(--accent-gold);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.8rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* --- 文字樣式 --- */
-        .welcome-text {
-            font-weight: 600;
-            font-size: 3.8rem;
-            color: var(--text-color);
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-
-        .date-text {
-            font-size: 1.5rem;
-            letter-spacing: 5px;
-            margin-bottom: 40px;
-        }
-
-        .names {
-            font-weight: 600;
-            font-size: 2.2rem;
-            padding-top: 350px;
-            margin-top: 0;
-        }
-
-        .tagline {
-            font-size: 1.4rem;
-            letter-spacing: 2px;
-            margin-top: 15px;
-            color: var(--text-color);
-            min-height: 1.6em;
-            opacity: 0;
-            transition: opacity 0.8s ease-in-out;
-        }
-
-        .tagline.visible {
-            opacity: 1;
-        }
+        /* 文字樣式 (承襲您之前的設定) */
+        .welcome-text { font-size: 3.8rem; color: var(--text-color); margin-bottom: 10px; }
+        .names { font-size: 2.2rem; margin-top: 200px; font-weight: 600; }
+        .tagline { margin-top: 20px; min-height: 1.6em; opacity: 0; transition: opacity 0.8s; }
+        .tagline.visible { opacity: 1; }
 
         .enter-button {
-            margin-top: 20px;
-            padding: 12px 50px;
-            background: white;
-            border: 1px solid var(--accent-gold);
-            color: var(--text-color);
-            text-decoration: none;
-            border-radius: 30px;
-            font-size: 1.1rem;
+            margin-top: 30px; padding: 12px 50px;
+            background: white; border: 1px solid var(--accent-gold);
+            border-radius: 30px; text-decoration: none; color: var(--text-color);
             transition: 0.3s;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            pointer-events: auto;
-            font-family: var(--handwriting);
         }
 
-        .enter-button:hover {
-            background: var(--accent-gold);
-            color: white;
-        }
-
-        /* --- 手機版適配 --- */
+        /* 手機版適配：中層不縮放可能會導致圖片太寬，可加上 media query 微調 */
         @media screen and (max-width: 768px) {
-
-            body,
-            html {
-                background-image: url('base-background-V1.png');
-            }
-
-            .content-layer {
-                background-image: url('main-background-phone-v1.png') !important;
-                background-size: contain !important;
-            }
-
-            .welcome-text {
-                font-size: 2.0rem !important;
-                margin-top: 30px !important;
-            }
-
-            .date-text {
-                font-size: 1.0rem;
-                margin-bottom: 20px;
-            }
-
-            .names {
-                font-size: 1.2rem;
-                padding-top: 200px !important;
-                margin-top: 0 !important;
-            }
-
-            .tagline {
-                font-size: 1.0rem;
-            }
-
-            .enter-button {
-                font-size: 1.0rem;
-                padding: 8px 30px; /* 扁平化處理 */
-                margin-top: 20px;
-                border-radius: 25px;
-                width: auto;          /* 將原本的 80% 改為 auto，或者直接刪除這行 */
-                max-width: none;      /* 刪除或取消限制 */
-            }
+            .layer-mid { background-size: 80% auto; } /* 手機版還是稍微縮小一點比較好，或維持 auto */
+            .welcome-text { font-size: 2rem; }
+            .names { padding-top: 100px; font-size: 1.5rem; }
         }
     </style>
 </head>
-
 <body>
+
+    <div class="layer-base"></div>
+    <div class="layer-mid"></div>
+    <div class="layer-top"></div>
 
     <div class="curtain-wrapper" id="curtainLayer">
         <div class="curtain left"></div>
         <div class="curtain right"></div>
-        <div class="seal-wrapper">
-            <div class="seal">囍</div>
+        <div class="seal-wrapper" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:101;">
+            <div class="seal" onclick="startApp()" style="width:80px; height:80px; background:var(--accent-gold); border-radius:50%; color:white; display:flex; justify-content:center; align-items:center; font-size:1.8rem; cursor:pointer;">囍</div>
         </div>
     </div>
 
-    <div class="content-layer">
+    <div class="content-layer" id="mainContent">
         <h1 class="welcome-text">歡迎參加我們的婚禮</h1>
         <div class="date-text">10 - 10 - 2026</div>
-
-        <div class="names">凱翔與禹萱</div>
-
+        <div class="names">凱翔 & 禹萱</div>
         <div id="dynamicTagline" class="tagline"></div>
-
         <a href="schedule.html" class="enter-button">開啟邀請函</a>
     </div>
 
     <script>
-        // 設定動態文字內容
-        const phrases = [
-            "大家好～",
-            "我們要結婚了！",
-            "誠摯的邀請大家參加我們的婚禮",
-            "婚禮分為下午與晚上場",
-            "分別是下午的教堂婚禮與晚上的兄弟飯店喜宴",
-            "我們需要統計喜宴桌數",
-            "要參加晚上喜宴的朋友，請記得在邀請函裡填表",
-            "我們當天見，感謝大家的祝福"
-        ];
-
+        const phrases = ["大家好～", "我們要結婚了！", "誠摯邀請大家參加我們的婚禮","婚禮有下午的教堂","還有晚上的晚宴" , "邀請大家參加，我們當天見"];
         let currentIndex = 0;
-        const taglineEl = document.getElementById('dynamicTagline');
-        let taglineInterval;
 
-        function updateTagline() {
-            // 1. 先淡出
-            taglineEl.classList.remove('visible');
-
+        function startApp() {
+            // 1. 開啟紗簾
+            document.body.classList.add('opened');
+            
+            // 2. 顯示內容
             setTimeout(() => {
-                // 2. 更換文字
-                taglineEl.innerText = phrases[currentIndex];
+                document.getElementById('mainContent').classList.add('visible');
+                updateTagline();
+            }, 1000);
 
-                // 3. 再淡入
-                taglineEl.classList.add('visible');
-
-                // 4. 檢查是否到達最後一句，若到達則停止計時器
-                if (currentIndex === phrases.length - 1) {
-                    clearInterval(taglineInterval);
-                    console.log("已到達最後一句，動畫停止。");
-                } else {
-                    currentIndex++;
-                }
-            }, 800); // 配合 CSS transition 的時間
+            // 3. 移除紗簾層避免擋到按鈕
+            setTimeout(() => {
+                document.getElementById('curtainLayer').style.display = 'none';
+            }, 3000);
         }
 
-        window.onload = function() {
-            // 1 秒後開啟紗簾
-            setTimeout(function() {
-                document.body.classList.add('opened');
-
-                // 啟動文字輪播
-                updateTagline(); // 顯示第一句
-                taglineInterval = setInterval(updateTagline, 5000); // 每 5 秒切換一次流程
-            }, 1000);
-        };
+        function updateTagline() {
+            const el = document.getElementById('dynamicTagline');
+            el.classList.remove('visible');
+            setTimeout(() => {
+                el.innerText = phrases[currentIndex];
+                el.classList.add('visible');
+                if (currentIndex < phrases.length - 1) {
+                    currentIndex++;
+                    setTimeout(updateTagline, 4000);
+                }
+            }, 800);
+        }
     </script>
 </body>
-
 </html>
