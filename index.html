@@ -107,12 +107,12 @@
             /* 1. 更換手機版圖層檔案 */
             .layer-base { background-image: url('base-background-mobile.png'); }
             .layer-mid { 
-                background-image: url('main-image-layer-mid-mobile-V1.png'); 
+                background-image: url('main-image-layer-mid-mobile-V2.png'); 
                 background-size: auto; /* 依照要求不縮放 */
             }
             /* 針對最上層裝飾圖的縮放設定 */
             .layer-top {        
-                background-image: url('main-image-layer-top-mobile-V1.png');
+                background-image: url('main-image-layer-top-mobile-V2.png');
                 background-size: cover;
                 background-position: center center;
                 background-repeat: no-repeat;
@@ -122,8 +122,12 @@
             .desktop-spacer {
                 height: 180px; /* 手機版人像較小，間距也稍微縮小 */
             }
-
-            .welcome-text { font-size: 2.2rem; }
+            
+            .welcome-text { 
+                font-size: 2.2rem; 
+                margin-top: 0px; /* ← 強迫手機版回到頂端，不繼承電腦版的 80px */
+            }
+            
             .names { font-size: 1.6rem; }
             .tagline { font-size: 1.1rem; }
         }
