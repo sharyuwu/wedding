@@ -69,7 +69,7 @@
         
         /* --- 手機版底部推手 (預設隱藏) --- */
         .mobile-bottom-push {
-            display: none;
+            height: 50px; /* 這個值越高，文字就越往上推 */
         }
         .welcome-text { font-size: 3.5rem; color: var(--text-color); margin-bottom: 5px; margin-top: 50px;}
         .date-text { font-size: 1.5rem; letter-spacing: 5px; margin-bottom: 20px; }
@@ -124,7 +124,6 @@
             
             /* 2. 排版向上移：透過底部推手與中間縮小間距 */
             .mobile-bottom-push {
-                display: block;
                 height: 130px; /* 這個值越高，文字就越往上推 */
             }
 
