@@ -22,9 +22,11 @@
             overflow: hidden;
             font-family: var(--handwriting);
             background-color: #fdfaf7;
+            /* 加入 3D 透視感，翻轉特效必備 */
+            perspective: 2000px;
         }
 
-        /* --- 三層背景系統 (電腦版預設) --- */
+        /* --- 三層背景系統 --- */
         .layer-base {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('base-background-V1.png') center center / cover no-repeat;
@@ -45,7 +47,7 @@
             pointer-events: none;
         }
 
-        /* --- 文字內容層 --- */
+        /* --- 文字內容層 (同時作為 3D 翻轉主體) --- */
         .content-layer {
             position: relative;
             z-index: 10;
@@ -57,27 +59,35 @@
             text-align: center;
             padding: 20px;
             opacity: 0;
-            transition: opacity 1.5s ease-in;
+            /* 翻轉動畫設定 */
+            transition: opacity 1.5s ease-in, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
         }
         .content-layer.visible { opacity: 1; }
 
-        /* --- 調整文字位置的關鍵：空白間距元件 --- */
+        /* 觸發翻轉時的 Class */
+        .content-layer.is-flipped {
+            transform: rotateY(-180deg);
+            opacity: 0;
+        }
+
+        /* --- 調整文字位置的間距元件 --- */
         .desktop-spacer {
             width: 100%;
-            height: 300px; /* 您可以在這裡調整「空白行」的高度，數字越大，名字越往下推 */
+            height: 300px;
         }
         
-        /* --- 手機版底部推手 (預設隱藏) --- */
         .mobile-bottom-push {
-            height: 50px; /* 這個值越高，文字就越往上推 */
+            height: 50px;
         }
+
         .welcome-text { font-size: 3.5rem; color: var(--text-color); margin-bottom: 5px; margin-top: 50px;}
         .date-text { font-size: 1.5rem; letter-spacing: 5px; margin-bottom: 20px; }
         
         .names {
             font-weight: 600;
             font-size: 2.2rem;
-            margin-top: 0; /* 移除原本的 margin-top */
+            margin-top: 0;
         }
 
         .tagline {
@@ -92,9 +102,11 @@
             border: 1px solid var(--accent-gold); color: var(--text-color);
             text-decoration: none; border-radius: 30px; font-size: 1.1rem;
             transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            display: inline-block;
         }
 
-        /* --- 紗簾與囍字樣式 (保持之前優化過的版本) --- */
+        /* --- 紗簾與囍字樣式 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { flex: 1; height: 100%; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); }
         .opened .curtain.left { transform: translateX(-100%); }
@@ -106,34 +118,30 @@
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
         @keyframes click-prompt-fade { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 
-        /* --- 手機版適配 (調整圖片與間距) --- */
+        /* --- 手機版適配 (保留你原本的設定) --- */
         @media screen and (max-width: 768px) {
-            /* 1. 更換手機版圖層檔案 */
             .layer-base { background-image: url('base-background-mobile.png'); }
             .layer-mid { 
                 background-image: url('main-image-layer-mid-mobile-V4.png'); 
-                background-size: auto; /* 依照要求不縮放 */
+                background-size: auto;
             }
-            /* 針對最上層裝飾圖的縮放設定 */
-            .layer-top {        
+            .layer-top {         
                 background-image: url('main-image-layer-top-mobile-V4.png');
                 background-size: cover;
                 background-position: center center;
-                background-repeat: no-repeat;
             }
             
-            /* 2. 排版向上移：透過底部推手與中間縮小間距 */
             .mobile-bottom-push {
-                height: 130px; /* 這個值越高，文字就越往上推 */
+                height: 130px;
             }
 
             .desktop-spacer {
-                height: 330px; /* 縮小標題與人像之間的距離 */
+                height: 330px;
             }
 
             .welcome-text {
                 font-size: 1.8rem;
-                margin-top: 0px; /* 手機版不加 80px */
+                margin-top: 0px;
             }
 
             .names { font-size: 1.6rem; }
@@ -167,7 +175,8 @@
 
         <div class="names">凱翔 & 禹萱</div>
         <div id="dynamicTagline" class="tagline"></div>
-        <a href="schedule.html" class="enter-button">打開邀請函</a>
+        
+        <a href="javascript:void(0)" class="enter-button" onclick="goToSchedule()">打開邀請函</a>
         
         <div class="mobile-bottom-push"></div>
     </div>
@@ -177,7 +186,19 @@
         let currentIndex = 0;
         const taglineEl = document.getElementById('dynamicTagline');
 
+        // 檢查是否曾經開啟過
+        window.addEventListener('DOMContentLoaded', () => {
+            const hasOpened = localStorage.getItem('wedding_opened');
+            if (hasOpened === 'true') {
+                const curtainLayer = document.getElementById('curtainLayer');
+                if (curtainLayer) curtainLayer.remove(); // 直接移除
+                document.getElementById('mainContent').classList.add('visible');
+                updateTagline();
+            }
+        });
+
         function startApp() {
+            localStorage.setItem('wedding_opened', 'true'); // 標記已開啟
             document.body.classList.add('opened');
             setTimeout(() => {
                 document.getElementById('mainContent').classList.add('visible');
@@ -199,6 +220,15 @@
                     setTimeout(updateTagline, 4000);
                 }
             }, 500); 
+        }
+
+        // 翻轉並跳轉
+        function goToSchedule() {
+            const content = document.getElementById('mainContent');
+            content.classList.add('is-flipped'); // 執行 3D 翻轉
+            setTimeout(() => {
+                window.location.href = "schedule.html";
+            }, 700);
         }
     </script>
 </body>
