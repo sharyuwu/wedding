@@ -13,8 +13,6 @@
             --text-color: #5d4a44;
             --accent-gold: #a67c52;
             --light-gold: #e2c08d;
-            /* 調整透明度，讓全版背景圖隱約透出 */
-            --content-bg: rgba(253, 250, 247, 0.92);
             --handwriting: "Klee One", "Noto Serif TC", serif;
         }
 
@@ -24,16 +22,34 @@
             min-height: 100%; width: 100%;
             font-family: var(--handwriting);
             color: var(--text-color);
-            /* --- 全版面背景圖：固定不動 --- */
-            background-image: url('schedule/background.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed; 
+            
+            /* --- CSS 多重背景設定 --- */
+            /* 關鍵說明：先寫的在最上層，後寫的在最下層 */
+            background-image: 
+                url('background_flower.png'), /* 上層：花卉圖案 (請確保此檔去背透明) */
+                url('schedule/background.png');    /* 下層：固定不動的底圖 */
+                
+            /* 對應設定 */
+            background-repeat: 
+                no-repeat, /* 花卉：只顯示一次，滑動就會走 */
+                no-repeat; /* 底圖 */
+                
+            background-position: 
+                center top, /* 花卉：靠上置中，出現在 Hero 區塊 */
+                center center; /* 底圖 */
+                
+            background-size: 
+                auto 600px, /* 花卉：控制大小，例如高度 600px 配合 Hero Section，寬度自動 */
+                cover; /* 底圖 */
+                
+            background-attachment: 
+                scroll, /* 花卉：隨頁面捲動 */
+                fixed;  /* 底圖：固定不動 */
+                
             background-color: #ece5df;
         }
 
-        /* --- 3D 翻轉容器：全版佈局 --- */
+        /* --- 3D 翻轉容器：全版透明 --- */
         .page-wrapper {
             perspective: 2000px;
             width: 100%;
@@ -44,14 +60,15 @@
         }
 
         .card-inner {
-            width: 100%; /* 電腦版改為全寬 */
-            max-width: 100%; /* 移除原本 600px 的限制 */
+            width: 100%;
+            max-width: 100%;
             min-height: 100vh;
             transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s;
             transform-style: preserve-3d;
             position: relative;
             transform: rotateY(180deg); 
-            background: var(--content-bg);
+            background: transparent;
+            box-shadow: none;
         }
         
         .loaded .card-inner { transform: rotateY(0deg); }
@@ -62,14 +79,15 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            background: transparent;
         }
 
-        /* --- Section 通用設定：滿版感 --- */
+        /* --- Section 通用設定 --- */
         section {
             width: 100%;
-            max-width: 1200px; /* 內容物在中間，避免文字拉太寬難以閱讀 */
-            padding: 100px 20px;
-            min-height: 100vh; /* 每個區塊至少佔滿一屏 */
+            max-width: 1200px;
+            padding: 80px 20px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -77,21 +95,22 @@
             position: relative;
         }
 
-        /* --- Hero Section --- */
-        .hero-section {
-            z-index: 1;
+        /* 為文字加上微弱陰影以確保在背景圖上的易讀性 */
+        .hero-title, .hero-quote, .group-title, .event-name {
+            text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,1);
         }
 
-        .hero-title { font-size: 2.5rem; letter-spacing: 8px; margin-bottom: 15px; font-weight: 500; }
-        .hero-date { font-size: 1.8rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
+        /* --- Hero Section (花卉會疊加在這個區塊的背景) --- */
+        .hero-title { font-size: 2.8rem; letter-spacing: 8px; margin-bottom: 15px; font-weight: 500; }
+        .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
         .hero-quote { font-size: 1.2rem; margin: 20px 0; opacity: 0.9; line-height: 2; text-align: center; }
 
         .merged-photo-container {
             width: 100%;
-            max-width: 800px; /* 電腦版照片稍微放大 */
+            max-width: 800px;
             margin: 40px auto;
-            -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 70%, rgba(255,255,255,0) 100%);
-            mask-image: radial-gradient(circle, rgba(255,255,255,1) 70%, rgba(255,255,255,0) 100%);
+            -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(255,255,255,0) 100%);
+            mask-image: radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(255,255,255,0) 100%);
         }
 
         .merged-photo-img { width: 100%; height: auto; display: block; }
@@ -99,7 +118,7 @@
         .rsvp-button {
             margin-top: 40px;
             padding: 15px 80px;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border: 2px solid var(--accent-gold);
             color: var(--text-color);
             font-family: var(--handwriting);
@@ -107,18 +126,18 @@
             border-radius: 4px;
             cursor: pointer;
             transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
         .rsvp-button:hover { background: var(--accent-gold); color: white; transform: scale(1.05); }
 
-        /* --- Schedule Section --- */
+        /* --- Schedule Section (滑動後花卉消失，只留底圖) --- */
         .schedule-section {
-            background: rgba(255, 255, 255, 0.3); /* 輕微區隔感 */
-            max-width: 100%; /* 讓底色能拉滿全螢幕 */
+            max-width: 100%;
         }
 
         .schedule-content-wrapper {
             width: 100%;
-            max-width: 1000px; /* 內容集中 */
+            max-width: 1000px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -134,7 +153,7 @@
         .schedule-column { display: flex; flex-direction: column; gap: 60px; }
 
         .divider {
-            background: var(--light-gold);
+            background: linear-gradient(to bottom, transparent, var(--light-gold), transparent);
             width: 1px;
             justify-self: center;
             position: relative;
@@ -142,17 +161,16 @@
         .divider::after {
             content: '⚭';
             position: absolute;
-            top: 10%; left: 50%;
+            top: 5%; left: 50%;
             transform: translateX(-50%);
-            background: #fdfaf7;
-            padding: 15px 0;
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: var(--accent-gold);
+            text-shadow: 0 0 15px white, 0 0 5px white;
         }
 
         .event-group { text-align: center; }
-        .group-title { font-size: 1.8rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
-        .group-loc { font-size: 1rem; color: var(--accent-gold); margin-bottom: 40px; letter-spacing: 2px; }
+        .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
+        .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 40px; letter-spacing: 2px; }
 
         .event-item {
             display: flex;
@@ -169,11 +187,11 @@
             flex: 1;
         }
 
-        .event-time { font-weight: 600; font-size: 1.4rem; color: #4a3a35; font-family: initial; }
-        .event-name { font-size: 1.2rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
+        .event-time { font-weight: 600; font-size: 1.5rem; color: #4a3a35; font-family: initial; }
+        .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
 
         .gold-line-divider {
-            width: 100px;
+            width: 120px;
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
             position: relative;
@@ -183,27 +201,26 @@
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 14px;
+            font-size: 16px;
             color: var(--accent-gold);
-            background: #fdfaf7;
-            padding: 0 5px;
+            text-shadow: 0 0 10px white;
         }
 
         .event-icon-container { flex: 1; display: flex; justify-content: center; }
-        .event-icon-img { width: 100px; height: 100px; object-fit: contain; }
+        .event-icon-img { 
+            width: 110px; 
+            height: 110px; 
+            object-fit: contain; 
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.8));
+        }
 
-        /* --- 手機版微調 (Responsive) --- */
+        /* --- 手機版微調 --- */
         @media (max-width: 768px) {
             section { padding: 60px 15px; min-height: auto; }
+            body { background-size: auto 400px, cover; } /* 手機版花卉縮小 */
             .hero-title { font-size: 1.8rem; }
-            .hero-date { font-size: 1.3rem; }
-            .schedule-grid { grid-template-columns: 1fr 2px 1fr; gap: 5px; }
-            .divider::after { font-size: 1.2rem; }
-            .event-item { gap: 10px; }
-            .event-icon-img { width: 60px; height: 60px; }
-            .group-title { font-size: 1.3rem; }
-            .event-time { font-size: 1.1rem; }
-            .event-name { font-size: 1rem; }
+            .event-icon-img { width: 70px; height: 70px; }
+            .gold-line-divider { width: 80px; }
         }
     </style>
 </head>
@@ -261,12 +278,12 @@
 
                                     <div class="event-item">
                                         <div class="event-text-stack">
-                                            <p class="event-time">15:00</p>
-                                            <p class="event-name">茶會慶祝</p>
-                                            <div class="gold-line-divider"></div>
+                                        <p class="event-time">15:00</p>
+                                        <p class="event-name">茶會慶祝</p>
+                                        <div class="gold-line-divider"></div>
                                         </div>
                                         <div class="event-icon-container">
-                                            <img src="schedule/icon_cake.png" class="event-icon-img">
+                                        <img src="schedule/icon_cake.png" class="event-icon-img">
                                         </div>
                                     </div>
                                 </div>
@@ -317,7 +334,7 @@
                     </div>
                 </section>
 
-                <footer style="text-align: center; padding: 60px 0; opacity: 0.5; font-size: 0.9rem;">
+                <footer style="text-align: center; padding: 60px 0; opacity: 0.5; font-size: 1rem; text-shadow: 0 0 5px white;">
                     2026.10.10 | 凱翔 & 禹萱
                 </footer>
             </div>
