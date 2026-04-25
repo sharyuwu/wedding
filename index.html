@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="format-detection" content="telephone=no">
     <title>凱翔 & 禹萱 Wedding</title>
 
@@ -17,15 +17,18 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        /* 使用 dvh 確保 body 撐滿「實際可見」高度 */
         body, html {
-            height: 100%; width: 100%;
+            height: 100vh;
+            height: 100dvh; 
+            width: 100%;
             overflow: hidden;
             font-family: var(--handwriting);
             background-color: #fdfaf7;
             perspective: 2000px;
         }
 
-        /* --- 背景系統 --- */
+        /* --- 背景層 --- */
         .layer-base {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('base-background-V1.png') center center / cover no-repeat;
@@ -34,41 +37,32 @@
             transform-style: preserve-3d;
             backface-visibility: hidden;
         }
-
-        .layer-base.is-flipped {
-            transform: rotateY(-180deg) scale(1.1);
-            opacity: 0;
-        }
+        .layer-base.is-flipped { transform: rotateY(-180deg) scale(1.1); opacity: 0; }
 
         .layer-mid {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('main-image-layer-mid.png') center center / auto no-repeat;
-            z-index: 2;
-            pointer-events: none;
-            transition: opacity 0.8s;
+            z-index: 2; pointer-events: none; transition: opacity 0.8s;
         }
-
         .layer-top {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('main-image-layer-top.png') center center / cover no-repeat;
-            z-index: 3;
-            pointer-events: none;
-            transition: opacity 0.8s;
+            z-index: 3; pointer-events: none; transition: opacity 0.8s;
         }
-
         .is-leaving .layer-mid, .is-leaving .layer-top { opacity: 0; }
 
-        /* --- 文字內容層：核心修正點 --- */
+        /* --- 文字內容層：使用 dvh 進行垂直置中 --- */
         .content-layer {
             position: relative;
             z-index: 10;
+            /* 關鍵：使用 dvh 鎖定在瀏覽器當前可見區域的中間 */
             height: 100vh;
+            height: 100dvh; 
             width: 100%;
             display: flex;
             flex-direction: column;
-            /* 讓內容整體在螢幕垂直置中 */
-            justify-content: center; 
-            align-items: center;
+            justify-content: center; /* 垂直置中 */
+            align-items: center;    /* 水平置中 */
             text-align: center;
             padding: 0 20px;
             opacity: 0;
@@ -77,15 +71,14 @@
         .content-layer.visible { opacity: 1; }
         .content-layer.is-leaving { opacity: 0; transform: translateZ(-100px); }
 
-        /* --- 動態間距：使用 vh 單位 --- */
+        /* --- 動態彈性間距 --- */
         .spacer-gap {
             width: 100%;
-            /* 根據螢幕高度自動調整間距，避免壓到背景圖的人像 */
-            height: 40vh; 
+            height: 35vh; /* 根據視窗比例調整，避開人像 */
         }
 
         .welcome-text { font-size: 3.5rem; color: var(--text-color); margin-bottom: 5px; }
-        .date-text { font-size: 1.5rem; letter-spacing: 5px; margin-bottom: 0; }
+        .date-text { font-size: 1.5rem; letter-spacing: 5px; }
         .names { font-weight: 600; font-size: 2.2rem; }
 
         .tagline {
@@ -115,16 +108,16 @@
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
         @keyframes click-prompt-fade { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 
-        /* --- 手機版適配修正 --- */
+        /* --- 手機版優化 --- */
         @media screen and (max-width: 768px) {
             .layer-base { background-image: url('base-background-mobile.png'); }
             .layer-mid { background-image: url('main-image-layer-mid-mobile-V4.png'); background-size: auto; }
             .layer-top { background-image: url('main-image-layer-top-mobile-V4.png'); background-size: cover; background-position: center center; }
             
-            /* 手機版中間間距稍微加大，以避開人像 */
-            .spacer-gap { height: 40vh; }
+            /* 手機版視圖高度間距，確保文字鎖定在人像間的空白處 */
+            .spacer-gap { height: 38dvh; }
 
-            .welcome-text { font-size: 1.8rem; margin-top: 0; }
+            .welcome-text { font-size: 1.8rem; }
             .names { font-size: 1.6rem; }
             .tagline { font-size: 1.1rem; }
             .enter-button { margin-top: 15px; padding: 10px 40px; }
@@ -169,6 +162,7 @@
         const taglineEl = document.getElementById('dynamicTagline');
 
         window.addEventListener('DOMContentLoaded', () => {
+            // 使用 sessionStorage，關閉分頁即重置
             const hasOpened = sessionStorage.getItem('wedding_opened');
             if (hasOpened === 'true') {
                 const curtainLayer = document.getElementById('curtainLayer');
