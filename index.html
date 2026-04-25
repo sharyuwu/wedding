@@ -25,7 +25,7 @@
             perspective: 2000px;
         }
 
-        /* --- 三層背景系統 --- */
+        /* --- 背景系統 --- */
         .layer-base {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('base-background-V1.png') center center / cover no-repeat;
@@ -58,47 +58,52 @@
 
         .is-leaving .layer-mid, .is-leaving .layer-top { opacity: 0; }
 
-        /* --- 文字內容層 --- */
+        /* --- 文字內容層：核心修正點 --- */
         .content-layer {
             position: relative;
             z-index: 10;
             height: 100vh;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            /* 讓內容整體在螢幕垂直置中 */
+            justify-content: center; 
             align-items: center;
             text-align: center;
-            padding: 20px;
+            padding: 0 20px;
             opacity: 0;
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
         .content-layer.visible { opacity: 1; }
         .content-layer.is-leaving { opacity: 0; transform: translateZ(-100px); }
 
-        /* --- 間距元件 --- */
-        .desktop-spacer { width: 100%; height: 300px; }
-        .mobile-bottom-push { height: 50px; }
+        /* --- 動態間距：使用 vh 單位 --- */
+        .spacer-gap {
+            width: 100%;
+            /* 根據螢幕高度自動調整間距，避免壓到背景圖的人像 */
+            height: 35vh; 
+        }
 
-        .welcome-text { font-size: 3.5rem; color: var(--text-color); margin-bottom: 5px; margin-top: 50px;}
-        .date-text { font-size: 1.5rem; letter-spacing: 5px; margin-bottom: 20px; }
+        .welcome-text { font-size: 3.5rem; color: var(--text-color); margin-bottom: 5px; }
+        .date-text { font-size: 1.5rem; letter-spacing: 5px; margin-bottom: 0; }
         .names { font-weight: 600; font-size: 2.2rem; }
 
         .tagline {
-            font-size: 1.4rem; margin-top: 0px; min-height: 1.6em;
+            font-size: 1.4rem; margin-top: 10px; min-height: 1.6em;
             color: var(--text-color); opacity: 0; visibility: hidden;
             transition: opacity 0.4s ease-in-out, visibility 0.4s;
         }
         .tagline.visible { opacity: 1; visibility: visible; }
 
         .enter-button {
-            margin-top: 15px; padding: 12px 50px; background: white;
+            margin-top: 20px; padding: 12px 50px; background: white;
             border: 1px solid var(--accent-gold); color: var(--text-color);
             text-decoration: none; border-radius: 30px; font-size: 1.1rem;
             transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             cursor: pointer; display: inline-block;
         }
 
-        /* --- 紗簾與囍字樣式 --- */
+        /* --- 紗簾樣式 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { flex: 1; height: 100%; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); }
         .opened .curtain.left { transform: translateX(-100%); }
@@ -110,17 +115,19 @@
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
         @keyframes click-prompt-fade { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 
-        /* --- 手機版適配 --- */
+        /* --- 手機版適配修正 --- */
         @media screen and (max-width: 768px) {
             .layer-base { background-image: url('base-background-mobile.png'); }
             .layer-mid { background-image: url('main-image-layer-mid-mobile-V4.png'); background-size: auto; }
             .layer-top { background-image: url('main-image-layer-top-mobile-V4.png'); background-size: cover; background-position: center center; }
-            .mobile-bottom-push { height: 130px; }
-            .desktop-spacer { height: 330px; }
-            .welcome-text { font-size: 1.8rem; margin-top: 0px; }
+            
+            /* 手機版中間間距稍微加大，以避開人像 */
+            .spacer-gap { height: 40vh; }
+
+            .welcome-text { font-size: 1.8rem; margin-top: 0; }
             .names { font-size: 1.6rem; }
             .tagline { font-size: 1.1rem; }
-            .enter-button { margin-top: 10px; padding: 10px 40px; }
+            .enter-button { margin-top: 15px; padding: 10px 40px; }
             .seal { width: 80px; height: 80px; font-size: 1.8rem; }
         }
     </style>
@@ -142,13 +149,18 @@
     </div>
 
     <div class="content-layer" id="mainContent">
-        <h1 class="welcome-text">歡迎參加我們的婚禮</h1>
-        <div class="date-text">10 - 10 - 2026</div>
-        <div class="desktop-spacer"></div>
-        <div class="names">凱翔 & 禹萱</div>
-        <div id="dynamicTagline" class="tagline"></div>
-        <a href="javascript:void(0)" class="enter-button" onclick="goToSchedule()">打開邀請函</a>
-        <div class="mobile-bottom-push"></div>
+        <div class="text-top-group">
+            <h1 class="welcome-text">歡迎參加我們的婚禮</h1>
+            <div class="date-text">10 - 10 - 2026</div>
+        </div>
+
+        <div class="spacer-gap"></div>
+
+        <div class="text-bottom-group">
+            <div class="names">凱翔 & 禹萱</div>
+            <div id="dynamicTagline" class="tagline"></div>
+            <a href="javascript:void(0)" class="enter-button" onclick="goToSchedule()">打開邀請函</a>
+        </div>
     </div>
 
     <script>
@@ -156,11 +168,9 @@
         let currentIndex = 0;
         const taglineEl = document.getElementById('dynamicTagline');
 
-        // 【核心修改】將 localStorage 改為 sessionStorage
         window.addEventListener('DOMContentLoaded', () => {
             const hasOpened = sessionStorage.getItem('wedding_opened');
             if (hasOpened === 'true') {
-                // 如果在本次會話（Session）中已開啟過，直接移除紗簾
                 const curtainLayer = document.getElementById('curtainLayer');
                 if (curtainLayer) curtainLayer.remove();
                 document.getElementById('mainContent').classList.add('visible');
@@ -169,9 +179,7 @@
         });
 
         function startApp() {
-            // 存入 sessionStorage，關掉標籤頁後此紀錄會消失
             sessionStorage.setItem('wedding_opened', 'true');
-            
             document.body.classList.add('opened');
             setTimeout(() => {
                 document.getElementById('mainContent').classList.add('visible');
