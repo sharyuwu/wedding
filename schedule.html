@@ -23,33 +23,17 @@
             font-family: var(--handwriting);
             color: var(--text-color);
             
-            /* --- CSS 多重背景設定 --- */
-            /* 關鍵說明：先寫的在最上層，後寫的在最下層 */
+            /* 背景圖層疊 */
             background-image: 
-                url('background_flower.png'), /* 上層：花卉圖案 (請確保此檔去背透明) */
-                url('schedule/background.jpg');    /* 下層：固定不動的底圖 */
-                
-            /* 對應設定 */
-            background-repeat: 
-                no-repeat, /* 花卉：只顯示一次，滑動就會走 */
-                no-repeat; /* 底圖 */
-                
-            background-position: 
-                center top, /* 花卉：靠上置中，出現在 Hero 區塊 */
-                center center; /* 底圖 */
-                
-            background-size: 
-                auto 600px, /* 花卉：控制大小，例如高度 600px 配合 Hero Section，寬度自動 */
-                cover; /* 底圖 */
-                
-            background-attachment: 
-                scroll, /* 花卉：隨頁面捲動 */
-                fixed;  /* 底圖：固定不動 */
-                
+                url('background_flower.png'), 
+                url('schedule/background.png');
+            background-repeat: no-repeat, no-repeat;
+            background-position: center top, center center;
+            background-size: auto 600px, cover;
+            background-attachment: scroll, fixed;
             background-color: #ece5df;
         }
 
-        /* --- 3D 翻轉容器：全版透明 --- */
         .page-wrapper {
             perspective: 2000px;
             width: 100%;
@@ -68,7 +52,6 @@
             position: relative;
             transform: rotateY(180deg); 
             background: transparent;
-            box-shadow: none;
         }
         
         .loaded .card-inner { transform: rotateY(0deg); }
@@ -79,10 +62,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: transparent;
         }
 
-        /* --- Section 通用設定 --- */
         section {
             width: 100%;
             max-width: 1200px;
@@ -92,18 +73,14 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
         }
 
-        /* 為文字加上微弱陰影以確保在背景圖上的易讀性 */
-        .hero-title, .hero-quote, .group-title, .event-name {
+        .hero-title, .hero-quote {
             text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,1);
         }
 
-        /* --- Hero Section (花卉會疊加在這個區塊的背景) --- */
         .hero-title { font-size: 2.8rem; letter-spacing: 8px; margin-bottom: 15px; font-weight: 500; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
-        .hero-quote { font-size: 1.2rem; margin: 20px 0; opacity: 0.9; line-height: 2; text-align: center; }
 
         .merged-photo-container {
             width: 100%;
@@ -126,51 +103,65 @@
             border-radius: 4px;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .rsvp-button:hover { background: var(--accent-gold); color: white; transform: scale(1.05); }
-
-        /* --- Schedule Section (滑動後花卉消失，只留底圖) --- */
-        .schedule-section {
-            max-width: 100%;
         }
 
+        /* --- Schedule Section --- */
         .schedule-content-wrapper {
             width: 100%;
-            max-width: 1000px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            max-width: 1100px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 40px;
+            padding: 60px 40px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin: 20px auto;
         }
 
         .schedule-grid {
             display: grid;
-            grid-template-columns: 1fr 60px 1fr;
+            grid-template-columns: 1fr 100px 1fr; /* 增加中間寬度以容納戒指圖片 */
             width: 100%;
-            margin-top: 50px;
         }
 
         .schedule-column { display: flex; flex-direction: column; gap: 60px; }
 
-        .divider {
-            background: linear-gradient(to bottom, transparent, var(--light-gold), transparent);
+        /* --- 核心修改：三段式分隔線設計 --- */
+        .divider-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+        }
+
+        .divider-line {
             width: 1px;
-            justify-self: center;
+            background: var(--light-gold);
+            flex-grow: 1;
             position: relative;
         }
-        .divider::after {
-            content: '⚭';
+
+        /* 模擬截圖中的星芒裝飾 */
+        .divider-line::after {
+            content: '✶';
             position: absolute;
-            top: 5%; left: 50%;
+            left: 50%;
             transform: translateX(-50%);
-            font-size: 2.2rem;
             color: var(--accent-gold);
-            text-shadow: 0 0 15px white, 0 0 5px white;
+            font-size: 18px;
+            /* 讓星芒出現在線條的中段 */
+            top: 40%;
+        }
+
+        .divider-ring-img {
+            width: 90px; /* 根據圖片大小調整 */
+            height: auto;
+            margin: 25px 0;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
         }
 
         .event-group { text-align: center; }
         .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
-        .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 40px; letter-spacing: 2px; }
+        .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
 
         .event-item {
             display: flex;
@@ -203,24 +194,23 @@
             transform: translate(-50%, -50%);
             font-size: 16px;
             color: var(--accent-gold);
-            text-shadow: 0 0 10px white;
+            background: rgba(255, 255, 255, 0.01);
+            padding: 0 5px;
         }
 
         .event-icon-container { flex: 1; display: flex; justify-content: center; }
-        .event-icon-img { 
-            width: 110px; 
-            height: 110px; 
-            object-fit: contain; 
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.8));
-        }
+        .event-icon-img { width: 110px; height: 110px; object-fit: contain; }
 
-        /* --- 手機版微調 --- */
         @media (max-width: 768px) {
-            section { padding: 60px 15px; min-height: auto; }
-            body { background-size: auto 400px, cover; } /* 手機版花卉縮小 */
-            .hero-title { font-size: 1.8rem; }
+            section { padding: 40px 10px; }
+            .schedule-content-wrapper { padding: 40px 15px; }
+            .schedule-grid { grid-template-columns: 1fr 60px 1fr; }
+            .divider-ring-img { width: 50px; margin: 15px 0; }
+            .divider-line::after { font-size: 12px; }
             .event-icon-img { width: 70px; height: 70px; }
-            .gold-line-divider { width: 80px; }
+            .group-title { font-size: 1.4rem; }
+            .event-time { font-size: 1.1rem; }
+            .event-name { font-size: 1rem; }
         }
     </style>
 </head>
@@ -233,15 +223,11 @@
                 <section class="hero-section">
                     <h1 class="hero-title">凱翔與禹萱的婚禮</h1>
                     <p class="hero-date">10.10.2026</p>
-                    
                     <p class="hero-quote">我們...沒有拍婚紗，雖然結婚是個紀念</p>
-                    
                     <div class="merged-photo-container">
                         <img src="schedule/main.png" alt="婚禮照片" class="merged-photo-img">
                     </div>
-
                     <p class="hero-quote">在一起的每一天，更值得留念</p>
-
                     <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdX0pTRn6Xgd2ync0EHPiqUqXZl9hgQm8tBAS4sDOxQ8FcLFA/viewform?usp=header')">回覆出席</button>
                 </section>
 
@@ -278,18 +264,22 @@
 
                                     <div class="event-item">
                                         <div class="event-text-stack">
-                                        <p class="event-time">15:00</p>
-                                        <p class="event-name">茶會慶祝</p>
-                                        <div class="gold-line-divider"></div>
+                                            <p class="event-time">15:00</p>
+                                            <p class="event-name">茶會慶祝</p>
+                                            <div class="gold-line-divider"></div>
                                         </div>
                                         <div class="event-icon-container">
-                                        <img src="schedule/icon_cake.png" class="event-icon-img">
+                                            <img src="schedule/icon_cake.png" class="event-icon-img">
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="divider"></div>
+                            <div class="divider-container">
+                                <div class="divider-line"></div>
+                                <img src="schedule/icon_ring.png" alt="戒指" class="divider-ring-img">
+                                <div class="divider-line"></div>
+                            </div>
 
                             <div class="schedule-column">
                                 <div class="event-group">
@@ -334,7 +324,7 @@
                     </div>
                 </section>
 
-                <footer style="text-align: center; padding: 60px 0; opacity: 0.5; font-size: 1rem; text-shadow: 0 0 5px white;">
+                <footer style="text-align: center; padding: 60px 0; opacity: 0.5; font-size: 1rem;">
                     2026.10.10 | 凱翔 & 禹萱
                 </footer>
             </div>
