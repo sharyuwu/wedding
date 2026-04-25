@@ -23,13 +23,13 @@
             font-family: var(--handwriting);
             color: var(--text-color);
             
-            /* 背景圖層疊 */
+            /* --- 背景設定 (已修正路徑與層疊順序) --- */
             background-image: 
-                url('background_flower.png'), 
-                url('schedule/background.png');
+                url('schedule/background_flower.png'), /* 上層花卉 (請確認此檔背景透明) */
+                url('schedule/background.png');        /* 下層固定底圖 */
             background-repeat: no-repeat, no-repeat;
             background-position: center top, center center;
-            background-size: auto 600px, cover;
+            background-size: 100% auto, cover;
             background-attachment: scroll, fixed;
             background-color: #ece5df;
         }
@@ -75,41 +75,76 @@
             align-items: center;
         }
 
-        .hero-title, .hero-quote {
+        /* --- 文字陰影 (增加易讀性) --- */
+        .hero-title, .hero-quote, .group-title, .event-name {
             text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,1);
         }
 
         .hero-title { font-size: 2.8rem; letter-spacing: 8px; margin-bottom: 15px; font-weight: 500; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
+        .hero-quote { font-size: 1.2rem; margin: 20px 0; opacity: 0.9; line-height: 2; text-align: center; }
 
+        /* --- 主照片容器 (已加上白色半透明色塊) --- */
         .merged-photo-container {
             width: 100%;
             max-width: 800px;
             margin: 40px auto;
-            -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(255,255,255,0) 100%);
-            mask-image: radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(255,255,255,0) 100%);
+            
+            /* 新增：白色，30% 透明度色塊 */
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 30px; /* 色塊圓角 */
+            padding: 30px; /* 照片與色塊邊緣的距離 */
+            
+            /* 保持照片邊緣柔和效果 */
+            -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 70%, rgba(255,255,255,0) 100%);
+            mask-image: radial-gradient(circle, rgba(255,255,255,1) 70%, rgba(255,255,255,0) 100%);
         }
 
         .merged-photo-img { width: 100%; height: auto; display: block; }
 
-        .rsvp-button {
-            margin-top: 40px;
+        /* --- 按鈕通用樣式 --- */
+        .rsvp-button, .back-home-button {
             padding: 15px 80px;
             background: rgba(255, 255, 255, 0.9);
             border: 2px solid var(--accent-gold);
             color: var(--text-color);
             font-family: var(--handwriting);
-            font-size: 1.4rem;
             border-radius: 4px;
             cursor: pointer;
             transition: 0.3s;
+            text-decoration: none; /* 移除超連結底線 */
+            display: inline-block;
+        }
+        
+        .rsvp-button:hover, .back-home-button:hover { 
+            background: var(--accent-gold); 
+            color: white; 
+            transform: scale(1.05); 
         }
 
-        /* --- Schedule Section --- */
+        .rsvp-button {
+            margin-top: 40px;
+            font-size: 1.4rem;
+        }
+
+        /* --- 新增：返回首頁按鈕樣式 --- */
+        .back-home-container {
+            margin-top: 80px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .back-home-button {
+            font-size: 1.2rem;
+            border-radius: 30px; /* 圓角形狀按鈕 */
+            padding: 12px 50px;
+        }
+
+        /* --- Schedule Section 半透明方塊 --- */
         .schedule-content-wrapper {
             width: 100%;
             max-width: 1100px;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.5); /* 白色，50% 透明度 */
             border-radius: 40px;
             padding: 60px 40px;
             backdrop-filter: blur(5px);
@@ -119,13 +154,13 @@
 
         .schedule-grid {
             display: grid;
-            grid-template-columns: 1fr 100px 1fr; /* 增加中間寬度以容納戒指圖片 */
+            grid-template-columns: 1fr 100px 1fr;
             width: 100%;
         }
 
         .schedule-column { display: flex; flex-direction: column; gap: 60px; }
 
-        /* --- 核心修改：三段式分隔線設計 --- */
+        /* 中間分隔線佈局 */
         .divider-container {
             display: flex;
             flex-direction: column;
@@ -140,7 +175,6 @@
             position: relative;
         }
 
-        /* 模擬截圖中的星芒裝飾 */
         .divider-line::after {
             content: '✶';
             position: absolute;
@@ -148,15 +182,13 @@
             transform: translateX(-50%);
             color: var(--accent-gold);
             font-size: 18px;
-            /* 讓星芒出現在線條的中段 */
             top: 40%;
         }
 
         .divider-ring-img {
-            width: 90px; /* 根據圖片大小調整 */
+            width: 90px;
             height: auto;
             margin: 25px 0;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
         }
 
         .event-group { text-align: center; }
@@ -201,16 +233,20 @@
         .event-icon-container { flex: 1; display: flex; justify-content: center; }
         .event-icon-img { width: 110px; height: 110px; object-fit: contain; }
 
+        /* --- 手機版微調 (Responsive) --- */
         @media (max-width: 768px) {
-            section { padding: 40px 10px; }
+            section { padding: 40px 10px; min-height: auto; }
+            .hero-title { font-size: 1.8rem; }
+            .merged-photo-container { padding: 15px; border-radius: 20px; }
             .schedule-content-wrapper { padding: 40px 15px; }
             .schedule-grid { grid-template-columns: 1fr 60px 1fr; }
-            .divider-ring-img { width: 50px; margin: 15px 0; }
-            .divider-line::after { font-size: 12px; }
+            .divider-ring-img { width: 50px; }
             .event-icon-img { width: 70px; height: 70px; }
             .group-title { font-size: 1.4rem; }
             .event-time { font-size: 1.1rem; }
             .event-name { font-size: 1rem; }
+            .rsvp-button { font-size: 1.2rem; padding: 12px 50px; }
+            .back-home-button { font-size: 1rem; padding: 10px 30px; }
         }
     </style>
 </head>
@@ -223,11 +259,15 @@
                 <section class="hero-section">
                     <h1 class="hero-title">凱翔與禹萱的婚禮</h1>
                     <p class="hero-date">10.10.2026</p>
+                    
                     <p class="hero-quote">我們...沒有拍婚紗，雖然結婚是個紀念</p>
+                    
                     <div class="merged-photo-container">
                         <img src="schedule/main.png" alt="婚禮照片" class="merged-photo-img">
                     </div>
+
                     <p class="hero-quote">在一起的每一天，更值得留念</p>
+
                     <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdX0pTRn6Xgd2ync0EHPiqUqXZl9hgQm8tBAS4sDOxQ8FcLFA/viewform?usp=header')">回覆出席</button>
                 </section>
 
@@ -324,7 +364,11 @@
                     </div>
                 </section>
 
-                <footer style="text-align: center; padding: 60px 0; opacity: 0.5; font-size: 1rem;">
+                <div class="back-home-container">
+                    <button class="back-home-button" onclick="window.location.href='https://sharyuwu.github.io/wedding/'">← 返回首頁</button>
+                </div>
+
+                <footer style="text-align: center; padding: 40px 0; opacity: 0.5; font-size: 1rem;">
                     2026.10.10 | 凱翔 & 禹萱
                 </footer>
             </div>
