@@ -167,25 +167,23 @@
         .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
         .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
 
-        /* --- 修正：調整 event-item 排版 --- */
+        /* 通用項目設定 */
         .event-item { display: flex; align-items: center; gap: 5px; margin-bottom: 40px; }
-        
-        .event-text-stack { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            flex: 1; /* 保持原本比例 */
-        }
-        
-        .event-icon-container { 
-            display: flex; 
-            justify-content: center; 
-            flex: 1; 
-        }
+        .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .event-icon-container { display: flex; justify-content: center; flex: 1; }
 
-        /* --- 核心修改：結婚典禮區塊圖示向左對齊，往中心移動 --- */
-        #ceremony-target .event-icon-container {
-            justify-content: flex-start; /* 教堂圖示向左靠，貼近文字 */
+        /* --- 結婚典禮 (左欄) 特殊對齊 --- */
+        #ceremony-target .event-icon-container { justify-content: flex-start; }
+
+        /* --- 結婚晚宴 (右欄) 特殊對齊：圖示與文字鏡像排列 --- */
+        #banquet-target .event-item { 
+            flex-direction: row-reverse; /* 讓圖示在左，文字在右 */
+        }
+        #banquet-target .event-text-stack { 
+            align-items: flex-end; /* 文字向右對齊 (向外側) */
+        }
+        #banquet-target .event-icon-container { 
+            justify-content: flex-end; /* 圖示向右靠攏 (向中心分隔線) */
         }
 
         .event-time { font-weight: 600; font-size: 1.5rem; color: #4a3a35; font-family: initial; }
@@ -199,8 +197,6 @@
             .hero-title { font-size: 1.8rem; }
             .schedule-main-title { font-size: 1.6rem; margin-bottom: 30px; }
             .guide-container { flex-direction: column; gap: 30px; align-items: center; }
-            .hero-quote { font-size: 1rem; }
-            .story-section { padding: 30px 15px; }
             .rsvp-button { width: 260px; height: 65px; font-size: 1.3rem; }
             .schedule-grid { grid-template-columns: 1fr 60px 1fr; }
             .divider-ring-img { width: 50px; }
@@ -208,8 +204,10 @@
             .group-title { font-size: 1.4rem; }
             .gold-line-divider { width: 100px; }
             
-            /* 手機版建議恢復置中對齊 */
-            #ceremony-target .event-icon-container { justify-content: center; }
+            /* 手機版恢復一般排列 */
+            #banquet-target .event-item { flex-direction: row; }
+            #banquet-target .event-text-stack { align-items: center; }
+            #ceremony-target .event-icon-container, #banquet-target .event-icon-container { justify-content: center; }
         }
     </style>
 </head>
