@@ -156,9 +156,23 @@
             .spacer-gap { height: 50dvh; }
             .guide-img-wrapper, .view-detail-hint { max-width: 160px; }
             .schedule-grid { grid-template-columns: 1fr; }
-            .divider-container { flex-direction: row; padding: 40px 0; }
-            .divider-line { width: 60px; height: 1px; flex-grow: 0; }
-            .divider-ring-img { width: 50px; margin: 0 10px; }
+            .divider-container { 
+                padding: 40px 0; 
+                flex-direction: row;    /* 讓線條與戒指橫向排列 */
+                justify-content: center; /* 水平置中 */
+                align-items: center;     /* 垂直置中 */
+                width: 100%;             /* 確保容器撐滿寬度 */
+            }
+            .divider-line { 
+                width: 60px;             /* 線條長度 */
+                height: 1px; 
+                flex-grow: 0;            /* 防止線條過度拉伸 */
+            }
+            .divider-ring-img { 
+                width: 50px; 
+                margin: 0 15px;          /* 增加戒指左右的間距 */
+            }
+            
             .rsvp-button { width: 260px; height: 65px; background-image: url('schedule/respond_button_mobile.png'); }
         }
     </style>
