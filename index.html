@@ -34,7 +34,7 @@
             scroll-snap-type: y mandatory;
         }
 
-        /* 背景管理 */
+        /* --- 背景管理系統 --- */
         .index-bg-base {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #fdfaf7; z-index: -2;
@@ -80,7 +80,7 @@
             padding: 0 20px;
         }
 
-        /* 文字元件：預設顯示 (會被窗簾擋住) */
+        /* 文字元件：預設顯示 (一開始躲在窗簾後) */
         .welcome-text { font-size: 3.5rem; color: var(--text-color-index); margin-bottom: 5px; opacity: 1; }
         .date-text-index { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-color-index); opacity: 1; }
         .spacer-gap { width: 100%; height: 40vh; } 
@@ -93,6 +93,7 @@
         }
         .tagline.visible { opacity: 1; }
 
+        /* 打開邀請函按鈕：設定為 1.5s 浮現 */
         .enter-button {
             margin-top: 20px; padding: 12px 50px; background: white;
             border: 1px solid var(--accent-gold); color: var(--text-color-index);
@@ -104,7 +105,7 @@
         }
         .enter-button.btn-visible { opacity: 1; pointer-events: auto; }
 
-        /* --- 1. 窗簾與囍字 --- */
+        /* --- 窗簾與囍字 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { 
             flex: 1; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); 
@@ -123,7 +124,7 @@
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-        /* 音樂控制 */
+        /* 音樂按鈕 */
         .music-toggle {
             position: fixed; bottom: 20px; right: 20px; z-index: 1000;
             width: 45px; height: 45px; background: rgba(255, 255, 255, 0.7);
@@ -135,7 +136,7 @@
         .rotating { animation: music-rotate 3s linear infinite; }
         @keyframes music-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* --- 【下半部：Schedule 排版】 --- */
+        /* --- 【下半部：Schedule 嚴格排版還原】 --- */
         #schedule-section {
             background: transparent !important; opacity: 0; transition: opacity 1.5s ease-in-out;
             color: var(--text-color-schedule); overflow-y: auto;
@@ -146,12 +147,11 @@
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-shadow: 0 0 10px white; font-weight: 500; text-align: center; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
+        /* Guide Container */
         .guide-container { display: flex; justify-content: center; gap: 40px; width: 100%; max-width: 900px; margin-bottom: 50px; }
         .guide-item { 
-            flex: 1; text-align: center; cursor: pointer; 
-            display: flex; flex-direction: column; align-items: center; 
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
-            -webkit-tap-highlight-color: transparent;
+            flex: 1; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; 
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); -webkit-tap-highlight-color: transparent;
         }
         .guide-item.is-clicked { transform: scale(0.95) translateY(2px); transition: transform 0.1s ease; }
         .guide-img-wrapper { 
@@ -161,20 +161,21 @@
         .guide-img { width: 100%; border-radius: 4px; display: block; }
         .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; text-align: left; width: 100%; max-width: 350px; opacity: 0.8; letter-spacing: 1px; }
 
+        /* RSVP */
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; }
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
 
+        /* 故事區 */
         .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; text-align: center; }
         .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; width: 100%; text-shadow: 0 0 10px white; }
         .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; display: block; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); mask-image: radial-gradient(circle, white 75%, transparent 100%); }
 
-        /* 行程表結構 1fr 100px 1fr */
+        /* 行程表：1fr 100px 1fr */
         .schedule-content-wrapper { width: 100%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
         .schedule-main-title { font-size: 2rem; letter-spacing: 4px; text-align: center; margin-bottom: 40px; font-weight: 600; color: #4a3a35; }
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
         .schedule-column { display: flex; flex-direction: column; gap: 20px; text-align: center; }
-
         .event-group { text-align: center; }
         .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
         .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
@@ -195,7 +196,7 @@
         @media (max-width: 768px) {
             .welcome-text { font-size: 1.8rem; }
             .names-index { font-size: 1.6rem; }
-            .spacer-gap { height: 40dvh; }
+            .spacer-gap { height: 50dvh; }
             .hero-title { font-size: 1.6rem; }
             .guide-container { flex-direction: row; gap: 12px; width: 100%; justify-content: center; }
             .guide-img-wrapper, .view-detail-hint { max-width: 160px; }
@@ -257,7 +258,6 @@
                 <div class="card-face">
                     <h1 class="hero-title">凱翔與禹萱的婚禮</h1>
                     <p class="hero-date">10.10.2026</p>
-
                     <div class="guide-container">
                         <div class="guide-item" onclick="handleGuideClick('ceremony', this)">
                             <div class="guide-img-wrapper"><img src="schedule/main-church.png" class="guide-img"></div>
@@ -270,12 +270,10 @@
                             <h3 style="margin-bottom: 5px;">餐廳婚禮晚宴</h3><p style="color:var(--accent-gold); font-weight:600;">18 : 00</p>
                         </div>
                     </div>
-
                     <div class="rsvp-container">
                         <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdX0pTRn6Xgd2ync0EHPiqUqXZl9hgQm8tBAS4sDOxQ8FcLFA/viewform')">回覆出席</button>
                         <p class="rsvp-subtext">填寫 Google 表單，統計出席人數</p>
                     </div>
-
                     <div class="story-section">
                         <div style="display:grid; justify-items:center; width:100%;">
                             <p class="hero-quote" style="text-align:left; width:100%; max-width:800px; margin-bottom:-5px;">我們...沒有拍婚紗，結婚是個紀念</p>
@@ -283,10 +281,8 @@
                             <p class="hero-quote" style="text-align:right; width:100%; max-width:800px; margin-top:-5px;">在一起的每一天，更令人留念</p>
                         </div>
                     </div>
-
                     <div class="schedule-content-wrapper">
                         <h2 class="schedule-main-title" id="schedule-title-target">我們特別的日子</h2>
-                        
                         <div class="schedule-grid">
                             <div class="schedule-column">
                                 <div class="event-group">
@@ -307,9 +303,7 @@
                                 </div>
                             </div>
                             <div class="divider-container">
-                                <div class="divider-line"></div>
-                                <img src="schedule/icon_ring.png" class="divider-ring-img">
-                                <div class="divider-line"></div>
+                                <div class="divider-line"></div><img src="schedule/icon_ring.png" class="divider-ring-img"><div class="divider-line"></div>
                             </div>
                             <div class="schedule-column">
                                 <div class="event-group">
@@ -367,26 +361,15 @@
 
         window.addEventListener('load', initWaterfall);
 
-        // --- 修正後的跳轉邏輯 ---
         function handleGuideClick(type, element) {
             element.classList.add('is-clicked');
             setTimeout(() => {
                 element.classList.remove('is-clicked');
                 const isMobile = window.innerWidth <= 768;
-                let targetId = 'schedule-title-target'; // 預設電腦版標題
-
-                if (isMobile && type === 'banquet') {
-                    targetId = 'banquet-title-target'; // 手機版且點晚宴，跳到小標
-                }
-
+                let targetId = 'schedule-title-target';
+                if (isMobile && type === 'banquet') { targetId = 'banquet-title-target'; }
                 const target = document.getElementById(targetId);
-                if (target) {
-                    // 使用原生 scrollIntoView 對抗 scroll-snap
-                    target.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'start' 
-                    });
-                }
+                if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
             }, 150);
         }
 
@@ -394,7 +377,7 @@
             if (bgMusic) { bgMusic.play().then(() => musicToggle.classList.add('rotating')).catch(e => console.log("Music blocked")); }
             document.body.classList.add('opened');
             setTimeout(() => { document.body.classList.add('snap-mode'); }, 50);
-            setTimeout(updateTagline, 1300); 
+            setTimeout(updateTagline, 1300); // 窗簾拉開一半啟動
             setTimeout(() => {
                 const curtain = document.getElementById('curtainLayer');
                 if (curtain) curtain.remove();
@@ -406,8 +389,10 @@
             else { bgMusic.pause(); musicToggle.classList.remove('rotating'); }
         }
 
+        // --- 核心修正：調整按鈕浮現時機 ---
         function updateTagline() {
             if (!taglineEl) return;
+            
             if (currentIndex === 0) {
                 taglineEl.innerText = phrases[currentIndex];
                 taglineEl.classList.add('visible');
@@ -417,15 +402,17 @@
                 taglineEl.classList.remove('visible');
                 setTimeout(() => {
                     taglineEl.innerText = phrases[currentIndex];
-                    setTimeout(() => {
-                        taglineEl.classList.add('visible');
-                        if (currentIndex < phrases.length - 1) {
-                            currentIndex++;
-                            setTimeout(updateTagline, 3500);
-                        } else {
-                            setTimeout(() => { if (enterBtn) enterBtn.classList.add('btn-visible'); }, 1200); 
-                        }
-                    }, 100); 
+                    taglineEl.classList.add('visible');
+
+                    // 【核心邏輯：當顯示「我們要結婚了！」(currentIndex為1) 時啟動按鈕浮現】
+                    if (currentIndex === 1 && enterBtn) {
+                        enterBtn.classList.add('btn-visible');
+                    }
+                    
+                    if (currentIndex < phrases.length - 1) {
+                        currentIndex++;
+                        setTimeout(updateTagline, 3500);
+                    }
                 }, 850); 
             }
         }
