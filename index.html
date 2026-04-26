@@ -19,21 +19,21 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* --- 核心模式切換 --- */
+        /* --- 核心模式設定 --- */
         html, body {
             width: 100%; height: 100%;
             font-family: var(--handwriting);
             scroll-behavior: smooth;
+            background-color: #fdfaf7;
         }
 
         /* 初始分頁模式 */
         body.snap-mode {
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
-            background-color: #fdfaf7;
         }
 
-        /* 行程表模式：移除首頁並置頂 */
+        /* 進入行程表模式：解除吸附，允許長捲動 */
         body.schedule-mode {
             scroll-snap-type: none;
             overflow-y: auto;
@@ -44,11 +44,35 @@
             width: 100%; height: 100vh; height: 100dvh;
             scroll-snap-align: start; scroll-snap-stop: always;
             position: relative; overflow: hidden;
+            transition: opacity 1.5s ease-in-out, height 0s 1.5s; /* 延遲高度縮減 */
         }
 
-        /* --- 【上版部：Index】 --- */
-        #hero-section { z-index: 10; transition: opacity 1.5s ease-in-out; background-color: #fdfaf7; }
-        body.schedule-mode #hero-section { display: none; }
+        /* --- 【固定背景層：解決拉伸問題】 --- */
+        .schedule-bg-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: url('schedule/background.jpg') center center / cover no-repeat;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            pointer-events: none;
+        }
+        /* 當進入行程表或滑動時顯示背景 */
+        body.schedule-emerged .schedule-bg-layer {
+            opacity: 1;
+        }
+
+        /* --- 【上版部：Index 樣式】 --- */
+        #hero-section { z-index: 10; }
+        
+        /* 解決閃爍關鍵：不要立刻 display: none，而是透過 class 控制 */
+        body.schedule-mode #hero-section {
+            height: 0;
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+        }
 
         .layer-base, .layer-mid, .layer-top {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -64,17 +88,17 @@
             opacity: 0; transition: opacity 1.2s ease-out;
         }
         .content-layer.visible { opacity: 1; }
-        .fade-out { opacity: 0 !important; } /* 按下按鈕後淡出 */
+        .fade-out { opacity: 0 !important; }
 
         .spacer-gap { width: 100%; height: 40vh; }
         .welcome-text { font-size: 3.5rem; color: var(--text-color-index); margin-bottom: 5px; }
-        .date-text-index { font-size: 1.5rem; letter-spacing: 5px; }
-        .names-index { font-weight: 600; font-size: 2.2rem; }
-        .tagline { font-size: 1.4rem; margin-top: 10px; min-height: 1.6em; opacity: 0; transition: 0.4s; }
+        .date-text-index { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-color-index); }
+        .names-index { font-weight: 600; font-size: 2.2rem; color: var(--text-color-index); }
+        .tagline { font-size: 1.4rem; margin-top: 10px; min-height: 1.6em; color: var(--text-color-index); opacity: 0; transition: 0.4s; }
         .tagline.visible { opacity: 1; }
         .enter-button { margin-top: 20px; padding: 12px 50px; background: white; border: 1px solid var(--accent-gold); border-radius: 30px; cursor: pointer; text-decoration: none; color: inherit; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 
-        /* 窗簾動畫 */
+        /* 窗簾 */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { flex: 1; height: 100%; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px); transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); }
         .opened .curtain.left { transform: translateX(-100%); }
@@ -84,62 +108,47 @@
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-        /* --- 【下版部：Schedule】 --- */
+        /* --- 【下版部：Schedule 樣式】 --- */
         #schedule-section {
-            background-image: url('schedule/background.jpg');
-            background-repeat: no-repeat; background-position: center center; background-size: cover; background-attachment: fixed;
-            opacity: 0; /* 初始透明 */
-            transform: translateY(30px); /* 初始微位移 */
+            background: transparent !important; /* 背景交給 schedule-bg-layer */
+            opacity: 0;
+            transform: translateY(30px);
             transition: opacity 1.5s ease-out, transform 1.5s ease-out;
             color: var(--text-color-schedule);
         }
-        /* 當進入行程表區域時浮現 */
         body.schedule-emerged #schedule-section { opacity: 1; transform: translateY(0); }
         body.schedule-mode #schedule-section { height: auto; overflow-y: visible; }
 
-        .mobile-bg-fix { display: none; }
+        .page-wrapper { width: 100%; min-height: 100vh; display: flex; justify-content: center; position: relative; z-index: 1; }
+        .card-inner { width: 100%; background: transparent !important; }
+        .card-face { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 60px 20px; background: transparent !important; }
 
-        .page-wrapper { perspective: 2000px; width: 100%; min-height: 100vh; display: flex; justify-content: center; position: relative; z-index: 1; }
-        
-        /* 核心修正：移除翻轉動畫 transform: rotateY，設定透明 */
-        .card-inner {
-            width: 100%; max-width: 100%; min-height: 100vh;
-            position: relative;
-            background: transparent !important;
-            /* 移除 rotateY(180deg) */
-        }
-
-        .card-face {
-            width: 100%; display: flex; flex-direction: column; align-items: center;
-            background: transparent !important;
-        }
-
-        /* 繼承文字大小與樣式 */
-        .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-bottom: 10px; font-weight: 500; text-shadow: 0 0 10px white; margin-top: 60px; }
-        .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; }
+        .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-bottom: 10px; font-weight: 500; text-shadow: 0 0 10px white, 0 0 2px white; margin-top: 60px; text-align: center; }
+        .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; text-align: center; }
 
         .guide-container { display: flex; justify-content: center; gap: 40px; width: 100%; max-width: 900px; margin-bottom: 50px; }
-        .guide-item { flex: 1; text-align: center; cursor: pointer; transition: 0.4s; }
-        .guide-img-wrapper { width: 100%; max-width: 350px; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin: 0 auto 10px; }
-        .guide-img { width: 100%; border-radius: 4px; }
-        .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin: 0 auto 10px; display: block; text-align: left; max-width: 350px; opacity: 0.8; }
+        .guide-item { flex: 1; text-align: center; cursor: pointer; transition: 0.4s; display: flex; flex-direction: column; align-items: center; }
+        .guide-img-wrapper { width: 100%; max-width: 350px; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; }
+        .guide-img { width: 100%; border-radius: 4px; display: block; }
+        .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; text-align: left; width: 100%; max-width: 350px; opacity: 0.8; }
+        .guide-item h3 { font-size: 1.5rem; margin-bottom: 8px; color: #4a3a35; }
+        .guide-item p { font-size: 1.4rem; color: var(--accent-gold); font-weight: 600; }
 
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
         .rsvp-button:hover { transform: scale(1.05); }
 
-        .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; text-align: center; }
-        .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; width: 100%; }
-        .quote-left { text-align: left; }
-        .quote-right { text-align: right; }
-        .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); mask-image: radial-gradient(circle, white 75%, transparent 100%); }
+        .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; }
+        .hero-quote { font-size: 1.2rem; line-height: 2; width: 100%; opacity: 0.9; }
+        .quote-left { text-align: left; } .quote-right { text-align: right; }
+        .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; display: block; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); mask-image: radial-gradient(circle, white 75%, transparent 100%); }
 
         .schedule-content-wrapper { width: 100%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
-        .schedule-column { display: flex; flex-direction: column; gap: 60px; }
+        .schedule-column { display: flex; flex-direction: column; gap: 60px; text-align: center; }
         .event-item { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 40px; }
         .event-text-stack { display: flex; flex-direction: column; align-items: center; }
-        .event-time { font-weight: 600; font-size: 1.5rem; font-family: initial; }
+        .event-time { font-weight: 600; font-size: 1.5rem; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; }
         .gold-line-divider { width: 110px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; }
         .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--accent-gold); }
@@ -149,23 +158,23 @@
         .divider-ring-img { width: 80px; margin: 25px 0; }
 
         @media (max-width: 768px) {
-            #schedule-section { background-image: none !important; }
-            .mobile-bg-fix { display: block; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: url('schedule/background_mobile.jpg') center center / cover no-repeat; z-index: -1; }
+            .schedule-bg-layer { background-image: url('schedule/background_mobile.jpg'); }
             .welcome-text { font-size: 1.8rem; }
             .spacer-gap { height: 50dvh; }
-            .hero-title { font-size: 1.6rem; }
             .guide-container { gap: 12px; }
             .guide-img-wrapper, .view-detail-hint { max-width: 160px; }
             .schedule-grid { grid-template-columns: 1fr; }
             .divider-container { flex-direction: row; padding: 40px 0; }
             .divider-line { width: 60px; height: 1px; }
             .divider-ring-img { width: 50px; }
-            .rsvp-button { width: 260px; height: 65px; background-image: url('schedule/respond_button_mobile.png'); }
+            .rsvp-button { width: 260px; height: 65px; }
         }
     </style>
 </head>
 
 <body class="snap-mode">
+
+    <div class="schedule-bg-layer"></div>
 
     <div class="curtain-wrapper" id="curtainLayer">
         <div class="curtain left"></div>
@@ -194,90 +203,79 @@
         </div>
     </section>
 
-    <div class="mobile-bg-fix"></div>
-
     <section class="snap-section" id="schedule-section">
         <div class="page-wrapper">
-            <div class="card-inner" id="mainCard">
+            <div class="card-inner">
                 <div class="card-face">
-                    
-                    <section style="width:100%; max-width:1200px; display:flex; flex-direction:column; align-items:center;">
-                        <h1 class="hero-title">凱翔與禹萱的婚禮</h1>
-                        <p class="hero-date">10.10.2026</p>
+                    <h1 class="hero-title">凱翔與禹萱的婚禮</h1>
+                    <p class="hero-date">10.10.2026</p>
 
-                        <div class="guide-container">
-                            <div class="guide-item" onclick="handleGuideClick('ceremony-target', this)">
-                                <div class="guide-img-wrapper"><img src="schedule/main-church.png" class="guide-img"></div>
-                                <span class="view-detail-hint">點擊查看行程</span>
-                                <h3>教堂婚禮彌撒</h3><p>13 : 00</p>
-                            </div>
-                            <div class="guide-item" onclick="handleGuideClick('banquet-target', this)">
-                                <div class="guide-img-wrapper"><img src="schedule/main-bouquet.png" class="guide-img"></div>
-                                <span class="view-detail-hint">點擊查看行程</span>
-                                <h3>餐廳婚禮晚宴</h3><p>18 : 00</p>
-                            </div>
+                    <div class="guide-container">
+                        <div class="guide-item" onclick="handleGuideClick('ceremony-target', this)">
+                            <div class="guide-img-wrapper"><img src="schedule/main-church.png" class="guide-img"></div>
+                            <span class="view-detail-hint">點擊查看行程</span>
+                            <h3>教堂婚禮彌撒</h3><p>13 : 00</p>
                         </div>
-
-                        <div class="rsvp-container">
-                            <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/...')">回覆出席</button>
-                            <p style="margin-top:15px; opacity:0.9">填寫 Google 表單，統計參與人數</p>
+                        <div class="guide-item" onclick="handleGuideClick('banquet-target', this)">
+                            <div class="guide-img-wrapper"><img src="schedule/main-bouquet.png" class="guide-img"></div>
+                            <span class="view-detail-hint">點擊查看行程</span>
+                            <h3>餐廳婚禮晚宴</h3><p>18 : 00</p>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="story-section">
+                    <div class="rsvp-container">
+                        <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/...')">回覆出席</button>
+                        <p style="margin-top:15px; opacity:0.9">填寫 Google 表單，統計參與人數</p>
+                    </div>
+
+                    <div class="story-section">
                         <div style="display:grid; justify-items:center; width:100%;">
                             <p class="hero-quote quote-left">我們...沒有拍婚紗，結婚是個紀念</p>
-                            <img src="schedule/main.png" alt="婚禮照片" class="merged-photo-img">
+                            <img src="schedule/main.png" class="merged-photo-img">
                             <p class="hero-quote quote-right">在一起的每一天，更令人留念</p>
                         </div>
-                    </section>
+                    </div>
 
-                    <section style="width:100%; max-width:1200px; display:flex; flex-direction:column; align-items:center;">
-                        <div class="schedule-content-wrapper">
-                            <h2 style="text-align:center; font-size:2rem; margin-bottom:40px; letter-spacing:4px;">我們特別的日子</h2>
-                            <div class="schedule-grid">
-                                <div class="schedule-column" id="ceremony-target">
-                                    <div style="text-align:center">
-                                        <h3 style="font-size:2rem; font-weight:600;">結婚典禮</h3>
-                                        <p style="color:var(--accent-gold); margin-bottom:40px">地點：汐止天主堂</p>
-                                        <div class="event-item">
-                                            <div class="event-text-stack"><p class="event-time">13:00</p><p>賓客入場</p><div class="gold-line-divider"></div></div>
-                                            <img src="schedule/icon_church.png" class="event-icon-img">
-                                        </div>
-                                        <div class="event-item">
-                                            <div class="event-text-stack"><p class="event-time">13:30</p><p>典禮開始</p><div class="gold-line-divider"></div></div>
-                                            <img src="schedule/icon_doves.png" class="event-icon-img">
-                                        </div>
-                                        <div class="event-item">
-                                            <div class="event-text-stack"><p class="event-time">15:00</p><p>茶會慶祝</p><div class="gold-line-divider"></div></div>
-                                            <img src="schedule/icon_cake.png" class="event-icon-img">
-                                        </div>
-                                    </div>
+                    <div class="schedule-content-wrapper">
+                        <h2 style="text-align:center; font-size:2rem; margin-bottom:40px;">我們特別的日子</h2>
+                        <div class="schedule-grid">
+                            <div class="schedule-column" id="ceremony-target">
+                                <h3 style="font-size:2rem; font-weight:600;">結婚典禮</h3>
+                                <p style="color:var(--accent-gold); margin-bottom:40px">汐止天主堂</p>
+                                <div class="event-item">
+                                    <div class="event-text-stack"><p class="event-time">13:00</p><p>賓客入場</p><div class="gold-line-divider"></div></div>
+                                    <img src="schedule/icon_church.png" class="event-icon-img">
                                 </div>
-                                <div class="divider-container">
-                                    <div class="divider-line"></div><img src="schedule/icon_ring.png" class="divider-ring-img"><div class="divider-line"></div>
+                                <div class="event-item">
+                                    <div class="event-text-stack"><p class="event-time">13:30</p><p>典禮開始</p><div class="gold-line-divider"></div></div>
+                                    <img src="schedule/icon_doves.png" class="event-icon-img">
                                 </div>
-                                <div class="schedule-column" id="banquet-target">
-                                    <div style="text-align:center">
-                                        <h3 style="font-size:2rem; font-weight:600;">結婚晚宴</h3>
-                                        <p style="color:var(--accent-gold); margin-bottom:40px">地點：兄弟飯店，桂花廳</p>
-                                        <div class="event-item">
-                                            <div class="event-text-stack"><p class="event-time">18:00</p><p>晚宴簽到</p><div class="gold-line-divider"></div></div>
-                                            <img src="schedule/icon_champagne.png" class="event-icon-img">
-                                        </div>
-                                        <div class="event-item">
-                                            <div class="event-text-stack"><p class="event-time">18:30</p><p>晚宴開始</p><div class="gold-line-divider"></div></div>
-                                            <img src="schedule/icon_bouquet.png" class="event-icon-img">
-                                        </div>
-                                        <div class="event-item">
-                                            <div class="event-text-stack"><p class="event-time">20:30</p><p>送客合影</p><div class="gold-line-divider"></div></div>
-                                            <img src="schedule/icon_the_end.png" class="event-icon-img">
-                                        </div>
-                                    </div>
+                                <div class="event-item">
+                                    <div class="event-text-stack"><p class="event-time">15:00</p><p>茶會慶祝</p><div class="gold-line-divider"></div></div>
+                                    <img src="schedule/icon_cake.png" class="event-icon-img">
+                                </div>
+                            </div>
+                            <div class="divider-container">
+                                <div class="divider-line"></div><img src="schedule/icon_ring.png" class="divider-ring-img"><div class="divider-line"></div>
+                            </div>
+                            <div class="schedule-column" id="banquet-target">
+                                <h3 style="font-size:2rem; font-weight:600;">結婚晚宴</h3>
+                                <p style="color:var(--accent-gold); margin-bottom:40px">兄弟飯店，桂花廳</p>
+                                <div class="event-item">
+                                    <div class="event-text-stack"><p class="event-time">18:00</p><p>晚宴簽到</p><div class="gold-line-divider"></div></div>
+                                    <img src="schedule/icon_champagne.png" class="event-icon-img">
+                                </div>
+                                <div class="event-item">
+                                    <div class="event-text-stack"><p class="event-time">18:30</p><p>晚宴開始</p><div class="gold-line-divider"></div></div>
+                                    <img src="schedule/icon_bouquet.png" class="event-icon-img">
+                                </div>
+                                <div class="event-item">
+                                    <div class="event-text-stack"><p class="event-time">20:30</p><p>送客合影</p><div class="gold-line-divider"></div></div>
+                                    <img src="schedule/icon_the_end.png" class="event-icon-img">
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
                     <footer style="text-align: center; padding: 40px 0; opacity: 0.5;">2026.10.10 | 凱翔 & 禹萱</footer>
                 </div>
@@ -290,7 +288,6 @@
         let currentIndex = 0;
         const taglineEl = document.getElementById('dynamicTagline');
 
-        // 窗簾啟動函式
         function startApp() {
             document.body.classList.add('opened');
             setTimeout(showIndex, 1000);
@@ -315,15 +312,7 @@
             }, 500);
         }
 
-        // 核心模式切換函式
-        function activateScheduleMode() {
-            if (document.body.classList.contains('schedule-mode')) return;
-            document.body.classList.remove('snap-mode');
-            document.body.classList.add('schedule-mode');
-            window.scrollTo(0, 0); 
-        }
-
-        // 修改後的「打開邀請函」轉場動畫
+        // 修改後的無閃爍轉場
         function goToSchedule() {
             // 1. Index 淡出
             document.getElementById('baseLayer').classList.add('fade-out');
@@ -331,20 +320,24 @@
             document.getElementById('topLayer').classList.add('fade-out');
             document.getElementById('mainContent').classList.add('fade-out');
 
-            // 2. Schedule 浮現
+            // 2. Schedule 背景與內容浮現
             document.body.classList.add('schedule-emerged');
             
-            // 3. 平滑捲動到第二頁
+            // 3. 平滑捲動
             document.getElementById('schedule-section').scrollIntoView({ behavior: 'smooth' });
 
-            // 4. 1.5 秒動畫完成後正式切換模式
-            setTimeout(activateScheduleMode, 1500);
+            // 4. 等待捲動完成後切換模式
+            setTimeout(() => {
+                // 核心關鍵：先取消 snap 再切換，避免閃爍
+                document.body.classList.remove('snap-mode');
+                document.body.classList.add('schedule-mode');
+                // 因為 Index 高度變 0，這裡強制回到頂部是無感的
+                window.scrollTo(0, 0); 
+            }, 1000);
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // F5 重置不保留狀態，固定顯示窗簾
-
-            // 手機版自動圖片字尾替換
+            // 圖片自動替換邏輯
             if (window.innerWidth <= 768) {
                 document.querySelectorAll('img').forEach(img => {
                     let src = img.getAttribute('src');
@@ -354,15 +347,21 @@
                 });
             }
 
-            // 監測手動捲動觸發浮現
+            // 監測滑動
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(e => {
                     if (e.isIntersecting) {
                         document.body.classList.add('schedule-emerged');
-                        setTimeout(activateScheduleMode, 800);
+                        // 使用者手動滑下來時，延遲一點再切換模式以維持流暢感
+                        setTimeout(() => {
+                            if (!document.body.classList.contains('schedule-mode')) {
+                                document.body.classList.remove('snap-mode');
+                                document.body.classList.add('schedule-mode');
+                            }
+                        }, 1000);
                     }
                 });
-            }, { threshold: 0.4 });
+            }, { threshold: 0.2 });
             observer.observe(document.getElementById('schedule-section'));
         });
 
