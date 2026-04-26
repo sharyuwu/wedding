@@ -22,8 +22,6 @@
             min-height: 100%; width: 100%;
             font-family: var(--handwriting);
             color: var(--text-color);
-            
-            /* --- 背景設定：僅保留底圖 --- */
             background-image: url('schedule/background.jpg');
             background-repeat: no-repeat;
             background-position: center center;
@@ -80,7 +78,6 @@
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-bottom: 10px; font-weight: 500; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
-        /* 引導區塊佈局 */
         .guide-container {
             display: flex;
             justify-content: center;
@@ -112,7 +109,6 @@
         .guide-item h3 { font-size: 1.5rem; margin-bottom: 8px; }
         .guide-item p { font-size: 1.4rem; color: var(--accent-gold); font-family: initial; font-weight: 600; }
 
-        /* 回覆出席按鈕 */
         .rsvp-container {
             text-align: center;
             margin-bottom: 80px;
@@ -138,27 +134,50 @@
         .rsvp-button:hover { transform: scale(1.05); filter: brightness(1.05); }
         .rsvp-subtext { font-size: 0.9rem; color: #888; margin-top: 10px; }
 
-        /* --- 調整：故事區背板透明度為 0.2 --- */
+        /* --- 故事區調整 --- */
         .story-section {
             background: rgba(255, 255, 255, 0.2); 
             border-radius: 40px;
-            padding: 60px 40px;
+            padding: 40px;
             margin-bottom: 60px;
-            backdrop-filter: blur(3px); /* 增加輕微模糊感提升易讀性 */
+            backdrop-filter: blur(3px);
+            width: 100%;
+            max-width: 1000px;
         }
 
-        .merged-photo-container {
+        .story-content {
             width: 100%;
-            max-width: 800px;
-            margin: 30px auto;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            padding: 20px;
-            -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 70%, rgba(255,255,255,0) 100%);
-            mask-image: radial-gradient(circle, rgba(255,255,255,1) 70%, rgba(255,255,255,0) 100%);
+            max-width: 800px; /* 寬度與照片一致 */
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
         }
-        .merged-photo-img { width: 100%; height: auto; display: block; }
-        .hero-quote { font-size: 1.2rem; margin: 20px 0; opacity: 0.9; line-height: 2; text-align: center; }
+
+        .hero-quote {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            line-height: 2;
+        }
+
+        /* 調整文字對齊與距離 */
+        .quote-left {
+            text-align: left;
+            margin-bottom: -5px; /* 往下拉近照片 */
+        }
+
+        .quote-right {
+            text-align: right;
+            margin-top: -5px; /* 往上拉近照片 */
+        }
+
+        .merged-photo-img { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+            margin: 0 auto;
+            -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%);
+            mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%);
+        }
 
         /* 行程表區塊 */
         .schedule-content-wrapper {
@@ -173,26 +192,29 @@
 
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
         .schedule-column { display: flex; flex-direction: column; gap: 60px; }
+
         .divider-container { display: flex; flex-direction: column; align-items: center; height: 100%; }
-        .divider-line { width: 1px; background: var(--light-gold); flex-grow: 1; position: relative; }
-        .divider-line::after { content: '✶'; position: absolute; left: 50%; transform: translateX(-50%); color: var(--accent-gold); font-size: 18px; top: 40%; }
-        .divider-ring-img { width: 90px; height: auto; margin: 25px 0; }
+        .divider-line { width: 20px; flex-grow: 1; background: url('schedule/line.png') no-repeat center; background-size: contain; transform: rotate(90deg); }
+        .divider-ring-img { width: 90px; height: auto; margin: 25px 0; z-index: 2; }
+
         .event-group { text-align: center; }
         .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
         .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
+
         .event-item { display: flex; align-items: center; justify-content: center; gap: 30px; margin-bottom: 40px; }
         .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: 1; }
         .event-time { font-weight: 600; font-size: 1.5rem; color: #4a3a35; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
-        .gold-line-divider { width: 120px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; }
-        .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: var(--accent-gold); background: rgba(255, 255, 255, 0.01); padding: 0 5px; }
+
+        .gold-line-divider { width: 150px; height: 15px; background: url('schedule/line.png') no-repeat center; background-size: contain; margin-top: 5px; }
         .event-icon-img { width: 110px; height: 110px; object-fit: contain; }
 
         @media (max-width: 768px) {
             section { padding: 40px 10px; min-height: auto; }
             .hero-title { font-size: 1.8rem; }
             .guide-container { flex-direction: column; gap: 30px; align-items: center; }
-            .guide-img-wrapper { max-width: 280px; }
+            .hero-quote { font-size: 1rem; }
+            .story-section { padding: 30px 15px; }
             .rsvp-button { width: 260px; height: 65px; font-size: 1.3rem; }
             .schedule-grid { grid-template-columns: 1fr 60px 1fr; }
             .divider-ring-img { width: 50px; }
@@ -235,11 +257,13 @@
                 </section>
 
                 <section class="story-section">
-                    <p class="hero-quote">我們...沒有拍婚紗，雖然結婚是個紀念</p>
-                    <div class="merged-photo-container">
+                    <div class="story-content">
+                        <p class="hero-quote quote-left">我們...沒有拍婚紗，雖然結婚是個紀念</p>
+                        
                         <img src="schedule/main.png" alt="婚禮照片" class="merged-photo-img">
+                        
+                        <p class="hero-quote quote-right">在一起的每一天，更值得留念</p>
                     </div>
-                    <p class="hero-quote">在一起的每一天，更值得留念</p>
                 </section>
 
                 <section class="schedule-section">
@@ -275,11 +299,13 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="divider-container">
                                 <div class="divider-line"></div>
                                 <img src="schedule/icon_ring.png" alt="戒指" class="divider-ring-img">
                                 <div class="divider-line"></div>
                             </div>
+
                             <div class="schedule-column">
                                 <div class="event-group">
                                     <h3 class="group-title">結婚晚宴</h3>
@@ -315,7 +341,7 @@
                 </section>
 
                 <div class="back-home-container">
-                    <a class="back-home-button" style="text-decoration:none; padding:12px 50px; border:2px solid var(--accent-gold); border-radius:30px; color:var(--text-color);" href="https://sharyuwu.github.io/wedding/">← 返回邀請函首頁</a>
+                    <a class="back-home-button" style="text-decoration:none; padding:12px 50px; border:2px solid var(--accent-gold); border-radius:30px; color:var(--text-color); margin-top: 40px; display: inline-block;" href="https://sharyuwu.github.io/wedding/">← 返回邀請函首頁</a>
                 </div>
 
                 <footer style="text-align: center; padding: 40px 0; opacity: 0.5; font-size: 1rem;">
