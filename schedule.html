@@ -28,7 +28,7 @@
             background-size: cover;
             background-attachment: fixed;
             background-color: #ece5df;
-            scroll-behavior: smooth; /* 全域平滑捲動 */
+            scroll-behavior: smooth;
         }
 
         .page-wrapper {
@@ -124,8 +124,6 @@
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center; background-size: contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; transition: 0.3s; padding-bottom: 5px; }
         .rsvp-button:hover { transform: scale(1.05); }
-        
-        /* 補回說明文字的樣式 */
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
 
         .story-section {
@@ -169,8 +167,27 @@
         .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
         .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
 
-        .event-item { display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 40px; }
-        .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: 1; }
+        /* --- 修正：調整 event-item 排版 --- */
+        .event-item { display: flex; align-items: center; gap: 5px; margin-bottom: 40px; }
+        
+        .event-text-stack { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            flex: 1; /* 保持原本比例 */
+        }
+        
+        .event-icon-container { 
+            display: flex; 
+            justify-content: center; 
+            flex: 1; 
+        }
+
+        /* --- 核心修改：結婚典禮區塊圖示向左對齊，往中心移動 --- */
+        #ceremony-target .event-icon-container {
+            justify-content: flex-start; /* 教堂圖示向左靠，貼近文字 */
+        }
+
         .event-time { font-weight: 600; font-size: 1.5rem; color: #4a3a35; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
         .gold-line-divider { width: 120px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; margin-top: 5px; }
@@ -190,6 +207,9 @@
             .event-icon-img { width: 70px; height: 70px; }
             .group-title { font-size: 1.4rem; }
             .gold-line-divider { width: 100px; }
+            
+            /* 手機版建議恢復置中對齊 */
+            #ceremony-target .event-icon-container { justify-content: center; }
         }
     </style>
 </head>
