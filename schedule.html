@@ -71,7 +71,7 @@
             align-items: center;
         }
 
-        .hero-title, .hero-date, .hero-quote, .guide-item h3, .guide-item p {
+        .hero-title, .hero-date, .hero-quote, .guide-item h3, .guide-item p, .schedule-main-title {
             text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,1);
         }
 
@@ -87,99 +87,24 @@
             margin-bottom: 50px;
         }
 
-        .guide-item {
-            flex: 1;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .guide-img-wrapper {
-            width: 100%;
-            max-width: 350px;
-            margin-bottom: 20px;
-            position: relative;
-            padding: 10px;
-            border: 1px solid rgba(166, 124, 82, 0.3);
-            border-radius: 4px;
-        }
-
+        .guide-item { flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .guide-img-wrapper { width: 100%; max-width: 350px; margin-bottom: 20px; position: relative; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 4px; }
         .guide-img { width: 100%; height: auto; display: block; }
         .guide-item h3 { font-size: 1.5rem; margin-bottom: 8px; }
         .guide-item p { font-size: 1.4rem; color: var(--accent-gold); font-family: initial; font-weight: 600; }
 
-        .rsvp-container {
-            text-align: center;
-            margin-bottom: 80px;
-        }
-
-        .rsvp-button {
-            width: 320px;
-            height: 80px;
-            background: url('schedule/respond_button.png') no-repeat center;
-            background-size: contain;
-            border: none;
-            cursor: pointer;
-            font-family: var(--handwriting);
-            font-size: 1.6rem;
-            color: #5d4a44;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: 0.3s;
-            padding-bottom: 5px;
-        }
-        
+        .rsvp-container { text-align: center; margin-bottom: 80px; }
+        .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center; background-size: contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; transition: 0.3s; padding-bottom: 5px; }
         .rsvp-button:hover { transform: scale(1.05); filter: brightness(1.05); }
-        .rsvp-subtext { font-size: 0.9rem; color: #888; margin-top: 10px; }
 
-        /* --- 故事區調整 --- */
-        .story-section {
-            background: rgba(255, 255, 255, 0.2); 
-            border-radius: 40px;
-            padding: 40px;
-            margin-bottom: 60px;
-            backdrop-filter: blur(3px);
-            width: 100%;
-            max-width: 1000px;
-        }
+        .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; }
+        .story-content { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; }
+        .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; }
+        .quote-left { text-align: left; margin-bottom: -5px; }
+        .quote-right { text-align: right; margin-top: -5px; }
+        .merged-photo-img { width: 100%; height: auto; display: block; margin: 0 auto; -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); }
 
-        .story-content {
-            width: 100%;
-            max-width: 800px; /* 寬度與照片一致 */
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .hero-quote {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            line-height: 2;
-        }
-
-        /* 調整文字對齊與距離 */
-        .quote-left {
-            text-align: left;
-            margin-bottom: -5px; /* 往下拉近照片 */
-        }
-
-        .quote-right {
-            text-align: right;
-            margin-top: -5px; /* 往上拉近照片 */
-        }
-
-        .merged-photo-img { 
-            width: 100%; 
-            height: auto; 
-            display: block; 
-            margin: 0 auto;
-            -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%);
-            mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%);
-        }
-
-        /* 行程表區塊 */
+        /* --- Schedule Section 標題與方框樣式 --- */
         .schedule-content-wrapper {
             width: 100%;
             max-width: 1100px;
@@ -190,11 +115,21 @@
             margin: 20px auto;
         }
 
+        .schedule-main-title {
+            font-size: 2rem;
+            letter-spacing: 4px;
+            text-align: center;
+            margin-bottom: 40px; /* 與下方內容的距離 */
+            font-weight: 600;
+            color: #4a3a35;
+        }
+
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
         .schedule-column { display: flex; flex-direction: column; gap: 60px; }
 
         .divider-container { display: flex; flex-direction: column; align-items: center; height: 100%; }
-        .divider-line { width: 20px; flex-grow: 1; background: url('schedule/line.png') no-repeat center; background-size: contain; transform: rotate(90deg); }
+        .divider-line { width: 1px; flex-grow: 1; background: var(--light-gold); position: relative; }
+        .divider-line::after { content: '✶'; position: absolute; left: 50%; transform: translateX(-50%); color: var(--accent-gold); font-size: 18px; top: 40%; }
         .divider-ring-img { width: 90px; height: auto; margin: 25px 0; z-index: 2; }
 
         .event-group { text-align: center; }
@@ -205,13 +140,14 @@
         .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: 1; }
         .event-time { font-weight: 600; font-size: 1.5rem; color: #4a3a35; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
-
-        .gold-line-divider { width: 150px; height: 15px; background: url('schedule/line.png') no-repeat center; background-size: contain; margin-top: 5px; }
+        .gold-line-divider { width: 120px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; margin-top: 5px; }
+        .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: var(--accent-gold); background: rgba(255, 255, 255, 0.01); padding: 0 5px; }
         .event-icon-img { width: 110px; height: 110px; object-fit: contain; }
 
         @media (max-width: 768px) {
             section { padding: 40px 10px; min-height: auto; }
             .hero-title { font-size: 1.8rem; }
+            .schedule-main-title { font-size: 1.6rem; margin-bottom: 30px; }
             .guide-container { flex-direction: column; gap: 30px; align-items: center; }
             .hero-quote { font-size: 1rem; }
             .story-section { padding: 30px 15px; }
@@ -220,6 +156,7 @@
             .divider-ring-img { width: 50px; }
             .event-icon-img { width: 70px; height: 70px; }
             .group-title { font-size: 1.4rem; }
+            .gold-line-divider { width: 100px; }
         }
     </style>
 </head>
@@ -252,22 +189,21 @@
 
                     <div class="rsvp-container">
                         <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdX0pTRn6Xgd2ync0EHPiqUqXZl9hgQm8tBAS4sDOxQ8FcLFA/viewform?usp=header')">回覆出席</button>
-                        <p class="rsvp-subtext">填寫 Google 表單，統計參與人數</p>
                     </div>
                 </section>
 
                 <section class="story-section">
                     <div class="story-content">
                         <p class="hero-quote quote-left">我們...沒有拍婚紗，雖然結婚是個紀念</p>
-                        
                         <img src="schedule/main.png" alt="婚禮照片" class="merged-photo-img">
-                        
                         <p class="hero-quote quote-right">在一起的每一天，更值得留念</p>
                     </div>
                 </section>
 
                 <section class="schedule-section">
                     <div class="schedule-content-wrapper">
+                        <h2 class="schedule-main-title">我們的特別的日子</h2>
+                        
                         <div class="schedule-grid">
                             <div class="schedule-column">
                                 <div class="event-group">
