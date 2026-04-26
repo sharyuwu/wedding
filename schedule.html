@@ -126,6 +126,7 @@
         .rsvp-button:hover { transform: scale(1.05); }
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
 
+        /* 故事區：高度調小且透明度 0.2 */
         .story-section {
             background: rgba(255, 255, 255, 0.2); 
             border-radius: 40px;
@@ -167,29 +168,33 @@
         .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
         .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
 
-        /* 通用項目設定 */
+        /* 通用行程項目排版 */
         .event-item { display: flex; align-items: center; gap: 5px; margin-bottom: 40px; }
-        .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .event-icon-container { display: flex; justify-content: center; flex: 1; }
+        .event-text-stack { display: flex; flex-direction: column; flex: 1; }
+        .event-icon-container { display: flex; flex: 1; }
 
-        /* --- 結婚典禮 (左欄) 特殊對齊 --- */
+        /* --- 結婚典禮 (左欄)：文字靠左對齊，圖示靠左 (往中心靠) --- */
+        #ceremony-target .event-text-stack { align-items: center; } /* 保持原樣或依需求調整 */
         #ceremony-target .event-icon-container { justify-content: flex-start; }
 
-        /* --- 結婚晚宴 (右欄) 特殊對齊：圖示與文字鏡像排列 --- */
-        #banquet-target .event-item { 
-            flex-direction: row-reverse; /* 讓圖示在左，文字在右 */
-        }
+        /* --- 結婚晚宴 (右欄)：文字在左但向右靠攏，圖示在右但向左靠攏 --- */
+        #banquet-target .event-item { flex-direction: row; } /* 確保是文字左、圖示右 */
+        
         #banquet-target .event-text-stack { 
-            align-items: flex-end; /* 文字向右對齊 (向外側) */
+            align-items: flex-end; /* 文字向右對齊，貼近右側的圖示 */
         }
+        
         #banquet-target .event-icon-container { 
-            justify-content: flex-end; /* 圖示向右靠攏 (向中心分隔線) */
+            justify-content: flex-start; /* 圖示向左靠攏，貼近左側的文字 */
         }
 
         .event-time { font-weight: 600; font-size: 1.5rem; color: #4a3a35; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
+        
+        /* CSS 繪製的金色線條 */
         .gold-line-divider { width: 120px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; margin-top: 5px; }
         .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: var(--accent-gold); background: rgba(255, 255, 255, 0.01); padding: 0 5px; }
+        
         .event-icon-img { width: 110px; height: 110px; object-fit: contain; }
 
         @media (max-width: 768px) {
@@ -204,8 +209,7 @@
             .group-title { font-size: 1.4rem; }
             .gold-line-divider { width: 100px; }
             
-            /* 手機版恢復一般排列 */
-            #banquet-target .event-item { flex-direction: row; }
+            /* 手機版建議統一置中 */
             #banquet-target .event-text-stack { align-items: center; }
             #ceremony-target .event-icon-container, #banquet-target .event-icon-container { justify-content: center; }
         }
