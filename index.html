@@ -34,7 +34,7 @@
             scroll-snap-type: y mandatory;
         }
 
-        /* --- 背景管理系統 --- */
+        /* 背景系統 */
         .index-bg-base {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #fdfaf7; z-index: -2;
@@ -58,7 +58,7 @@
             background: transparent !important;
         }
 
-        /* --- 上半部：Index 圖片層樣式 --- */
+        /* 上半部層級 */
         #hero-section { z-index: 10; }
         .layer-base, .layer-mid, .layer-top {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -80,7 +80,7 @@
             padding: 0 20px;
         }
 
-        /* 文字元件：預設顯示 (一開始躲在窗簾後) */
+        /* 文字元件：預設透明度 1，躲在窗簾後 */
         .welcome-text { font-size: 3.5rem; color: var(--text-color-index); margin-bottom: 5px; opacity: 1; }
         .date-text-index { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-color-index); opacity: 1; }
         .spacer-gap { width: 100%; height: 40vh; } 
@@ -88,12 +88,12 @@
         
         .tagline { 
             font-size: 1.4rem; margin-top: 10px; min-height: 1.6em; 
-            color: var(--text-color-index); opacity: 0; 
+            color: var(--text-color-index); 
+            opacity: 1; /* 第一句預設顯示 */
             transition: opacity 0.8s ease-in-out; 
         }
-        .tagline.visible { opacity: 1; }
 
-        /* 打開邀請函按鈕：設定為 1.5s 浮現 */
+        /* 打開邀請函按鈕：1.5s 浮現 */
         .enter-button {
             margin-top: 20px; padding: 12px 50px; background: white;
             border: 1px solid var(--accent-gold); color: var(--text-color-index);
@@ -105,73 +105,49 @@
         }
         .enter-button.btn-visible { opacity: 1; pointer-events: auto; }
 
-        /* --- 窗簾與囍字 --- */
+        /* --- 1. 窗簾與囍字 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { 
             flex: 1; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); 
-            transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); 
-            transition-delay: 0.4s; 
+            transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); transition-delay: 0.4s; 
         }
         .opened .curtain.left { transform: translateX(-100%); }
         .opened .curtain.right { transform: translateX(100%); }
-
-        .seal-wrapper { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            z-index: 101; cursor: pointer; text-align: center; 
-            transition: opacity 0.3s ease-out; 
-        }
+        .seal-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 101; cursor: pointer; text-align: center; transition: opacity 0.3s ease-out; }
         .opened .seal-wrapper { opacity: 0; pointer-events: none; }
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
         /* 音樂按鈕 */
-        .music-toggle {
-            position: fixed; bottom: 20px; right: 20px; z-index: 1000;
-            width: 45px; height: 45px; background: rgba(255, 255, 255, 0.7);
-            border: 1px solid var(--accent-gold); border-radius: 50%;
-            cursor: pointer; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.5s;
-        }
+        .music-toggle { position: fixed; bottom: 20px; right: 20px; z-index: 1000; width: 45px; height: 45px; background: rgba(255, 255, 255, 0.7); border: 1px solid var(--accent-gold); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.5s; }
         body.opened .music-toggle { opacity: 1; }
         .rotating { animation: music-rotate 3s linear infinite; }
         @keyframes music-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         /* --- 【下半部：Schedule 嚴格排版還原】 --- */
-        #schedule-section {
-            background: transparent !important; opacity: 0; transition: opacity 1.5s ease-in-out;
-            color: var(--text-color-schedule); overflow-y: auto;
-        }
+        #schedule-section { background: transparent !important; opacity: 0; transition: opacity 1.5s ease-in-out; color: var(--text-color-schedule); overflow-y: auto; }
         body.show-schedule #schedule-section { opacity: 1; }
         .page-wrapper { width: 100%; min-height: 100vh; display: flex; justify-content: center; position: relative; z-index: 1; background: transparent !important; }
         .card-inner, .card-face { width: 100%; display: flex; flex-direction: column; align-items: center; background: transparent !important; }
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-shadow: 0 0 10px white; font-weight: 500; text-align: center; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
-        /* Guide Container */
         .guide-container { display: flex; justify-content: center; gap: 40px; width: 100%; max-width: 900px; margin-bottom: 50px; }
-        .guide-item { 
-            flex: 1; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; 
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); -webkit-tap-highlight-color: transparent;
-        }
+        .guide-item { flex: 1; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.4s; -webkit-tap-highlight-color: transparent; }
         .guide-item.is-clicked { transform: scale(0.95) translateY(2px); transition: transform 0.1s ease; }
-        .guide-img-wrapper { 
-            width: 100%; max-width: 350px; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); 
-            border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; transition: all 0.3s ease;
-        }
+        .guide-img-wrapper { width: 100%; max-width: 350px; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; transition: all 0.3s ease; }
         .guide-img { width: 100%; border-radius: 4px; display: block; }
         .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; text-align: left; width: 100%; max-width: 350px; opacity: 0.8; letter-spacing: 1px; }
 
-        /* RSVP */
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; }
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
 
-        /* 故事區 */
         .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; text-align: center; }
         .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; width: 100%; text-shadow: 0 0 10px white; }
         .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; display: block; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); mask-image: radial-gradient(circle, white 75%, transparent 100%); }
 
-        /* 行程表：1fr 100px 1fr */
+        /* 行程表結構 1fr 100px 1fr */
         .schedule-content-wrapper { width: 100%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
         .schedule-main-title { font-size: 2rem; letter-spacing: 4px; text-align: center; margin-bottom: 40px; font-weight: 600; color: #4a3a35; }
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
@@ -184,7 +160,6 @@
         .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: none; }
         .event-time { font-weight: 600; font-size: 1.8rem; color: #4a3a35; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
-
         .gold-line-divider { width: 110px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; margin-top: 5px; }
         .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: var(--accent-gold); padding: 0 5px; }
         .event-icon-img { width: 100px; height: 100px; object-fit: contain; }
@@ -246,7 +221,7 @@
             <div class="spacer-gap"></div>
             <div class="text-bottom-group">
                 <div class="names-index">凱翔 & 禹萱</div>
-                <div id="dynamicTagline" class="tagline"></div>
+                <div id="dynamicTagline" class="tagline">大家好～</div>
                 <a href="javascript:void(0)" class="enter-button" id="enterBtn" onclick="goToSchedule()">打開邀請函</a>
             </div>
         </div>
@@ -377,7 +352,10 @@
             if (bgMusic) { bgMusic.play().then(() => musicToggle.classList.add('rotating')).catch(e => console.log("Music blocked")); }
             document.body.classList.add('opened');
             setTimeout(() => { document.body.classList.add('snap-mode'); }, 50);
-            setTimeout(updateTagline, 1300); // 窗簾拉開一半啟動
+            
+            // 窗簾拉開一半（1.3秒處）啟動跑馬燈循環
+            setTimeout(cycleTagline, 1300); 
+
             setTimeout(() => {
                 const curtain = document.getElementById('curtainLayer');
                 if (curtain) curtain.remove();
@@ -389,32 +367,30 @@
             else { bgMusic.pause(); musicToggle.classList.remove('rotating'); }
         }
 
-        // --- 核心修正：調整按鈕浮現時機 ---
-        function updateTagline() {
+        // --- 核心：優化後的 Tagline 循環與按鈕觸發邏輯 ---
+        function cycleTagline() {
             if (!taglineEl) return;
             
-            if (currentIndex === 0) {
-                taglineEl.innerText = phrases[currentIndex];
-                taglineEl.classList.add('visible');
-                currentIndex++;
-                setTimeout(updateTagline, 3500);
-            } else {
-                taglineEl.classList.remove('visible');
+            // Phrase 0 "大家好" 已經顯示。等待 3.5s 後切換。
+            setTimeout(() => {
+                taglineEl.style.opacity = 0; // 淡出目前文字
+                
                 setTimeout(() => {
+                    currentIndex++; // 前進到 1 (我們要結婚了！)
                     taglineEl.innerText = phrases[currentIndex];
-                    taglineEl.classList.add('visible');
+                    taglineEl.style.opacity = 1; // 淡入新文字
 
-                    // 【核心邏輯：當顯示「我們要結婚了！」(currentIndex為1) 時啟動按鈕浮現】
+                    // 【重點：在「我們要結婚了！」顯示時同步啟動按鈕浮現】
                     if (currentIndex === 1 && enterBtn) {
                         enterBtn.classList.add('btn-visible');
                     }
                     
+                    // 如果還有下一句，繼續循環
                     if (currentIndex < phrases.length - 1) {
-                        currentIndex++;
-                        setTimeout(updateTagline, 3500);
+                        cycleTagline(); 
                     }
-                }, 850); 
-            }
+                }, 850); // 等待淡出動畫結束
+            }, 3500); // 顯示時間 3.5s
         }
 
         function goToSchedule() {
