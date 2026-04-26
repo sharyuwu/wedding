@@ -18,7 +18,6 @@
             --handwriting: "Klee One", "Noto Serif TC", serif;
         }
 
-        /* --- 基礎設定 --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         html, body {
@@ -34,7 +33,7 @@
             scroll-snap-type: y mandatory;
         }
 
-        /* 背景系統 */
+        /* --- 背景系統 --- */
         .index-bg-base {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #fdfaf7; z-index: -2;
@@ -98,7 +97,7 @@
             cursor: pointer; display: inline-block;
         }
 
-        /* --- 窗簾與囍字 --- */
+        /* --- 1. 第一優先：窗簾與囍字 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { 
             flex: 1; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); 
@@ -117,7 +116,7 @@
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-        /* 音樂控制 */
+        /* 音樂按鈕 */
         .music-toggle {
             position: fixed; bottom: 20px; right: 20px; z-index: 1000;
             width: 45px; height: 45px; background: rgba(255, 255, 255, 0.7);
@@ -129,23 +128,37 @@
         .rotating { animation: music-rotate 3s linear infinite; }
         @keyframes music-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* --- 【下半部：Schedule 排版還原】 --- */
+        /* --- 【下半部：Schedule 完整排版】 --- */
         #schedule-section {
             background: transparent !important;
             opacity: 0; transition: opacity 1.5s ease-in-out;
             color: var(--text-color-schedule); overflow-y: auto;
         }
         body.show-schedule #schedule-section { opacity: 1; }
-
         .page-wrapper { width: 100%; min-height: 100vh; display: flex; justify-content: center; position: relative; z-index: 1; background: transparent !important; }
         .card-inner, .card-face { width: 100%; display: flex; flex-direction: column; align-items: center; background: transparent !important; }
 
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-shadow: 0 0 10px white; font-weight: 500; text-align: center; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
+        /* Guide Item 回饋與跳轉功能樣式 */
         .guide-container { display: flex; justify-content: center; gap: 40px; width: 100%; max-width: 900px; margin-bottom: 50px; }
-        .guide-item { flex: 1; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.4s; }
-        .guide-img-wrapper { width: 100%; max-width: 350px; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; }
+        .guide-item { 
+            flex: 1; text-align: center; cursor: pointer; 
+            display: flex; flex-direction: column; align-items: center; 
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+            -webkit-tap-highlight-color: transparent;
+        }
+        .guide-item:hover { transform: translateY(-10px); }
+        .guide-item.is-clicked { transform: scale(0.95) translateY(2px); transition: transform 0.1s ease; }
+
+        .guide-img-wrapper { 
+            width: 100%; max-width: 350px; padding: 10px; 
+            border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; 
+            background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; 
+            transition: all 0.3s ease;
+        }
+        .guide-item:hover .guide-img-wrapper { border-color: var(--accent-gold); box-shadow: 0 10px 20px rgba(166, 124, 82, 0.1); }
         .guide-img { width: 100%; border-radius: 4px; display: block; }
         .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; text-align: left; width: 100%; max-width: 350px; opacity: 0.8; letter-spacing: 1px; }
 
@@ -156,18 +169,17 @@
         .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; width: 100%; text-shadow: 0 0 10px white; }
         .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; display: block; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); mask-image: radial-gradient(circle, white 75%, transparent 100%); }
 
-        /* --- 行程表 1fr 100px 1fr 結構 --- */
+        /* 行程表主體 1fr 100px 1fr */
         .schedule-content-wrapper { width: 100%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
-        .schedule-main-title { font-size: 2rem; letter-spacing: 4px; text-align: center; margin-bottom: 40px; font-weight: 600; color: #4a3a35; text-shadow: 0 0 10px white; }
-        
+        .schedule-main-title { font-size: 2rem; letter-spacing: 4px; text-align: center; margin-bottom: 40px; font-weight: 600; color: #4a3a35; }
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
-        .schedule-column { display: flex; flex-direction: column; }
+        .schedule-column { display: flex; flex-direction: column; gap: 20px; text-align: center; }
 
         .event-group { text-align: center; }
-        .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; text-shadow: 0 0 10px white; }
-        .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; text-shadow: 0 0 10px white; }
+        .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
+        .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
 
-        /* 行程項目：Gap 40px 為左右間距 */
+        /* 行程項目 Gap 40px */
         .event-item { display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 30px; width: 100%; }
         .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: none; }
         .event-time { font-weight: 600; font-size: 1.8rem; color: #4a3a35; font-family: initial; }
@@ -177,7 +189,7 @@
         .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: var(--accent-gold); padding: 0 5px; }
         .event-icon-img { width: 100px; height: 100px; object-fit: contain; }
 
-        /* 中間分隔 */
+        /* 中間分隔線與戒指 */
         .divider-container { display: flex; flex-direction: column; align-items: center; height: 100%; }
         .divider-line { width: 1px; flex-grow: 1; background: var(--light-gold); position: relative; }
         .divider-ring-img { width: 80px; height: auto; margin: 25px 0; z-index: 2; }
@@ -256,17 +268,17 @@
                         <div class="guide-item" onclick="handleGuideClick('ceremony-target', this)">
                             <div class="guide-img-wrapper"><img src="schedule/main-church.png" class="guide-img"></div>
                             <span class="view-detail-hint">點擊查看行程</span>
-                            <h3>教堂婚禮彌撒</h3><p>13 : 00</p>
+                            <h3 style="margin-bottom: 5px;">教堂婚禮彌撒</h3><p style="color:var(--accent-gold); font-weight:600;">13 : 00</p>
                         </div>
                         <div class="guide-item" onclick="handleGuideClick('banquet-target', this)">
                             <div class="guide-img-wrapper"><img src="schedule/main-bouquet.png" class="guide-img"></div>
                             <span class="view-detail-hint">點擊查看行程</span>
-                            <h3>餐廳婚禮晚宴</h3><p>18 : 00</p>
+                            <h3 style="margin-bottom: 5px;">餐廳婚禮晚宴</h3><p style="color:var(--accent-gold); font-weight:600;">18 : 00</p>
                         </div>
                     </div>
 
                     <div class="rsvp-container">
-                        <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdX0pTRn6Xgd2ync0EHPiqUqXZl9hgQm8tBAS4sDOxQ8FcLFA/viewform')">回覆出席</button>
+                        <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/...')">回覆出席</button>
                     </div>
 
                     <div class="story-section">
@@ -284,28 +296,16 @@
                                 <div class="event-group">
                                     <h3 class="group-title">結婚典禮</h3>
                                     <p class="group-loc">地點：汐止天主堂</p>
-                                    
                                     <div class="event-item">
-                                        <div class="event-text-stack">
-                                            <p class="event-time">13:00</p><p class="event-name">賓客入場</p>
-                                            <div class="gold-line-divider"></div>
-                                        </div>
+                                        <div class="event-text-stack"><p class="event-time">13:00</p><p class="event-name">賓客入場</p><div class="gold-line-divider"></div></div>
                                         <img src="schedule/icon_church.png" class="event-icon-img">
                                     </div>
-
                                     <div class="event-item">
-                                        <div class="event-text-stack">
-                                            <p class="event-time">13:30</p><p class="event-name">典禮開始</p>
-                                            <div class="gold-line-divider"></div>
-                                        </div>
+                                        <div class="event-text-stack"><p class="event-time">13:30</p><p class="event-name">典禮開始</p><div class="gold-line-divider"></div></div>
                                         <img src="schedule/icon_doves.png" class="event-icon-img">
                                     </div>
-
                                     <div class="event-item">
-                                        <div class="event-text-stack">
-                                            <p class="event-time">15:00</p><p class="event-name">茶會慶祝</p>
-                                            <div class="gold-line-divider"></div>
-                                        </div>
+                                        <div class="event-text-stack"><p class="event-time">15:00</p><p class="event-name">茶會慶祝</p><div class="gold-line-divider"></div></div>
                                         <img src="schedule/icon_cake.png" class="event-icon-img">
                                     </div>
                                 </div>
@@ -321,28 +321,16 @@
                                 <div class="event-group">
                                     <h3 class="group-title">結婚晚宴</h3>
                                     <p class="group-loc">地點：兄弟飯店，桂花廳</p>
-                                    
                                     <div class="event-item">
-                                        <div class="event-text-stack">
-                                            <p class="event-time">18:00</p><p class="event-name">晚宴簽到</p>
-                                            <div class="gold-line-divider"></div>
-                                        </div>
+                                        <div class="event-text-stack"><p class="event-time">18:00</p><p class="event-name">晚宴簽到</p><div class="gold-line-divider"></div></div>
                                         <img src="schedule/icon_champagne.png" class="event-icon-img">
                                     </div>
-
                                     <div class="event-item">
-                                        <div class="event-text-stack">
-                                            <p class="event-time">18:30</p><p class="event-name">晚宴開始</p>
-                                            <div class="gold-line-divider"></div>
-                                        </div>
+                                        <div class="event-text-stack"><p class="event-time">18:30</p><p class="event-name">晚宴開始</p><div class="gold-line-divider"></div></div>
                                         <img src="schedule/icon_bouquet.png" class="event-icon-img">
                                     </div>
-
                                     <div class="event-item">
-                                        <div class="event-text-stack">
-                                            <p class="event-time">20:30</p><p class="event-name">送客合影</p>
-                                            <div class="gold-line-divider"></div>
-                                        </div>
+                                        <div class="event-text-stack"><p class="event-time">20:30</p><p class="event-name">送客合影</p><div class="gold-line-divider"></div></div>
                                         <img src="schedule/icon_the_end.png" class="event-icon-img">
                                     </div>
                                 </div>
@@ -387,6 +375,18 @@
         }
 
         window.addEventListener('load', initWaterfall);
+
+        // --- 功能：跳轉行程 (修復版) ---
+        function handleGuideClick(targetId, element) {
+            element.classList.add('is-clicked');
+            setTimeout(() => {
+                element.classList.remove('is-clicked');
+                const target = document.getElementById(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 150);
+        }
 
         function startApp() {
             if (bgMusic) {
@@ -438,14 +438,6 @@
             }, { threshold: 0.3 });
             observer.observe(document.getElementById('schedule-section'));
         });
-
-        function handleGuideClick(targetId, element) {
-            const target = document.getElementById(targetId);
-            if (target) {
-                const top = target.getBoundingClientRect().top + window.pageYOffset - 20;
-                window.scrollTo({ top: top, behavior: 'smooth' });
-            }
-        }
     </script>
 </body>
 </html>
