@@ -18,6 +18,7 @@
             --handwriting: "Klee One", "Noto Serif TC", serif;
         }
 
+        /* --- 基礎設定 --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         html, body {
@@ -33,7 +34,7 @@
             scroll-snap-type: y mandatory;
         }
 
-        /* --- 背景系統 --- */
+        /* 背景管理系統 */
         .index-bg-base {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #fdfaf7; z-index: -2;
@@ -59,7 +60,7 @@
             background: transparent !important;
         }
 
-        /* --- 上半部：Index --- */
+        /* --- 上半部：Index 圖片層樣式 --- */
         #hero-section { z-index: 10; }
         .layer-base, .layer-mid, .layer-top {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -97,7 +98,7 @@
             cursor: pointer; display: inline-block;
         }
 
-        /* --- 1. 第一優先：窗簾與囍字 --- */
+        /* --- 1. 窗簾與囍字 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { 
             flex: 1; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); 
@@ -116,7 +117,7 @@
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-        /* 音樂按鈕 */
+        /* 音樂控制 */
         .music-toggle {
             position: fixed; bottom: 20px; right: 20px; z-index: 1000;
             width: 45px; height: 45px; background: rgba(255, 255, 255, 0.7);
@@ -128,7 +129,7 @@
         .rotating { animation: music-rotate 3s linear infinite; }
         @keyframes music-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* --- 【下半部：Schedule 完整排版】 --- */
+        /* --- 【下半部：Schedule 排版】 --- */
         #schedule-section {
             background: transparent !important;
             opacity: 0; transition: opacity 1.5s ease-in-out;
@@ -141,7 +142,7 @@
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-shadow: 0 0 10px white; font-weight: 500; text-align: center; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
-        /* Guide Item 回饋與跳轉功能樣式 */
+        /* Guide Item 樣式 */
         .guide-container { display: flex; justify-content: center; gap: 40px; width: 100%; max-width: 900px; margin-bottom: 50px; }
         .guide-item { 
             flex: 1; text-align: center; cursor: pointer; 
@@ -158,13 +159,15 @@
             background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; 
             transition: all 0.3s ease;
         }
-        .guide-item:hover .guide-img-wrapper { border-color: var(--accent-gold); box-shadow: 0 10px 20px rgba(166, 124, 82, 0.1); }
         .guide-img { width: 100%; border-radius: 4px; display: block; }
         .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; text-align: left; width: 100%; max-width: 350px; opacity: 0.8; letter-spacing: 1px; }
 
+        /* RSVP 區域 */
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; }
+        .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
 
+        /* 故事區 */
         .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; text-align: center; }
         .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; width: 100%; text-shadow: 0 0 10px white; }
         .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; display: block; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); mask-image: radial-gradient(circle, white 75%, transparent 100%); }
@@ -189,12 +192,11 @@
         .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: var(--accent-gold); padding: 0 5px; }
         .event-icon-img { width: 100px; height: 100px; object-fit: contain; }
 
-        /* 中間分隔線與戒指 */
+        /* 分隔線與戒指 */
         .divider-container { display: flex; flex-direction: column; align-items: center; height: 100%; }
         .divider-line { width: 1px; flex-grow: 1; background: var(--light-gold); position: relative; }
         .divider-ring-img { width: 80px; height: auto; margin: 25px 0; z-index: 2; }
 
-        /* --- 手機版適配 --- */
         @media (max-width: 768px) {
             .welcome-text { font-size: 1.8rem; }
             .names-index { font-size: 1.6rem; }
@@ -203,12 +205,10 @@
             .guide-container { flex-direction: row; gap: 12px; width: 100%; justify-content: center; }
             .guide-img-wrapper, .view-detail-hint { max-width: 160px; }
             .view-detail-hint { font-size: 0.75rem; }
-            
             .schedule-grid { grid-template-columns: 1fr; }
-            .divider-container { flex-direction: row; padding: 40px 0; justify-content: center; height: auto; width: 100%; }
+            .divider-container { flex-direction: row; padding: 40px 0; justify-content: center; width: 100%; }
             .divider-line { width: 60px; height: 1px; flex-grow: 0; }
             .divider-ring-img { width: 50px; margin: 0 10px; }
-
             .group-loc { margin-bottom: 30px; }
             .event-item { gap: 20px; margin-bottom: 25px; }
             .event-icon-img { width: 80px; height: 80px; }
@@ -267,18 +267,19 @@
                     <div class="guide-container">
                         <div class="guide-item" onclick="handleGuideClick('ceremony-target', this)">
                             <div class="guide-img-wrapper"><img src="schedule/main-church.png" class="guide-img"></div>
-                            <span class="view-detail-hint">點擊查看行程</span>
+                            <span class="view-detail-hint">點擊看行程</span>
                             <h3 style="margin-bottom: 5px;">教堂婚禮彌撒</h3><p style="color:var(--accent-gold); font-weight:600;">13 : 00</p>
                         </div>
                         <div class="guide-item" onclick="handleGuideClick('banquet-target', this)">
                             <div class="guide-img-wrapper"><img src="schedule/main-bouquet.png" class="guide-img"></div>
-                            <span class="view-detail-hint">點擊查看行程</span>
+                            <span class="view-detail-hint">點擊看行程</span>
                             <h3 style="margin-bottom: 5px;">餐廳婚禮晚宴</h3><p style="color:var(--accent-gold); font-weight:600;">18 : 00</p>
                         </div>
                     </div>
 
                     <div class="rsvp-container">
                         <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/...')">回覆出席</button>
+                        <p class="rsvp-subtext">填寫 Google 表單，統計出席人數</p>
                     </div>
 
                     <div class="story-section">
@@ -376,7 +377,6 @@
 
         window.addEventListener('load', initWaterfall);
 
-        // --- 功能：跳轉行程 (修復版) ---
         function handleGuideClick(targetId, element) {
             element.classList.add('is-clicked');
             setTimeout(() => {
