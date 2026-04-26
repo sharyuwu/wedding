@@ -51,7 +51,7 @@
         .enter-button { margin-top: 20px; padding: 12px 50px; background: white; border: 1px solid var(--accent-gold); color: var(--text-color-index); text-decoration: none; border-radius: 30px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); cursor: pointer; display: inline-block; opacity: 0; pointer-events: none; transition: opacity 1.5s ease-in-out; }
         .enter-button.btn-visible { opacity: 1; pointer-events: auto; }
 
-        /* --- 窗簾 --- */
+        /* --- 窗簾動畫 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { flex: 1; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); transition-delay: 0.4s; }
         .opened .curtain.left { transform: translateX(-100%); }
@@ -69,7 +69,7 @@
 
         /* --- Schedule 排版 --- */
         .page-wrapper { width: 100%; padding-bottom: 100px; display: flex; justify-content: center; position: relative; z-index: 1; background: transparent !important; }
-        .card-inner { width: 100%; max-width: 1200px; display: flex; flex-direction: column; align-items: center; }
+        .card-inner { width: 100%; max-width: 1200px; display: flex; flex-direction: column; align-items: center; background: transparent !important; }
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-align: center; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; }
 
@@ -78,9 +78,13 @@
         .guide-img-wrapper { width: 100%; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; }
         .guide-img { width: 100%; border-radius: 4px; display: block; }
         .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; text-align: center; width: 100%; opacity: 0.8; letter-spacing: 1px; }
+
+        /* RSVP 區域與還原小字 */
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; }
+        .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.8; letter-spacing: 1px; }
 
+        /* 故事區：文字對齊校正 */
         .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 60px 40px; margin-bottom: 80px; backdrop-filter: blur(3px); width: 95%; max-width: 1100px; text-align: center; }
         .quote-container { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; }
         .hero-quote { font-size: 1.3rem; opacity: 0.9; line-height: 1.8; text-shadow: 0 0 10px white; }
@@ -88,6 +92,7 @@
         .quote-right { text-align: right; }
         .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; display: block; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); transition: opacity 1.2s ease-in-out; opacity: 0; }
 
+        /* 行程表結構 */
         .schedule-content-wrapper { width: 95%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
         .schedule-main-title { font-size: 2.2rem; letter-spacing: 4px; text-align: center; margin-bottom: 60px; font-weight: 600; color: #4a3a35; }
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; align-items: start; }
@@ -95,6 +100,7 @@
         .event-item { display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 30px; width: 100%; }
         .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: none; }
         .event-time { font-weight: 600; font-size: 1.8rem; color: #4a3a35; }
+        .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
         .gold-line-divider { width: 110px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; margin-top: 5px; }
         .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--accent-gold); padding: 0 5px; }
         .event-icon-img { width: 100px; height: 100px; object-fit: contain; }
@@ -104,13 +110,15 @@
 
         @media (max-width: 768px) {
             .welcome-text { font-size: 1.8rem; } .names-index { font-size: 1.6rem; } .spacer-gap { height: 40dvh; } .hero-title { font-size: 1.6rem; }
-            .guide-container { flex-direction: row; }
+            .guide-container { flex-direction: row; justify-content: space-evenly; width: 100%; padding: 0; }
             .guide-img-wrapper, .view-detail-hint { max-width: 160px; }
+            .view-detail-hint { font-size: 0.75rem; }
             .schedule-grid { grid-template-columns: 1fr; }
             .divider-container { flex-direction: row; padding: 40px 0; min-height: auto; width: 100%; justify-content: center; }
             .divider-line { width: 60px; height: 1px; flex-grow: 0; } .divider-ring-img { width: 50px; margin: 0 10px; }
             .event-item { gap: 20px; }
             .rsvp-button { width: 260px; height: 65px; background-image: url('schedule/respond_button_mobile.png'); }
+            .rsvp-subtext { font-size: 0.85rem; }
             .quote-container { text-align: center; } .quote-left, .quote-right { text-align: center; }
         }
     </style>
@@ -175,6 +183,7 @@
 
                 <div class="rsvp-container">
                     <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdX0pTRn6Xgd2ync0EHPiqUqXZl9hgQm8tBAS4sDOxQ8FcLFA/viewform')">回覆出席</button>
+                    <p class="rsvp-subtext">填寫 Google 表單，統計參加人數</p>
                 </div>
                 
                 <div class="story-section">
@@ -243,10 +252,7 @@
             if(bgSched) document.getElementById('fixedScheduleBg').style.backgroundImage = `url('${bgSched}')`;
         }
 
-        window.addEventListener('load', () => {
-            window.scrollTo(0, 0);
-            initWaterfall();
-        });
+        window.addEventListener('load', () => { window.scrollTo(0, 0); initWaterfall(); });
 
         function startApp() {
             if (bgMusic) { bgMusic.play().then(() => musicToggle.classList.add('rotating')).catch(e => console.log("Music blocked")); }
@@ -292,15 +298,11 @@
         }
 
         function toggleMusic() { if (bgMusic.paused) { bgMusic.play(); musicToggle.classList.add('rotating'); } else { bgMusic.pause(); musicToggle.classList.remove('rotating'); } }
-
         function goToSchedule() { document.body.classList.add('is-fading', 'show-bg'); document.getElementById('schedule-section').scrollIntoView({ behavior: 'smooth' }); }
 
         window.addEventListener('scroll', () => {
-            if (window.scrollY < window.innerHeight * 0.3) {
-                document.body.classList.remove('show-bg', 'is-fading');
-            } else {
-                document.body.classList.add('show-bg', 'is-fading');
-            }
+            if (window.scrollY < window.innerHeight * 0.3) { document.body.classList.remove('show-bg', 'is-fading'); }
+            else { document.body.classList.add('show-bg', 'is-fading'); }
         });
     </script>
 </body>
