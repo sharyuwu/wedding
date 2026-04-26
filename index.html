@@ -91,7 +91,6 @@
             transition: opacity 0.8s ease-in-out; 
         }
 
-        /* 按鈕：1.5s 浮現 */
         .enter-button {
             margin-top: 20px; padding: 12px 50px; background: white;
             border: 1px solid var(--accent-gold); color: var(--text-color-index);
@@ -103,7 +102,7 @@
         }
         .enter-button.btn-visible { opacity: 1; pointer-events: auto; }
 
-        /* --- 1. 窗簾與囍字 --- */
+        /* --- 窗簾與囍字 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { 
             flex: 1; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); 
@@ -116,7 +115,7 @@
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-        /* 音樂控制 */
+        /* 音樂按鈕 */
         .music-toggle { position: fixed; bottom: 20px; right: 20px; z-index: 1000; width: 45px; height: 45px; background: rgba(255, 255, 255, 0.7); border: 1px solid var(--accent-gold); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.5s; }
         body.opened .music-toggle { opacity: 1; }
         .rotating { animation: music-rotate 3s linear infinite; }
@@ -130,13 +129,24 @@
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-shadow: 0 0 10px white; font-weight: 500; text-align: center; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
-        .guide-container { display: flex; justify-content: center; gap: 40px; width: 100%; max-width: 900px; margin-bottom: 50px; }
-        .guide-item { flex: 1; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.4s; -webkit-tap-highlight-color: transparent; }
+        /* --- 修正：Guide Container 水平平分 --- */
+        .guide-container { 
+            display: flex; 
+            justify-content: space-evenly; /* 核心：水平平分空間 */
+            width: 100%; 
+            max-width: 900px; 
+            margin-bottom: 50px; 
+        }
+        .guide-item { 
+            flex: 0 1 400px; /* 確保項目有平分的基調但不至於過大 */
+            text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; 
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); -webkit-tap-highlight-color: transparent;
+        }
         .guide-item.is-clicked { transform: scale(0.95) translateY(2px); transition: transform 0.1s ease; }
         .guide-img-wrapper { width: 100%; max-width: 350px; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; transition: all 0.3s ease; }
         .guide-img { width: 100%; border-radius: 4px; display: block; }
 
-        /* 修正：將小字文字改為置中 */
+        /* 小字置中對齊 */
         .view-detail-hint { 
             font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; 
             text-align: center; width: 100%; max-width: 350px; 
@@ -177,9 +187,10 @@
             .names-index { font-size: 1.6rem; }
             .spacer-gap { height: 50dvh; }
             .hero-title { font-size: 1.6rem; }
-            .guide-container { flex-direction: row; gap: 12px; width: 100%; justify-content: center; }
+            /* 手機版同樣平分 */
+            .guide-container { flex-direction: row; justify-content: space-evenly; width: 100%; padding: 0 5px; }
             .guide-img-wrapper, .view-detail-hint { max-width: 160px; }
-            .view-detail-hint { font-size: 0.75rem; text-align: center; } /* 手機版小字同樣置中 */
+            .view-detail-hint { font-size: 0.75rem; text-align: center; }
             .schedule-grid { grid-template-columns: 1fr; }
             .divider-container { flex-direction: row; padding: 40px 0; justify-content: center; width: 100%; }
             .divider-line { width: 60px; height: 1px; flex-grow: 0; }
@@ -255,7 +266,7 @@
                     </div>
                     <div class="story-section">
                         <div style="display:grid; justify-items:center; width:100%;">
-                            <p class="hero-quote" style="text-align:left; width:100%; max-width:800px; margin-bottom:-5px;">我們沒有拍婚紗，結婚是個紀念</p>
+                            <p class="hero-quote" style="text-align:left; width:100%; max-width:800px; margin-bottom:-5px;">我們...沒有拍婚紗，結婚是個紀念</p>
                             <img src="schedule/main.png" class="merged-photo-img">
                             <p class="hero-quote" style="text-align:right; width:100%; max-width:800px; margin-top:-5px;">在一起的每一天，更令人留念</p>
                         </div>
@@ -368,28 +379,17 @@
             else { bgMusic.pause(); musicToggle.classList.remove('rotating'); }
         }
 
-        // --- 核心修正：調整第一句顯示時間為 2 秒 ---
         function cycleTagline() {
             if (!taglineEl) return;
-            
-            // 判斷當前句子的顯示時間：第一句 2s，其餘 3.5s
             let displayTime = (currentIndex === 0) ? 2000 : 3500;
-
             setTimeout(() => {
                 taglineEl.style.opacity = 0; 
-                
                 setTimeout(() => {
                     currentIndex++; 
                     taglineEl.innerText = phrases[currentIndex];
                     taglineEl.style.opacity = 1; 
-
-                    if (currentIndex === 1 && enterBtn) {
-                        enterBtn.classList.add('btn-visible');
-                    }
-                    
-                    if (currentIndex < phrases.length - 1) {
-                        cycleTagline(); 
-                    }
+                    if (currentIndex === 1 && enterBtn) { enterBtn.classList.add('btn-visible'); }
+                    if (currentIndex < phrases.length - 1) { cycleTagline(); }
                 }, 850); 
             }, displayTime);
         }
