@@ -87,7 +87,7 @@
         .tagline.visible { opacity: 1; }
         .enter-button { 
              /* 1. 修改與上方文字的間隔 */
-            margin-top: 40px;      /* 原本是 20px，數字越大間隔越開 */
+            margin-top: 30px;      /* 原本是 20px，數字越大間隔越開 */
             /* 2. 修改按鈕的寬度（場寬） */
             /* 方法 A：透過增加左右內邊距 (Padding) 來撐開按鈕 */
             padding: 12px 80px;    /* 12px 是上下高度，80px 是左右寬度（原本是 50px） */
@@ -95,7 +95,7 @@
             /* width: 250px; */      /* 直接指定寬度 */
             background: white; 
             border: 1px solid var(--accent-gold); 
-            border-radius: 20px; 
+            border-radius: 30px; 
             cursor: pointer; 
             text-decoration: none; 
             color: var(--text-color-index); 
@@ -123,8 +123,7 @@
             z-index: 101; 
             cursor: pointer; 
             text-align: center; 
-            /* 這裡改為 none，點擊後「囍」字會瞬間不見 */
-            transition: none; 
+            transition: opacity 0.1s ease-out;        
         }
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
