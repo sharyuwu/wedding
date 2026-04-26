@@ -19,87 +19,65 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* --- 基礎背景設定 --- */
+        /* --- 全局設定與模式切換 --- */
         html, body {
             width: 100%; height: 100%;
             font-family: var(--handwriting);
-            background-color: #fdfaf7; /* 初始 Index 色 */
-            transition: background-color 1s ease;
+            scroll-behavior: smooth;
+            background-color: #fdfaf7; /* 頁面基礎底色 */
+            /* 強制重新整理時回到最上方 */
+            overflow: hidden; 
         }
 
-        /* 初始狀態：啟用分頁吸附 */
+        /* 啟用窗簾後的捲動模式 */
         body.snap-mode {
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
         }
 
-        /* 模式切換：徹底移除首頁後 */
-        body.schedule-mode {
-            scroll-snap-type: none;
-            overflow-y: auto;
-            background-color: #ece5df; /* 變換為 Schedule 底色 */
+        .snap-section {
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
         }
 
-        /* --- 固定背景層：解決拉伸與閃爍色塊 --- */
-        .fixed-bg-layer {
+        /* --- 【固定背景層：Schedule 專用】 --- */
+        .fixed-schedule-bg {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
             background: url('schedule/background.jpg') center center / cover no-repeat;
             z-index: -1;
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out;
+            opacity: 0; /* 預設隱藏，滑動時才浮現 */
+            transition: opacity 1.5s ease;
             pointer-events: none;
         }
-        body.schedule-emerged .fixed-bg-layer {
-            opacity: 1;
-        }
-
-        .snap-section {
-            width: 100%; height: 100vh; height: 100dvh;
-            scroll-snap-align: start;
-            scroll-snap-stop: always;
-            position: relative;
-            overflow: hidden;
-        }
+        body.show-bg .fixed-schedule-bg { opacity: 1; }
 
         /* --- 【上版部：Index】 --- */
-        #hero-section { 
-            z-index: 10; 
-            transition: opacity 1.2s ease-in-out, visibility 1.2s;
-        }
+        /* 修正：將背景顏色改為透明 */
+        #hero-section { z-index: 10; background-color: transparent; transition: opacity 1.2s ease; }
         
-        /* 置頂時徹底消失且不佔空間 */
-        body.schedule-mode #hero-section {
-            height: 0;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        /* 修正：確保所有 Layer 同步消失 */
         .layer-base, .layer-mid, .layer-top {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+            transition: opacity 1.5s ease;
         }
         .layer-base { background: url('base-background-V1.png') center center / cover no-repeat; z-index: 1; }
         .layer-mid { background: url('main-image-layer-mid.png') center center / auto no-repeat; z-index: 2; pointer-events: none; }
         .layer-top { background: url('main-image-layer-top.png') center center / cover no-repeat; z-index: 3; pointer-events: none; }
 
-        /* 點擊按鈕後，所有層同步淡出 */
-        .is-fading .layer-base, 
-        .is-fading .layer-mid, 
-        .is-fading .layer-top,
-        .is-fading .content-layer {
-            opacity: 0 !important;
-        }
-
         .content-layer {
             position: relative; z-index: 10; height: 100dvh; width: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px;
-            opacity: 0; transition: opacity 1.2s ease-out;
+            opacity: 0; transition: opacity 1.2s ease;
         }
         .content-layer.visible { opacity: 1; }
+        
+        /* 當使用者按下按鈕後的淡出效果 */
+        .is-fading { opacity: 0.3 !important; }
 
         .spacer-gap { width: 100%; height: 40vh; }
         .welcome-text { font-size: 3.5rem; color: var(--text-color-index); }
@@ -109,7 +87,7 @@
         .tagline.visible { opacity: 1; }
         .enter-button { margin-top: 20px; padding: 12px 50px; background: white; border: 1px solid var(--accent-gold); border-radius: 30px; cursor: pointer; text-decoration: none; color: inherit; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
 
-        /* 窗簾 */
+        /* 窗簾動畫 */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { flex: 1; height: 100%; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px); transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); }
         .opened .curtain.left { transform: translateX(-100%); }
@@ -122,20 +100,19 @@
         /* --- 【下版部：Schedule】 --- */
         #schedule-section {
             background: transparent !important;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+            opacity: 0; /* 初始透明 */
+            transition: opacity 1.5s ease;
             color: var(--text-color-schedule);
+            overflow-y: auto; /* 允許內部捲動 */
         }
-        body.schedule-emerged #schedule-section { opacity: 1; transform: translateY(0); }
-        body.schedule-mode #schedule-section { height: auto; overflow-y: visible; }
+        /* 浮現 class */
+        body.show-schedule #schedule-section { opacity: 1; }
 
-        .page-wrapper { width: 100%; min-height: 100vh; display: flex; justify-content: center; position: relative; z-index: 1; }
+        .page-wrapper { width: 100%; display: flex; justify-content: center; position: relative; z-index: 1; }
         .card-inner { width: 100%; background: transparent !important; }
         .card-face { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 60px 20px; background: transparent !important; }
 
-        /* 文字陰影與樣式 */
-        .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-bottom: 10px; font-weight: 500; text-shadow: 0 0 15px white, 0 0 5px white; margin-top: 60px; text-align: center; }
+        .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-bottom: 10px; font-weight: 500; text-shadow: 0 0 10px white; margin-top: 60px; text-align: center; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; text-align: center; }
 
         .guide-container { display: flex; justify-content: center; gap: 40px; width: 100%; max-width: 900px; margin-bottom: 50px; }
@@ -148,17 +125,16 @@
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
         .rsvp-button:hover { transform: scale(1.05); }
 
-        .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; }
-        .hero-quote { font-size: 1.2rem; line-height: 2; width: 100%; opacity: 0.9; text-shadow: 0 0 10px white; }
-        .quote-left { text-align: left; } .quote-right { text-align: right; }
+        .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; text-align: center; }
+        .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; width: 100%; }
         .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; display: block; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); mask-image: radial-gradient(circle, white 75%, transparent 100%); }
 
         .schedule-content-wrapper { width: 100%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
-        .schedule-column { display: flex; flex-direction: column; gap: 60px; text-align: center; }
+        .schedule-column { display: flex; flex-direction: column; gap: 60px; }
         .event-item { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 40px; }
         .event-text-stack { display: flex; flex-direction: column; align-items: center; }
-        .event-time { font-weight: 600; font-size: 1.5rem; }
+        .event-time { font-weight: 600; font-size: 1.5rem; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; }
         .gold-line-divider { width: 110px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; }
         .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--accent-gold); }
@@ -168,7 +144,7 @@
         .divider-ring-img { width: 80px; margin: 25px 0; }
 
         @media (max-width: 768px) {
-            .fixed-bg-layer { background-image: url('schedule/background_mobile.jpg'); }
+            .fixed-schedule-bg { background-image: url('schedule/background_mobile.jpg'); }
             .welcome-text { font-size: 1.8rem; }
             .spacer-gap { height: 50dvh; }
             .guide-container { gap: 12px; }
@@ -182,9 +158,9 @@
     </style>
 </head>
 
-<body class="snap-mode">
+<body>
 
-    <div class="fixed-bg-layer"></div>
+    <div class="fixed-schedule-bg"></div>
 
     <div class="curtain-wrapper" id="curtainLayer">
         <div class="curtain left"></div>
@@ -274,15 +250,15 @@
                                 <div class="event-item">
                                     <div class="event-text-stack"><p class="event-time">18:00</p><p>晚宴簽到</p><div class="gold-line-divider"></div></div>
                                     <img src="schedule/icon_champagne.png" class="event-icon-img">
-                                </div>
+                                }
                                 <div class="event-item">
                                     <div class="event-text-stack"><p class="event-time">18:30</p><p>晚宴開始</p><div class="gold-line-divider"></div></div>
                                     <img src="schedule/icon_bouquet.png" class="event-icon-img">
-                                </div>
+                                }
                                 <div class="event-item">
                                     <div class="event-text-stack"><p class="event-time">20:30</p><p>送客合影</p><div class="gold-line-divider"></div></div>
                                     <img src="schedule/icon_the_end.png" class="event-icon-img">
-                                </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -298,8 +274,54 @@
         let currentIndex = 0;
         const taglineEl = document.getElementById('dynamicTagline');
 
+        // F5 重置邏輯：不使用 sessionStorage
+        // 載入時強制置頂，並根據是否重新整理來決定是否需要窗簾動畫
+        window.addEventListener('DOMContentLoaded', () => {
+            // 由於用戶要求F5重整要重新出現窗簾，
+            // 且 F5 重新整理不會保留 JavaScript 變數狀態，
+            // 只要我們這裡不做任何判斷，html 預設 overflow:hidden 就會生效。
+            window.scrollTo(0, 0); 
+
+            // 手機版自動圖片字尾替換
+            if (window.innerWidth <= 768) {
+                document.querySelectorAll('img').forEach(img => {
+                    let src = img.getAttribute('src');
+                    if (src && !src.includes('_mobile')) {
+                        img.setAttribute('src', src.replace(/\.(png|jpg)/, '_mobile.$1'));
+                    }
+                });
+            }
+
+            // 監測滑動
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        document.body.classList.add('show-bg');
+                        document.body.classList.add('show-schedule');
+                    } else if (window.scrollY < window.innerHeight / 2) {
+                        // 回到首頁時
+                        document.body.classList.remove('show-bg');
+                        document.body.classList.remove('show-schedule');
+                        document.getElementById('hero-section').classList.remove('is-fading');
+                    }
+                });
+            }, { threshold: 0.3 });
+            observer.observe(document.getElementById('schedule-section'));
+        });
+
+        // 強制 F5 重新整理時回到最上方（針對某些瀏覽器的行為）
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
         function startApp() {
+            // 開啟捲動模式
             document.body.classList.add('opened');
+            // 此時才給 body 加上 snap-mode
+            setTimeout(() => {
+                document.body.classList.add('snap-mode');
+            }, 50);
+
             setTimeout(showIndex, 1000);
             setTimeout(() => document.getElementById('curtainLayer').remove(), 3000);
         }
@@ -322,51 +344,12 @@
             }, 500);
         }
 
-        // 修改：徹底消除閃爍的轉場邏輯
+        // 轉場動畫
         function goToSchedule() {
-            // 1. 同步淡出 Index 的所有 Layer（包含 layer-base）
+            // 觸發 IntersectionObserver 的淡出邏輯
             document.getElementById('hero-section').classList.add('is-fading');
-            
-            // 2. 背景同步浮現
-            document.body.classList.add('schedule-emerged');
-            
-            // 3. 執行平滑捲動到第二頁
             document.getElementById('schedule-section').scrollIntoView({ behavior: 'smooth' });
-
-            // 4. 等待捲動「完全結束」後執行置頂切換
-            // 我們利用捲動結束後的短暫延遲來執行移除 Index，使用者將完全感受不到跳動
-            setTimeout(() => {
-                // 核心關鍵：先取消 snap
-                document.body.classList.remove('snap-mode');
-                // 加上模式切換，此時 Index 高度會歸 0
-                document.body.classList.add('schedule-mode');
-                // 瞬間歸零，因為 Index 高度已歸 0，此時歸零會讓 Schedule 完美貼在頂部
-                window.scrollTo(0, 0); 
-            }, 1200); 
         }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            if (window.innerWidth <= 768) {
-                document.querySelectorAll('img').forEach(img => {
-                    let src = img.getAttribute('src');
-                    if (src && !src.includes('_mobile')) {
-                        img.setAttribute('src', src.replace(/\.(png|jpg)/, '_mobile.$1'));
-                    }
-                });
-            }
-
-            // 監測手動捲動
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(e => {
-                    if (e.isIntersecting) {
-                        document.body.classList.add('schedule-emerged');
-                        // 使用者手動滑下來時，我們也維持淡出
-                        document.getElementById('hero-section').classList.add('is-fading');
-                    }
-                });
-            }, { threshold: 0.2 });
-            observer.observe(document.getElementById('schedule-section'));
-        });
 
         function handleGuideClick(targetId, element) {
             element.classList.add('is-clicked');
