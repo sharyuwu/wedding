@@ -18,7 +18,7 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* --- 修正：手機版背景固定層樣式 (預設隱藏) --- */
+        /* --- 手機版背景固定層 --- */
         .mobile-bg-fix {
             display: none;
         }
@@ -44,7 +44,7 @@
             display: flex;
             justify-content: center;
             overflow-x: hidden;
-            position: relative; /* 確保內容在背景層之上 */
+            position: relative;
             z-index: 1;
         }
 
@@ -87,6 +87,7 @@
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-bottom: 10px; font-weight: 500; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
+        /* --- 引導區塊 --- */
         .guide-container {
             display: flex;
             justify-content: center;
@@ -123,11 +124,13 @@
         .guide-item h3 { font-size: 1.5rem; margin-bottom: 8px; }
         .guide-item p { font-size: 1.4rem; color: var(--accent-gold); font-family: initial; font-weight: 600; }
 
+        /* --- 回覆出席 --- */
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center; background-size: contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; transition: 0.3s; padding-bottom: 5px; }
         .rsvp-button:hover { transform: scale(1.05); }
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
 
+        /* --- 故事區 --- */
         .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; min-height: auto; }
         .story-content { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; }
         
@@ -140,6 +143,7 @@
 
         .merged-photo-img { width: 100%; height: auto; display: block; margin: 0 auto; -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); }
 
+        /* --- 行程表 --- */
         .schedule-content-wrapper {
             width: 100%;
             max-width: 1100px;
@@ -176,34 +180,54 @@
         .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
         .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
 
+        /* --- 返回按鈕樣式 --- */
+        .back-home-container {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .back-home-button {
+            text-decoration: none;
+            padding: 12px 50px;
+            border: 2px solid var(--accent-gold);
+            border-radius: 30px;
+            color: var(--text-color);
+            display: inline-block;
+            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .back-home-button:hover { background: var(--accent-gold); color: white; }
+
         /* --- 手機版本專屬優化 --- */
         @media (max-width: 768px) {
-            /* --- 核心修正：解決手機版背景拉伸問題 --- */
             body, html {
-                background-image: none !important; /* 移除原本設定在 body 的背景 */
-                background-color: #ece5df; /* 保留底色 */
+                background-image: none !important;
+                background-color: transparent !important; /* 全透明 */
             }
 
-            /* 啟用固定的手機背景層 */
+            /* 需求修正：讓 card 相關層級完全透明 */
+            .card-inner, .card-face {
+                background: transparent !important;
+                background-color: transparent !important;
+            }
+
             .mobile-bg-fix {
                 display: block;
-                position: fixed; /* 固定在螢幕上 */
-                top: 0;
-                left: 0;
-                width: 100vw; /* 電子紙寬度 */
-                height: 100vh; /* 電子紙高度 */
+                position: fixed;
+                top: 0; left: 0;
+                width: 100vw; height: 100vh;
                 background-image: url('schedule/background_mobile.jpg');
                 background-repeat: no-repeat;
                 background-position: center center;
-                background-size: cover; /* 完美覆蓋螢幕，不扭曲 */
-                z-index: -1; /* 放在最底層 */
-                will-change: transform; /* 優化部分行動瀏覽器的效能 */
+                background-size: cover;
+                z-index: -1;
+                will-change: transform;
             }
 
-            section { padding: 40px 10px; min-height: auto; }
+            section { padding: 40px 10px; min-height: auto; background: transparent; }
             .hero-title { font-size: 1.6rem; letter-spacing: 3px; }
             
-            /* 需求：引導頁面保持水平對齊 */
             .guide-container { 
                 flex-direction: row; 
                 gap: 12px; 
@@ -215,17 +239,14 @@
             .guide-item h3 { font-size: 0.95rem; }
             .guide-item p { font-size: 1rem; }
 
-            /* 需求：文字跳行調整 */
             .mobile-br { display: block; content: ""; margin-top: 5px; }
             .desktop-comma { display: none; }
             .hero-quote { font-size: 1rem; line-height: 1.6; }
 
-            /* 需求：行程表改為垂直對齊 (單欄) */
             .schedule-grid { grid-template-columns: 1fr; gap: 0; }
             .schedule-content-wrapper { padding: 30px 15px; border-radius: 20px; }
             .schedule-main-title { font-size: 1.6rem; margin-bottom: 30px; }
 
-            /* 戒指分隔線轉水平 */
             .divider-container { 
                 padding: 40px 0; 
                 flex-direction: row; 
@@ -245,6 +266,11 @@
                 background: url('schedule/respond_button_mobile.png') no-repeat center; 
                 background-size: contain;
                 font-size: 1.3rem;
+            }
+
+            .back-home-button {
+                padding: 10px 30px;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -370,6 +396,10 @@
                     </div>
                 </section>
 
+                <div class="back-home-container">
+                    <a class="back-home-button" href="https://sharyuwu.github.io/wedding/">← 返回邀請函首頁</a>
+                </div>
+
                 <footer style="text-align: center; padding: 40px 0; opacity: 0.5; font-size: 1rem;">
                     2026.10.10 | 凱翔 & 禹萱
                 </footer>
@@ -386,7 +416,6 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // 自動更換所有 <img> 標籤的路徑為 _mobile 版本
             if (window.innerWidth <= 768) {
                 document.querySelectorAll('img').forEach(img => {
                     let src = img.getAttribute('src');
