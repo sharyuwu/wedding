@@ -18,6 +18,7 @@
             --handwriting: "Klee One", "Noto Serif TC", serif;
         }
 
+        /* --- 基礎設定 --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         html, body {
@@ -33,7 +34,7 @@
             scroll-snap-type: y mandatory;
         }
 
-        /* --- 背景管理系統 --- */
+        /* 背景系統 */
         .index-bg-base {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #fdfaf7; z-index: -2;
@@ -59,7 +60,7 @@
             background: transparent !important;
         }
 
-        /* --- 上半部：Index 層級樣式 (背景由 JS 注入) --- */
+        /* --- 上半部：Index --- */
         #hero-section { z-index: 10; }
         .layer-base, .layer-mid, .layer-top {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -91,13 +92,13 @@
 
         .enter-button {
             margin-top: 20px; padding: 12px 50px; background: white;
-            border: 1px solid var(--accent-gold); color: var(--text-color);
+            border: 1px solid var(--accent-gold); color: var(--text-color-index);
             text-decoration: none; border-radius: 30px; font-size: 1.1rem;
             transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             cursor: pointer; display: inline-block;
         }
 
-        /* --- 1. 優先：窗簾與囍字 --- */
+        /* --- 窗簾與囍字 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { 
             flex: 1; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); 
@@ -128,24 +129,26 @@
         .rotating { animation: music-rotate 3s linear infinite; }
         @keyframes music-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* --- 【下半部：Schedule 嚴格排版】 --- */
+        /* --- 【下半部：Schedule 排版還原】 --- */
         #schedule-section {
             background: transparent !important;
             opacity: 0; transition: opacity 1.5s ease-in-out;
             color: var(--text-color-schedule); overflow-y: auto;
         }
         body.show-schedule #schedule-section { opacity: 1; }
+
         .page-wrapper { width: 100%; min-height: 100vh; display: flex; justify-content: center; position: relative; z-index: 1; background: transparent !important; }
         .card-inner, .card-face { width: 100%; display: flex; flex-direction: column; align-items: center; background: transparent !important; }
 
-        .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-shadow: 0 0 10px white; font-weight: 500; }
-        .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; }
+        .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-shadow: 0 0 10px white; font-weight: 500; text-align: center; }
+        .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
         .guide-container { display: flex; justify-content: center; gap: 40px; width: 100%; max-width: 900px; margin-bottom: 50px; }
-        .guide-item { flex: 1; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+        .guide-item { flex: 1; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.4s; }
         .guide-img-wrapper { width: 100%; max-width: 350px; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; }
         .guide-img { width: 100%; border-radius: 4px; display: block; }
-        
+        .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; text-align: left; width: 100%; max-width: 350px; opacity: 0.8; letter-spacing: 1px; }
+
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; }
 
@@ -153,42 +156,51 @@
         .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; width: 100%; text-shadow: 0 0 10px white; }
         .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; display: block; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); mask-image: radial-gradient(circle, white 75%, transparent 100%); }
 
-        /* 行程表主體 1fr 100px 1fr */
+        /* --- 行程表 1fr 100px 1fr 結構 --- */
         .schedule-content-wrapper { width: 100%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
-        .schedule-main-title { font-size: 2rem; letter-spacing: 4px; text-align: center; margin-bottom: 40px; font-weight: 600; color: #4a3a35; }
+        .schedule-main-title { font-size: 2rem; letter-spacing: 4px; text-align: center; margin-bottom: 40px; font-weight: 600; color: #4a3a35; text-shadow: 0 0 10px white; }
+        
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
-        .schedule-column { display: flex; flex-direction: column; gap: 60px; }
+        .schedule-column { display: flex; flex-direction: column; }
 
-        /* 行程項目 Gap 40px */
-        .event-item { display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 40px; width: 100%; }
-        .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: none; }        
-        .event-time { font-weight: 600; font-size: 1.8rem; font-family: initial; color: #4a3a35; }
-        
-        /* ✶ 星號金線分隔 (保留) */
+        .event-group { text-align: center; }
+        .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; text-shadow: 0 0 10px white; }
+        .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; text-shadow: 0 0 10px white; }
+
+        /* 行程項目：Gap 40px 為左右間距 */
+        .event-item { display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 30px; width: 100%; }
+        .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: none; }
+        .event-time { font-weight: 600; font-size: 1.8rem; color: #4a3a35; font-family: initial; }
+        .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
+
         .gold-line-divider { width: 110px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; margin-top: 5px; }
-        .gold-line-divider::after { 
-            content: '✶'; 
-            position: absolute; 
-            top: 50%; left: 50%; 
-            transform: translate(-50%, -50%); 
-            color: var(--accent-gold); 
-            font-size: 14px;
-        }
-        
-        .divider-container { display: flex; flex-direction: column; align-items: center; }
-        .divider-line { width: 1px; flex-grow: 1; background: var(--light-gold); }
-        .divider-ring-img { width: 80px; margin: 25px 0; }
+        .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: var(--accent-gold); padding: 0 5px; }
+        .event-icon-img { width: 100px; height: 100px; object-fit: contain; }
 
+        /* 中間分隔 */
+        .divider-container { display: flex; flex-direction: column; align-items: center; height: 100%; }
+        .divider-line { width: 1px; flex-grow: 1; background: var(--light-gold); position: relative; }
+        .divider-ring-img { width: 80px; height: auto; margin: 25px 0; z-index: 2; }
+
+        /* --- 手機版適配 --- */
         @media (max-width: 768px) {
             .welcome-text { font-size: 1.8rem; }
             .names-index { font-size: 1.6rem; }
             .spacer-gap { height: 50dvh; }
-            .guide-img-wrapper { max-width: 160px; }
+            .hero-title { font-size: 1.6rem; }
+            .guide-container { flex-direction: row; gap: 12px; width: 100%; justify-content: center; }
+            .guide-img-wrapper, .view-detail-hint { max-width: 160px; }
+            .view-detail-hint { font-size: 0.75rem; }
+            
             .schedule-grid { grid-template-columns: 1fr; }
-            .divider-container { flex-direction: row; padding: 40px 0; justify-content: center; align-items: center; width: 100%; }
+            .divider-container { flex-direction: row; padding: 40px 0; justify-content: center; height: auto; width: 100%; }
             .divider-line { width: 60px; height: 1px; flex-grow: 0; }
-            .divider-ring-img { width: 50px; margin: 0 15px; }
-            .event-item { gap: 20px; }
+            .divider-ring-img { width: 50px; margin: 0 10px; }
+
+            .group-loc { margin-bottom: 30px; }
+            .event-item { gap: 20px; margin-bottom: 25px; }
+            .event-icon-img { width: 80px; height: 80px; }
+            .event-time { font-size: 1.5rem; }
             .rsvp-button { width: 260px; height: 65px; background-image: url('schedule/respond_button_mobile.png'); }
         }
     </style>
@@ -243,11 +255,13 @@
                     <div class="guide-container">
                         <div class="guide-item" onclick="handleGuideClick('ceremony-target', this)">
                             <div class="guide-img-wrapper"><img src="schedule/main-church.png" class="guide-img"></div>
-                            <h3 style="margin: 10px 0 5px;">教堂婚禮彌撒</h3><p style="color:var(--accent-gold); font-weight:600;">13 : 00</p>
+                            <span class="view-detail-hint">點擊查看行程</span>
+                            <h3>教堂婚禮彌撒</h3><p>13 : 00</p>
                         </div>
                         <div class="guide-item" onclick="handleGuideClick('banquet-target', this)">
                             <div class="guide-img-wrapper"><img src="schedule/main-bouquet.png" class="guide-img"></div>
-                            <h3 style="margin: 10px 0 5px;">餐廳婚禮晚宴</h3><p style="color:var(--accent-gold); font-weight:600;">18 : 00</p>
+                            <span class="view-detail-hint">點擊查看行程</span>
+                            <h3>餐廳婚禮晚宴</h3><p>18 : 00</p>
                         </div>
                     </div>
 
@@ -267,38 +281,70 @@
                         <h2 class="schedule-main-title">我們特別的日子</h2>
                         <div class="schedule-grid">
                             <div class="schedule-column" id="ceremony-target">
-                                <h3 style="font-size:2rem; margin-bottom:10px;">結婚典禮</h3>
-                                <p style="color:var(--accent-gold); margin-bottom:40px;">地點：汐止天主堂</p>
-                                <div class="event-item">
-                                    <div class="event-text-stack"><p class="event-time">13:00</p><p>賓客入場</p><div class="gold-line-divider"></div></div>
-                                    <img src="schedule/icon_church.png" style="width:100px;">
-                                </div>
-                                <div class="event-item">
-                                    <div class="event-text-stack"><p class="event-time">13:30</p><p>典禮開始</p><div class="gold-line-divider"></div></div>
-                                    <img src="schedule/icon_doves.png" style="width:100px;">
-                                </div>
-                                <div class="event-item">
-                                    <div class="event-text-stack"><p class="event-time">15:00</p><p>茶會慶祝</p><div class="gold-line-divider"></div></div>
-                                    <img src="schedule/icon_cake.png" style="width:100px;">
+                                <div class="event-group">
+                                    <h3 class="group-title">結婚典禮</h3>
+                                    <p class="group-loc">地點：汐止天主堂</p>
+                                    
+                                    <div class="event-item">
+                                        <div class="event-text-stack">
+                                            <p class="event-time">13:00</p><p class="event-name">賓客入場</p>
+                                            <div class="gold-line-divider"></div>
+                                        </div>
+                                        <img src="schedule/icon_church.png" class="event-icon-img">
+                                    </div>
+
+                                    <div class="event-item">
+                                        <div class="event-text-stack">
+                                            <p class="event-time">13:30</p><p class="event-name">典禮開始</p>
+                                            <div class="gold-line-divider"></div>
+                                        </div>
+                                        <img src="schedule/icon_doves.png" class="event-icon-img">
+                                    </div>
+
+                                    <div class="event-item">
+                                        <div class="event-text-stack">
+                                            <p class="event-time">15:00</p><p class="event-name">茶會慶祝</p>
+                                            <div class="gold-line-divider"></div>
+                                        </div>
+                                        <img src="schedule/icon_cake.png" class="event-icon-img">
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="divider-container">
-                                <div class="divider-line"></div><img src="schedule/icon_ring.png" class="divider-ring-img"><div class="divider-line"></div>
+                                <div class="divider-line"></div>
+                                <img src="schedule/icon_ring.png" class="divider-ring-img">
+                                <div class="divider-line"></div>
                             </div>
+
                             <div class="schedule-column" id="banquet-target">
-                                <h3 style="font-size:2rem; margin-bottom:10px;">結婚晚宴</h3>
-                                <p style="color:var(--accent-gold); margin-bottom:40px;">地點：兄弟飯店，桂花廳</p>
-                                <div class="event-item">
-                                    <div class="event-text-stack"><p class="event-time">18:00</p><p>晚宴簽到</p><div class="gold-line-divider"></div></div>
-                                    <img src="schedule/icon_champagne.png" style="width:100px;">
-                                </div>
-                                <div class="event-item">
-                                    <div class="event-text-stack"><p class="event-time">18:30</p><p>晚宴開始</p><div class="gold-line-divider"></div></div>
-                                    <img src="schedule/icon_bouquet.png" style="width:100px;">
-                                </div>
-                                <div class="event-item">
-                                    <div class="event-text-stack"><p class="event-time">20:30</p><p>送客合影</p><div class="gold-line-divider"></div></div>
-                                    <img src="schedule/icon_the_end.png" style="width:100px;">
+                                <div class="event-group">
+                                    <h3 class="group-title">結婚晚宴</h3>
+                                    <p class="group-loc">地點：兄弟飯店，桂花廳</p>
+                                    
+                                    <div class="event-item">
+                                        <div class="event-text-stack">
+                                            <p class="event-time">18:00</p><p class="event-name">晚宴簽到</p>
+                                            <div class="gold-line-divider"></div>
+                                        </div>
+                                        <img src="schedule/icon_champagne.png" class="event-icon-img">
+                                    </div>
+
+                                    <div class="event-item">
+                                        <div class="event-text-stack">
+                                            <p class="event-time">18:30</p><p class="event-name">晚宴開始</p>
+                                            <div class="gold-line-divider"></div>
+                                        </div>
+                                        <img src="schedule/icon_bouquet.png" class="event-icon-img">
+                                    </div>
+
+                                    <div class="event-item">
+                                        <div class="event-text-stack">
+                                            <p class="event-time">20:30</p><p class="event-name">送客合影</p>
+                                            <div class="gold-line-divider"></div>
+                                        </div>
+                                        <img src="schedule/icon_the_end.png" class="event-icon-img">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -317,7 +363,7 @@
         const bgMusic = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
 
-        // --- Waterfall Loading 載入順序 ---
+        // --- Waterfall Loading ---
         function preloadImage(url) {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -330,17 +376,12 @@
         async function initWaterfall() {
             const isMobile = window.innerWidth <= 768;
             const s = isMobile ? '_mobile' : '';
-
-            // 1. Top -> 2. Mid -> 3. Base -> 4. Schedule BG
             const topImg = await preloadImage(`main-image-layer-top${s}.png`);
             if(topImg) document.getElementById('topLayer').style.backgroundImage = `url('${topImg}')`;
-
             const midImg = await preloadImage(`main-image-layer-mid${s}.png`);
             if(midImg) document.getElementById('midLayer').style.backgroundImage = `url('${midImg}')`;
-
             const baseImg = await preloadImage(`base-background-V1${s}.png`);
             if(baseImg) document.getElementById('baseLayer').style.backgroundImage = `url('${baseImg}')`;
-
             const bgSched = await preloadImage(isMobile ? 'schedule/background_mobile.jpg' : 'schedule/background.jpg');
             if(bgSched) document.getElementById('fixedScheduleBg').style.backgroundImage = `url('${bgSched}')`;
         }
@@ -400,7 +441,10 @@
 
         function handleGuideClick(targetId, element) {
             const target = document.getElementById(targetId);
-            if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+            if (target) {
+                const top = target.getBoundingClientRect().top + window.pageYOffset - 20;
+                window.scrollTo({ top: top, behavior: 'smooth' });
+            }
         }
     </script>
 </body>
