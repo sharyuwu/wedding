@@ -16,7 +16,6 @@
             --accent-gold: #a67c52;
             --light-gold: #e2c08d;
             --handwriting: "Klee One", "Noto Serif TC", serif;
-            --fade-speed: 1.5s; /* 統一浮現速度 */
         }
 
         /* --- 基礎設定 --- */
@@ -81,22 +80,22 @@
             padding: 0 20px;
         }
 
-        /* --- 核心：統一浮現效果 --- */
-        .welcome-text, .date-text-index, .names-index, .tagline {
-            opacity: 0;
-            transition: opacity var(--fade-speed) ease-in-out;
-        }
-
-        .welcome-text { font-size: 3.5rem; color: var(--text-color-index); margin-bottom: 5px; }
-        .date-text-index { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-color-index); }
+        /* --- 文字元件設定：一開始就在螢幕上 (透明度 1) --- */
+        .welcome-text { font-size: 3.5rem; color: var(--text-color-index); margin-bottom: 5px; opacity: 1; }
+        .date-text-index { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-color-index); opacity: 1; }
         .spacer-gap { width: 100%; height: 40vh; } 
-        .names-index { font-weight: 600; font-size: 2.2rem; color: var(--text-color-index); }
-        .tagline { font-size: 1.4rem; margin-top: 10px; min-height: 1.6em; color: var(--text-color-index); }
+        .names-index { font-weight: 600; font-size: 2.2rem; color: var(--text-color-index); opacity: 1; }
+        
+        /* Tagline 仍需淡換效果來切換句子 */
+        .tagline { 
+            font-size: 1.4rem; margin-top: 10px; min-height: 1.6em; 
+            color: var(--text-color-index); 
+            opacity: 0; 
+            transition: opacity 0.8s ease-in-out; 
+        }
+        .tagline.visible { opacity: 1; }
 
-        /* 啟動浮現的類別 */
-        .reveal-visible { opacity: 1 !important; }
-
-        /* 打開邀請函按鈕 */
+        /* 按鈕：維持最後浮現的設計 */
         .enter-button {
             margin-top: 20px; padding: 12px 50px; background: white;
             border: 1px solid var(--accent-gold); color: var(--text-color-index);
@@ -105,11 +104,11 @@
             cursor: pointer; display: inline-block;
             opacity: 0; 
             pointer-events: none; 
-            transition: opacity var(--fade-speed) ease-in-out; 
+            transition: opacity 1.5s ease-in-out; 
         }
         .enter-button.btn-visible { opacity: 1; pointer-events: auto; }
 
-        /* --- 窗簾與囍字 --- */
+        /* --- 1. 窗簾與囍字 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { 
             flex: 1; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); 
@@ -128,7 +127,7 @@
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-        /* 音樂組件樣式 */
+        /* 音樂控制 */
         .music-toggle {
             position: fixed; bottom: 20px; right: 20px; z-index: 1000;
             width: 45px; height: 45px; background: rgba(255, 255, 255, 0.7);
@@ -354,9 +353,7 @@
             setTimeout(() => {
                 element.classList.remove('is-clicked');
                 const target = document.getElementById(targetId);
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
             }, 150);
         }
 
@@ -367,8 +364,8 @@
             document.body.classList.add('opened');
             setTimeout(() => { document.body.classList.add('snap-mode'); }, 50);
             
-            // --- 核心：等到窗簾拉開完畢，文字全部一起浮現 ---
-            setTimeout(showIndexSimultaneously, 3000); 
+            // --- 核心修正：窗簾拉開一半（1.3秒處）就開始跑 tagline ---
+            setTimeout(updateTagline, 1300); 
 
             setTimeout(() => {
                 const curtain = document.getElementById('curtainLayer');
@@ -381,41 +378,30 @@
             else { bgMusic.pause(); musicToggle.classList.remove('rotating'); }
         }
 
-        // --- 優化後：所有文字同時浮現 ---
-        function showIndexSimultaneously() {
-            // 同時給予所有元素 reveal-visible 類別
-            document.querySelector('.welcome-text').classList.add('reveal-visible');
-            document.querySelector('.date-text-index').classList.add('reveal-visible');
-            document.querySelector('.names-index').classList.add('reveal-visible');
-            
-            // 啟動 Tagline 循環
-            updateTagline();
-        }
-
         function updateTagline() {
             if (!taglineEl) return;
             
             if (currentIndex === 0) {
                 taglineEl.innerText = phrases[currentIndex];
-                taglineEl.classList.add('reveal-visible'); // 第一句與大家一起同步浮現
+                taglineEl.classList.add('visible');
                 currentIndex++;
                 setTimeout(updateTagline, 4000);
             } else {
-                taglineEl.classList.remove('reveal-visible');
+                taglineEl.classList.remove('visible');
                 setTimeout(() => {
                     taglineEl.innerText = phrases[currentIndex];
-                    taglineEl.classList.add('reveal-visible');
+                    taglineEl.classList.add('visible');
                     
                     if (currentIndex < phrases.length - 1) {
                         currentIndex++;
                         setTimeout(updateTagline, 4000);
                     } else {
-                        // 最後一句話結束後，延遲浮現按鈕
+                        // 最後一句話結束後，浮現按鈕
                         setTimeout(() => {
                             if (enterBtn) enterBtn.classList.add('btn-visible');
                         }, 1200); 
                     }
-                }, 1500); // 使用 1.5s 配合 CSS transition 進行淡換
+                }, 800); 
             }
         }
 
