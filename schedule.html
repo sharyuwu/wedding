@@ -18,6 +18,11 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        /* --- 修正：手機版背景固定層樣式 (預設隱藏) --- */
+        .mobile-bg-fix {
+            display: none;
+        }
+
         /* --- 電腦版背景設定 --- */
         body, html {
             min-height: 100%; width: 100%;
@@ -39,6 +44,8 @@
             display: flex;
             justify-content: center;
             overflow-x: hidden;
+            position: relative; /* 確保內容在背景層之上 */
+            z-index: 1;
         }
 
         .card-inner {
@@ -80,7 +87,6 @@
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-bottom: 10px; font-weight: 500; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
-        /* 引導區塊 */
         .guide-container {
             display: flex;
             justify-content: center;
@@ -117,21 +123,23 @@
         .guide-item h3 { font-size: 1.5rem; margin-bottom: 8px; }
         .guide-item p { font-size: 1.4rem; color: var(--accent-gold); font-family: initial; font-weight: 600; }
 
-        /* 回覆出席 */
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center; background-size: contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; transition: 0.3s; padding-bottom: 5px; }
         .rsvp-button:hover { transform: scale(1.05); }
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
 
-        /* 故事區 */
         .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; min-height: auto; }
         .story-content { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; }
+        
         .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; }
         .quote-left { text-align: left; margin-bottom: -5px; }
         .quote-right { text-align: right; margin-top: -5px; }
+        
+        .mobile-br { display: none; }
+        .desktop-comma { display: inline; }
+
         .merged-photo-img { width: 100%; height: auto; display: block; margin: 0 auto; -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); }
 
-        /* 行程表 */
         .schedule-content-wrapper {
             width: 100%;
             max-width: 1100px;
@@ -170,35 +178,60 @@
 
         /* --- 手機版本專屬優化 --- */
         @media (max-width: 768px) {
-            /* 修正：切換手機版全網頁背景圖 */
+            /* --- 核心修正：解決手機版背景拉伸問題 --- */
             body, html {
+                background-image: none !important; /* 移除原本設定在 body 的背景 */
+                background-color: #ece5df; /* 保留底色 */
+            }
+
+            /* 啟用固定的手機背景層 */
+            .mobile-bg-fix {
+                display: block;
+                position: fixed; /* 固定在螢幕上 */
+                top: 0;
+                left: 0;
+                width: 100vw; /* 電子紙寬度 */
+                height: 100vh; /* 電子紙高度 */
                 background-image: url('schedule/background_mobile.jpg');
-                background-attachment: scroll; /* 手機版建議改為 scroll 以增加順暢度 */
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: cover; /* 完美覆蓋螢幕，不扭曲 */
+                z-index: -1; /* 放在最底層 */
+                will-change: transform; /* 優化部分行動瀏覽器的效能 */
             }
 
             section { padding: 40px 10px; min-height: auto; }
             .hero-title { font-size: 1.6rem; letter-spacing: 3px; }
             
+            /* 需求：引導頁面保持水平對齊 */
             .guide-container { 
                 flex-direction: row; 
                 gap: 12px; 
                 width: 100%; 
                 padding: 0 5px; 
                 justify-content: center;
-                flex-wrap: nowrap;
             }
             .guide-img-wrapper { max-width: 160px; margin-bottom: 10px; padding: 5px; }
             .guide-item h3 { font-size: 0.95rem; }
             .guide-item p { font-size: 1rem; }
 
-            .schedule-grid { grid-template-columns: 1fr; }
-            .schedule-content-wrapper { padding: 30px 15px; }
+            /* 需求：文字跳行調整 */
+            .mobile-br { display: block; content: ""; margin-top: 5px; }
+            .desktop-comma { display: none; }
+            .hero-quote { font-size: 1rem; line-height: 1.6; }
 
+            /* 需求：行程表改為垂直對齊 (單欄) */
+            .schedule-grid { grid-template-columns: 1fr; gap: 0; }
+            .schedule-content-wrapper { padding: 30px 15px; border-radius: 20px; }
+            .schedule-main-title { font-size: 1.6rem; margin-bottom: 30px; }
+
+            /* 戒指分隔線轉水平 */
             .divider-container { 
                 padding: 40px 0; 
                 flex-direction: row; 
                 justify-content: center;
                 height: auto;
+                width: 100%;
             }
             .divider-line { width: 60px; height: 1px; flex-grow: 0; }
             .divider-line::after { display: none; }
@@ -217,6 +250,7 @@
     </style>
 </head>
 <body>
+    <div class="mobile-bg-fix"></div>
 
     <div class="page-wrapper">
         <div class="card-inner" id="mainCard">
@@ -251,7 +285,10 @@
 
                 <section class="story-section">
                     <div class="story-content">
-                        <p class="hero-quote quote-left">我們...沒有拍婚紗，雖然結婚是個紀念</p>
+                        <p class="hero-quote quote-left">
+                            我們...沒有拍婚紗<span class="desktop-comma">，</span><br class="mobile-br">
+                            雖然結婚是個紀念
+                        </p>
                         <img src="schedule/main.png" alt="婚禮照片" class="merged-photo-img">
                         <p class="hero-quote quote-right">在一起的每一天，更值得留念</p>
                     </div>
@@ -356,7 +393,6 @@
                     if (src && src.includes('.png') && !src.includes('_mobile')) {
                         img.setAttribute('src', src.replace('.png', '_mobile.png'));
                     }
-                    // 同步處理 jpg 格式（如背景或照片若有 mobile 版也可透過腳本，但背景建議用 CSS 處理）
                     if (src && src.includes('.jpg') && !src.includes('_mobile')) {
                         img.setAttribute('src', src.replace('.jpg', '_mobile.jpg'));
                     }
