@@ -72,14 +72,13 @@
             align-items: center;
         }
 
-        .hero-title, .hero-date, .hero-quote, .guide-item h3, .guide-item p, .schedule-main-title {
+        .hero-title, .hero-date, .hero-quote, .guide-item h3, .guide-item p, .schedule-main-title, .rsvp-subtext {
             text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,1);
         }
 
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-bottom: 10px; font-weight: 500; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
-        /* --- 修改：將 Guide Item 做成按鈕樣式 --- */
         .guide-container {
             display: flex;
             justify-content: center;
@@ -95,7 +94,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            cursor: pointer; /* 滑鼠手型 */
+            cursor: pointer;
             transition: transform 0.3s ease, filter 0.3s ease;
             background: none;
             border: none;
@@ -103,7 +102,7 @@
         }
 
         .guide-item:hover {
-            transform: translateY(-10px); /* 懸浮微動感 */
+            transform: translateY(-10px);
             filter: brightness(1.05);
         }
 
@@ -126,15 +125,17 @@
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center; background-size: contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; transition: 0.3s; padding-bottom: 5px; }
         .rsvp-button:hover { transform: scale(1.05); }
         
+        /* 補回說明文字的樣式 */
+        .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
+
         .story-section {
             background: rgba(255, 255, 255, 0.2); 
             border-radius: 40px;
-            padding: 40px; /* 這裡的 padding 也可以縮小，例如改為 20px 40px */
+            padding: 40px;
             margin-bottom: 60px;
             backdrop-filter: blur(3px);
             width: 100%;
             max-width: 1000px;
-            /* 新增這行：覆蓋掉原本 section 的 100vh */
             min-height: auto; 
         }
         
@@ -156,7 +157,7 @@
 
         .schedule-main-title { font-size: 2rem; letter-spacing: 4px; text-align: center; margin-bottom: 40px; font-weight: 600; color: #4a3a35; }
 
-        .schedule-grid { display: grid; grid-template-columns: 1fr 50px 1fr; width: 100%; }
+        .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
         .schedule-column { display: flex; flex-direction: column; gap: 60px; }
 
         .divider-container { display: flex; flex-direction: column; align-items: center; height: 100%; }
@@ -168,7 +169,7 @@
         .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
         .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
 
-        .event-item { display: flex; align-items: center; justify-content: center; gap: 30px; margin-bottom: 40px; }
+        .event-item { display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 40px; }
         .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: 1; }
         .event-time { font-weight: 600; font-size: 1.5rem; color: #4a3a35; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
@@ -221,6 +222,7 @@
 
                     <div class="rsvp-container">
                         <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdX0pTRn6Xgd2ync0EHPiqUqXZl9hgQm8tBAS4sDOxQ8FcLFA/viewform?usp=header')">回覆出席</button>
+                        <p class="rsvp-subtext">填寫 Google 表單，統計參與人數</p>
                     </div>
                 </section>
 
@@ -320,11 +322,9 @@
     </div>
 
     <script>
-        // 頁面捲動函數
         function scrollToId(id) {
             const element = document.getElementById(id);
             if (element) {
-                // block: 'center' 可以讓該區塊捲動到螢幕中間，閱讀更舒服
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
