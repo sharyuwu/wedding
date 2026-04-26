@@ -79,6 +79,7 @@
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-bottom: 10px; font-weight: 500; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
+        /* 引導區塊 */
         .guide-container {
             display: flex;
             justify-content: center;
@@ -101,10 +102,7 @@
             outline: none;
         }
 
-        .guide-item:hover {
-            transform: translateY(-10px);
-            filter: brightness(1.05);
-        }
+        .guide-item:hover { transform: translateY(-10px); filter: brightness(1.05); }
 
         .guide-img-wrapper {
             width: 100%;
@@ -121,12 +119,13 @@
         .guide-item h3 { font-size: 1.5rem; margin-bottom: 8px; }
         .guide-item p { font-size: 1.4rem; color: var(--accent-gold); font-family: initial; font-weight: 600; }
 
+        /* 回覆出席 */
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center; background-size: contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; transition: 0.3s; padding-bottom: 5px; }
         .rsvp-button:hover { transform: scale(1.05); }
-        /* RSVP 說明文字樣式 */
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
 
+        /* 故事區 */
         .story-section {
             background: rgba(255, 255, 255, 0.2); 
             border-radius: 40px;
@@ -144,6 +143,7 @@
         .quote-right { text-align: right; margin-top: -5px; }
         .merged-photo-img { width: 100%; height: auto; display: block; margin: 0 auto; -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); }
 
+        /* 行程表 */
         .schedule-content-wrapper {
             width: 100%;
             max-width: 1100px;
@@ -156,16 +156,15 @@
 
         .schedule-main-title { font-size: 2rem; letter-spacing: 4px; text-align: center; margin-bottom: 40px; font-weight: 600; color: #4a3a35; }
 
-        /* 行程表 Grid 佈局 */
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
         .schedule-column { display: flex; flex-direction: column; gap: 60px; }
 
-        /* --- 核心修改：內部元素完美置中於紅線 --- */
+        /* --- 修正：各自紅線處置中，並增加 15px Gap --- */
         .event-item { 
             display: flex; 
             align-items: center; 
-            justify-content: center; /* 讓整體組合在該欄位的紅線位置置中 */
-            gap: 5px; /* 文字與圖示的 5px 間距 */
+            justify-content: center; /* 在各區域紅線置中 */
+            gap: 15px; /* 增加 10px，總共 15px 的間隔 */
             margin-bottom: 40px; 
             width: 100%;
         }
@@ -173,26 +172,19 @@
         .event-text-stack { 
             display: flex; 
             flex-direction: column; 
-            align-items: center; /* 文字與金色線條內部置中 */
-            flex: none; /* 移除 flex: 1，不強行填滿空間，讓它往紅線靠近 */
+            align-items: center; 
+            flex: none; 
         }
 
         .event-icon-container { 
             display: flex; 
             justify-content: center; 
-            flex: none; /* 移除 flex: 1，讓圖示緊貼文字區 */
-        }
-
-        /* 統一左右欄排版一致 */
-        #ceremony-target .event-item, 
-        #banquet-target .event-item { 
-            justify-content: center; 
+            flex: none; 
         }
 
         .event-time { font-weight: 600; font-size: 1.5rem; color: #4a3a35; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
 
-        /* 金色分隔線 */
         .gold-line-divider { 
             width: 110px; 
             height: 1px; 
@@ -213,7 +205,7 @@
 
         .event-icon-img { width: 100px; height: 100px; object-fit: contain; }
 
-        /* 中央分隔戒指線 */
+        /* 中央分隔線 */
         .divider-container { display: flex; flex-direction: column; align-items: center; height: 100%; }
         .divider-line { width: 1px; flex-grow: 1; background: var(--light-gold); position: relative; }
         .divider-line::after { content: '✶'; position: absolute; left: 50%; transform: translateX(-50%); color: var(--accent-gold); font-size: 18px; top: 40%; }
@@ -229,10 +221,11 @@
             .schedule-main-title { font-size: 1.6rem; margin-bottom: 30px; }
             .guide-container { flex-direction: column; gap: 30px; align-items: center; }
             .rsvp-button { width: 260px; height: 65px; font-size: 1.3rem; }
-            .schedule-grid { grid-template-columns: 1fr 60px 1fr; }
+            .schedule-grid { grid-template-columns: 1fr 40px 1fr; }
             .divider-ring-img { width: 50px; }
             .event-icon-img { width: 70px; height: 70px; }
             .group-title { font-size: 1.4rem; }
+            .event-item { gap: 8px; }
         }
     </style>
 </head>
