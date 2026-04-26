@@ -85,14 +85,47 @@
         .names-index { font-weight: 600; font-size: 2.2rem; color: var(--text-color-index); }
         .tagline { font-size: 1.4rem; margin-top: 10px; min-height: 1.6em; color: var(--text-color-index); opacity: 0; transition: 0.4s; }
         .tagline.visible { opacity: 1; }
-        .enter-button { margin-top: 30px; padding: 5px 10px; background: white; border: 1px solid var(--accent-gold); border-radius: 30px; cursor: pointer; text-decoration: none; color: var(--text-color-index); font-size: 1.1rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
+        .enter-button { 
+             /* 1. 修改與上方文字的間隔 */
+            margin-top: 40px;      /* 原本是 20px，數字越大間隔越開 */
+            /* 2. 修改按鈕的寬度（場寬） */
+            /* 方法 A：透過增加左右內邊距 (Padding) 來撐開按鈕 */
+            padding: 12px 80px;    /* 12px 是上下高度，80px 是左右寬度（原本是 50px） */
+            /* 方法 B：如果你想要按鈕是固定的絕對寬度，可以取消上面的 padding 左右值，改用下面這行 */
+            /* width: 250px; */      /* 直接指定寬度 */
+            background: white; 
+            border: 1px solid var(--accent-gold); 
+            border-radius: 20px; 
+            cursor: pointer; 
+            text-decoration: none; 
+            color: var(--text-color-index); 
+            font-size: 1.1rem; 
+            transition: 0.3s; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+            display: inline-block;
+        }
 
+
+
+        
         /* 窗簾動畫 */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { flex: 1; height: 100%; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px); transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); }
         .opened .curtain.left { transform: translateX(-100%); }
         .opened .curtain.right { transform: translateX(100%); }
         .seal-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 101; cursor: pointer; text-align: center; }
+        /* --- 修正這一段 --- */
+        .seal-wrapper { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: 101; 
+            cursor: pointer; 
+            text-align: center; 
+            /* 這裡改為 none，點擊後「囍」字會瞬間不見 */
+            transition: none; 
+        }
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
