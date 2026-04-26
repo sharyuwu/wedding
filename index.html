@@ -16,6 +16,7 @@
             --accent-gold: #a67c52;
             --light-gold: #e2c08d;
             --handwriting: "Klee One", "Noto Serif TC", serif;
+            --fade-speed: 1.5s; /* 統一浮現速度 */
         }
 
         /* --- 基礎設定 --- */
@@ -34,7 +35,7 @@
             scroll-snap-type: y mandatory;
         }
 
-        /* 背景管理系統 */
+        /* --- 背景管理系統 --- */
         .index-bg-base {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #fdfaf7; z-index: -2;
@@ -43,9 +44,7 @@
         .fixed-schedule-bg {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #ece5df;
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
+            background-position: center center; background-size: cover; background-repeat: no-repeat;
             z-index: -1; opacity: 0;
             transition: opacity 1.5s ease-in-out;
             pointer-events: none;
@@ -79,37 +78,36 @@
         .content-layer {
             position: relative; z-index: 10; height: 100dvh; width: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-            padding: 0 20px; opacity: 0; transition: opacity 1.2s ease-out;
+            padding: 0 20px;
         }
-        .content-layer.visible { opacity: 1; }
+
+        /* --- 核心：統一浮現效果 --- */
+        .welcome-text, .date-text-index, .names-index, .tagline {
+            opacity: 0;
+            transition: opacity var(--fade-speed) ease-in-out;
+        }
 
         .welcome-text { font-size: 3.5rem; color: var(--text-color-index); margin-bottom: 5px; }
         .date-text-index { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-color-index); }
         .spacer-gap { width: 100%; height: 40vh; } 
         .names-index { font-weight: 600; font-size: 2.2rem; color: var(--text-color-index); }
-        
-        .tagline { 
-            font-size: 1.4rem; margin-top: 10px; min-height: 1.6em; 
-            color: var(--text-color-index); opacity: 0; transition: 0.8s; 
-        }
-        .tagline.visible { opacity: 1; }
+        .tagline { font-size: 1.4rem; margin-top: 10px; min-height: 1.6em; color: var(--text-color-index); }
 
-        /* 按鈕預設隱藏，等待動態文字結束 */
+        /* 啟動浮現的類別 */
+        .reveal-visible { opacity: 1 !important; }
+
+        /* 打開邀請函按鈕 */
         .enter-button {
             margin-top: 20px; padding: 12px 50px; background: white;
             border: 1px solid var(--accent-gold); color: var(--text-color-index);
             text-decoration: none; border-radius: 30px; font-size: 1.1rem;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             cursor: pointer; display: inline-block;
-            
             opacity: 0; 
             pointer-events: none; 
-            transition: opacity 1.5s ease-in-out; 
+            transition: opacity var(--fade-speed) ease-in-out; 
         }
-        .enter-button.btn-visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .enter-button.btn-visible { opacity: 1; pointer-events: auto; }
 
         /* --- 窗簾與囍字 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
@@ -130,7 +128,7 @@
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-        /* 音樂控制 */
+        /* 音樂組件樣式 */
         .music-toggle {
             position: fixed; bottom: 20px; right: 20px; z-index: 1000;
             width: 45px; height: 45px; background: rgba(255, 255, 255, 0.7);
@@ -143,68 +141,38 @@
         @keyframes music-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         /* --- 【下半部：Schedule 排版還原】 --- */
-        #schedule-section {
-            background: transparent !important;
-            opacity: 0; transition: opacity 1.5s ease-in-out;
-            color: var(--text-color-schedule); overflow-y: auto;
-        }
+        #schedule-section { background: transparent !important; opacity: 0; transition: opacity 1.5s ease-in-out; color: var(--text-color-schedule); overflow-y: auto; }
         body.show-schedule #schedule-section { opacity: 1; }
         .page-wrapper { width: 100%; min-height: 100vh; display: flex; justify-content: center; position: relative; z-index: 1; background: transparent !important; }
         .card-inner, .card-face { width: 100%; display: flex; flex-direction: column; align-items: center; background: transparent !important; }
-
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-shadow: 0 0 10px white; font-weight: 500; text-align: center; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
-
         .guide-container { display: flex; justify-content: center; gap: 40px; width: 100%; max-width: 900px; margin-bottom: 50px; }
-        .guide-item { 
-            flex: 1; text-align: center; cursor: pointer; 
-            display: flex; flex-direction: column; align-items: center; 
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
-            -webkit-tap-highlight-color: transparent;
-        }
-        .guide-item:hover { transform: translateY(-10px); }
+        .guide-item { flex: 1; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.4s; }
         .guide-item.is-clicked { transform: scale(0.95) translateY(2px); transition: transform 0.1s ease; }
-
-        .guide-img-wrapper { 
-            width: 100%; max-width: 350px; padding: 10px; 
-            border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; 
-            background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; 
-            transition: all 0.3s ease;
-        }
+        .guide-img-wrapper { width: 100%; max-width: 350px; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; }
         .guide-img { width: 100%; border-radius: 4px; display: block; }
         .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; text-align: left; width: 100%; max-width: 350px; opacity: 0.8; letter-spacing: 1px; }
-
-        /* RSVP 區域 */
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; }
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
-
-        /* 故事區 */
         .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; text-align: center; }
         .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; width: 100%; text-shadow: 0 0 10px white; }
         .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; display: block; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); mask-image: radial-gradient(circle, white 75%, transparent 100%); }
-
-        /* 行程表主體 1fr 100px 1fr */
         .schedule-content-wrapper { width: 100%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
         .schedule-main-title { font-size: 2rem; letter-spacing: 4px; text-align: center; margin-bottom: 40px; font-weight: 600; color: #4a3a35; }
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
         .schedule-column { display: flex; flex-direction: column; gap: 20px; text-align: center; }
-
         .event-group { text-align: center; }
         .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
         .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
-
-        /* 行程項目 Gap 40px */
         .event-item { display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 30px; width: 100%; }
         .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: none; }
         .event-time { font-weight: 600; font-size: 1.8rem; color: #4a3a35; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
-
         .gold-line-divider { width: 110px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; margin-top: 5px; }
         .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: var(--accent-gold); padding: 0 5px; }
         .event-icon-img { width: 100px; height: 100px; object-fit: contain; }
-
-        /* 分隔線與戒指 */
         .divider-container { display: flex; flex-direction: column; align-items: center; height: 100%; }
         .divider-line { width: 1px; flex-grow: 1; background: var(--light-gold); position: relative; }
         .divider-ring-img { width: 80px; height: auto; margin: 25px 0; z-index: 2; }
@@ -272,10 +240,8 @@
         <div class="page-wrapper">
             <div class="card-inner">
                 <div class="card-face">
-                    
                     <h1 class="hero-title">凱翔與禹萱的婚禮</h1>
                     <p class="hero-date">10.10.2026</p>
-
                     <div class="guide-container">
                         <div class="guide-item" onclick="handleGuideClick('ceremony-target', this)">
                             <div class="guide-img-wrapper"><img src="schedule/main-church.png" class="guide-img"></div>
@@ -288,12 +254,10 @@
                             <h3 style="margin-bottom: 5px;">餐廳婚禮晚宴</h3><p style="color:var(--accent-gold); font-weight:600;">18 : 00</p>
                         </div>
                     </div>
-
                     <div class="rsvp-container">
                         <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/...')">回覆出席</button>
                         <p class="rsvp-subtext">填寫 Google 表單，統計出席人數</p>
                     </div>
-
                     <div class="story-section">
                         <div style="display:grid; justify-items:center; width:100%;">
                             <p class="hero-quote" style="text-align:left; width:100%; max-width:800px; margin-bottom:-5px;">我們...沒有拍婚紗，結婚是個紀念</p>
@@ -301,7 +265,6 @@
                             <p class="hero-quote" style="text-align:right; width:100%; max-width:800px; margin-top:-5px;">在一起的每一天，更令人留念</p>
                         </div>
                     </div>
-
                     <div class="schedule-content-wrapper">
                         <h2 class="schedule-main-title">我們特別的日子</h2>
                         <div class="schedule-grid">
@@ -323,13 +286,11 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="divider-container">
                                 <div class="divider-line"></div>
                                 <img src="schedule/icon_ring.png" class="divider-ring-img">
                                 <div class="divider-line"></div>
                             </div>
-
                             <div class="schedule-column" id="banquet-target">
                                 <div class="event-group">
                                     <h3 class="group-title">結婚晚宴</h3>
@@ -350,7 +311,6 @@
                             </div>
                         </div>
                     </div>
-
                     <footer style="padding: 60px 0; opacity: 0.5; text-align: center;">2026.10.10 | 凱翔 & 禹萱</footer>
                 </div>
             </div>
@@ -365,7 +325,6 @@
         const musicToggle = document.getElementById('musicToggle');
         const enterBtn = document.getElementById('enterBtn');
 
-        // --- Waterfall Loading ---
         function preloadImage(url) {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -407,7 +366,10 @@
             }
             document.body.classList.add('opened');
             setTimeout(() => { document.body.classList.add('snap-mode'); }, 50);
-            setTimeout(showIndex, 1300);
+            
+            // --- 核心：等到窗簾拉開完畢，文字全部一起浮現 ---
+            setTimeout(showIndexSimultaneously, 3000); 
+
             setTimeout(() => {
                 const curtain = document.getElementById('curtainLayer');
                 if (curtain) curtain.remove();
@@ -419,32 +381,42 @@
             else { bgMusic.pause(); musicToggle.classList.remove('rotating'); }
         }
 
-        function showIndex() {
-            const mainContent = document.getElementById('mainContent');
-            if (mainContent) {
-                mainContent.classList.add('visible');
-                updateTagline();
-            }
+        // --- 優化後：所有文字同時浮現 ---
+        function showIndexSimultaneously() {
+            // 同時給予所有元素 reveal-visible 類別
+            document.querySelector('.welcome-text').classList.add('reveal-visible');
+            document.querySelector('.date-text-index').classList.add('reveal-visible');
+            document.querySelector('.names-index').classList.add('reveal-visible');
+            
+            // 啟動 Tagline 循環
+            updateTagline();
         }
 
         function updateTagline() {
             if (!taglineEl) return;
-            taglineEl.classList.remove('visible');
-            setTimeout(() => {
+            
+            if (currentIndex === 0) {
                 taglineEl.innerText = phrases[currentIndex];
-                setTimeout(() => taglineEl.classList.add('visible'), 50);
-                
-                // 判斷是否為最後一句話
-                if (currentIndex < phrases.length - 1) {
-                    currentIndex++;
-                    setTimeout(updateTagline, 4000);
-                } else {
-                    // 當最後一句顯示完後，延遲浮現按鈕
-                    setTimeout(() => {
-                        if (enterBtn) enterBtn.classList.add('btn-visible');
-                    }, 1200); 
-                }
-            }, 500);
+                taglineEl.classList.add('reveal-visible'); // 第一句與大家一起同步浮現
+                currentIndex++;
+                setTimeout(updateTagline, 4000);
+            } else {
+                taglineEl.classList.remove('reveal-visible');
+                setTimeout(() => {
+                    taglineEl.innerText = phrases[currentIndex];
+                    taglineEl.classList.add('reveal-visible');
+                    
+                    if (currentIndex < phrases.length - 1) {
+                        currentIndex++;
+                        setTimeout(updateTagline, 4000);
+                    } else {
+                        // 最後一句話結束後，延遲浮現按鈕
+                        setTimeout(() => {
+                            if (enterBtn) enterBtn.classList.add('btn-visible');
+                        }, 1200); 
+                    }
+                }, 1500); // 使用 1.5s 配合 CSS transition 進行淡換
+            }
         }
 
         function goToSchedule() {
@@ -455,7 +427,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
             window.scrollTo(0, 0);
-
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(e => {
                     if (e.isIntersecting) { document.body.classList.add('show-bg', 'show-schedule', 'is-fading'); }
