@@ -16,19 +16,20 @@
             --accent-gold: #a67c52;
             --light-gold: #e2c08d;
             --handwriting: "Klee One", "Noto Serif TC", serif;
-            --main-fade: 1.5s ease-in-out; /* 統一轉場節奏 */
+            --main-fade: 1.5s ease-in-out;
         }
 
         /* --- 基礎設定 --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { width: 100%; height: 100%; font-family: var(--handwriting); background-color: #fdfaf7; scroll-behavior: smooth; }
+        
+        /* 初始狀態強制隱藏溢出，直到窗簾拉開 */
+        body { overflow: hidden; } 
         body.snap-mode { overflow-y: auto; }
 
-        /* --- 背景系統：解決色塊感的關鍵 --- */
+        /* --- 背景系統 --- */
         .index-bg-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #fdfaf7; z-index: -2; transition: opacity var(--main-fade); }
         .fixed-schedule-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #ece5df; background-position: center center; background-size: cover; background-repeat: no-repeat; z-index: -1; opacity: 0; transition: opacity var(--main-fade); pointer-events: none; }
-        
-        /* 切換背景 */
         body.show-bg .index-bg-base { opacity: 0; }
         body.show-bg .fixed-schedule-bg { opacity: 1; }
 
@@ -36,38 +37,21 @@
         .hero-snap-section { width: 100%; height: 100dvh; position: relative; overflow: hidden; background: transparent !important; }
         .content-snap-section { width: 100%; min-height: 100vh; position: relative; background: transparent !important; }
 
-        /* --- 上半部 Index 內容層轉場 --- */
-        .layer-base, .layer-mid, .layer-top { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background-size: cover; background-position: center center; background-repeat: no-repeat; 
-            transition: opacity var(--main-fade); 
-        }
+        /* --- 上半部 Index --- */
+        .layer-base, .layer-mid, .layer-top { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center center; background-repeat: no-repeat; transition: opacity var(--main-fade); }
+        .content-layer { position: relative; z-index: 10; height: 100dvh; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; transition: opacity var(--main-fade); }
 
-        /* 內容文字層也加入淡入淡出 */
-        .content-layer { 
-            position: relative; z-index: 10; height: 100dvh; width: 100%; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; 
-            padding: 0 20px;
-            transition: opacity var(--main-fade); 
-        }
+        body.is-fading .layer-base, body.is-fading .layer-mid, body.is-fading .layer-top, body.is-fading .content-layer { opacity: 0; pointer-events: none; }
 
-        /* 當滑到下方時，上方內容全部消失 */
-        body.is-fading .layer-base, 
-        body.is-fading .layer-mid, 
-        body.is-fading .layer-top, 
-        body.is-fading .content-layer { opacity: 0; pointer-events: none; }
-
-        /* --- 文字與按鈕樣式 --- */
         .welcome-text { font-size: 3.5rem; color: var(--text-color-index); margin-bottom: 5px; }
         .date-text-index { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-color-index); }
         .spacer-gap { width: 100%; height: 40vh; } 
         .names-index { font-weight: 600; font-size: 2.2rem; color: var(--text-color-index); }
         .tagline { font-size: 1.4rem; margin-top: 10px; min-height: 1.6em; color: var(--text-color-index); transition: opacity 0.8s ease-in-out; }
-        
         .enter-button { margin-top: 20px; padding: 12px 50px; background: white; border: 1px solid var(--accent-gold); color: var(--text-color-index); text-decoration: none; border-radius: 30px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); cursor: pointer; display: inline-block; opacity: 0; pointer-events: none; transition: opacity 1.5s ease-in-out; }
         .enter-button.btn-visible { opacity: 1; pointer-events: auto; }
 
-        /* --- 窗簾動畫 --- */
+        /* --- 窗簾 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { flex: 1; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); transition-delay: 0.4s; }
         .opened .curtain.left { transform: translateX(-100%); }
@@ -77,15 +61,15 @@
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-        /* --- 音樂按鈕 --- */
+        /* --- 音樂 --- */
         .music-toggle { position: fixed; bottom: 20px; right: 20px; z-index: 1000; width: 45px; height: 45px; background: rgba(255, 255, 255, 0.7); border: 1px solid var(--accent-gold); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.5s; }
         body.opened .music-toggle { opacity: 1; }
         .rotating { animation: music-rotate 3s linear infinite; }
         @keyframes music-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* --- 下半部 Schedule 排版 --- */
+        /* --- Schedule 排版 --- */
         .page-wrapper { width: 100%; padding-bottom: 100px; display: flex; justify-content: center; position: relative; z-index: 1; background: transparent !important; }
-        .card-inner { width: 100%; max-width: 1200px; display: flex; flex-direction: column; align-items: center; background: transparent !important; }
+        .card-inner { width: 100%; max-width: 1200px; display: flex; flex-direction: column; align-items: center; }
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-align: center; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; }
 
@@ -94,11 +78,9 @@
         .guide-img-wrapper { width: 100%; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; }
         .guide-img { width: 100%; border-radius: 4px; display: block; }
         .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; text-align: center; width: 100%; opacity: 0.8; letter-spacing: 1px; }
-
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; }
 
-        /* 故事區：文字對齊校正 */
         .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 60px 40px; margin-bottom: 80px; backdrop-filter: blur(3px); width: 95%; max-width: 1100px; text-align: center; }
         .quote-container { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; }
         .hero-quote { font-size: 1.3rem; opacity: 0.9; line-height: 1.8; text-shadow: 0 0 10px white; }
@@ -106,7 +88,6 @@
         .quote-right { text-align: right; }
         .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; display: block; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); transition: opacity 1.2s ease-in-out; opacity: 0; }
 
-        /* 行程表結構 */
         .schedule-content-wrapper { width: 95%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
         .schedule-main-title { font-size: 2.2rem; letter-spacing: 4px; text-align: center; margin-bottom: 60px; font-weight: 600; color: #4a3a35; }
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; align-items: start; }
@@ -135,7 +116,12 @@
     </style>
 </head>
 
-<body class="snap-mode">
+<body id="top">
+
+    <script>
+        if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+        window.scrollTo(0, 0);
+    </script>
 
     <div class="index-bg-base"></div>
     <div class="fixed-schedule-bg" id="fixedScheduleBg"></div>
@@ -227,6 +213,9 @@
     </section>
 
     <script>
+        // --- 初始化重置 ---
+        window.onbeforeunload = function () { window.scrollTo(0, 0); };
+
         const phrases = ["大家好～", "我們要結婚了！", "誠摯邀請大家參加我們的婚禮", "我們當天見，感謝大家的祝福"];
         const desktopPhotoCount = 1; const mobilePhotoCount = 9;  
         const isMobile = window.innerWidth <= 768;
@@ -241,7 +230,8 @@
 
         async function initWaterfall() {
             const s = isMobile ? '_mobile' : '';
-            const storyInit = await preloadImage(`story/story_phone_gallery_1${isMobile ? '_mobile.png' : '.png'}`);
+            const suffix = isMobile ? '_mobile.png' : '.png';
+            const storyInit = await preloadImage(`story/story_phone_gallery_1${suffix}`);
             if(storyInit) { storyImgEl.src = storyInit; storyImgEl.style.opacity = 1; }
             const topImg = await preloadImage(`main-image-layer-top${s}.png`);
             if(topImg) document.getElementById('topLayer').style.backgroundImage = `url('${topImg}')`;
@@ -253,11 +243,15 @@
             if(bgSched) document.getElementById('fixedScheduleBg').style.backgroundImage = `url('${bgSched}')`;
         }
 
-        window.addEventListener('load', initWaterfall);
+        window.addEventListener('load', () => {
+            window.scrollTo(0, 0);
+            initWaterfall();
+        });
 
         function startApp() {
             if (bgMusic) { bgMusic.play().then(() => musicToggle.classList.add('rotating')).catch(e => console.log("Music blocked")); }
             document.body.classList.add('opened');
+            setTimeout(() => { document.body.classList.add('snap-mode'); }, 50);
             setTimeout(cycleTagline, 1300); cycleStoryPhotos();
             setTimeout(() => { const curtain = document.getElementById('curtainLayer'); if (curtain) curtain.remove(); }, 3500);
         }
@@ -301,23 +295,11 @@
 
         function goToSchedule() { document.body.classList.add('is-fading', 'show-bg'); document.getElementById('schedule-section').scrollIntoView({ behavior: 'smooth' }); }
 
-        // --- 優化後的偵測邏輯：解決回滑色塊感並讓內容浮現 ---
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                const isScrollingDown = e.isIntersecting;
-                // 滑到底下時
-                if (isScrollingDown) { 
-                    document.body.classList.add('show-bg', 'is-fading'); 
-                } 
-                // 滑回頂部時 (透過滾動位置精確判斷)
-            });
-        }, { threshold: 0.1 });
-        observer.observe(document.getElementById('schedule-section'));
-
         window.addEventListener('scroll', () => {
-            // 當滑回頂部超過一定距離，強制移除消失類別，觸發浮現
             if (window.scrollY < window.innerHeight * 0.3) {
                 document.body.classList.remove('show-bg', 'is-fading');
+            } else {
+                document.body.classList.add('show-bg', 'is-fading');
             }
         });
     </script>
