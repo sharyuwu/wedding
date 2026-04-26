@@ -124,9 +124,9 @@
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center; background-size: contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; transition: 0.3s; padding-bottom: 5px; }
         .rsvp-button:hover { transform: scale(1.05); }
+        /* RSVP 說明文字樣式 */
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
 
-        /* 故事區：高度調小且透明度 0.2 */
         .story-section {
             background: rgba(255, 255, 255, 0.2); 
             border-radius: 40px;
@@ -156,46 +156,72 @@
 
         .schedule-main-title { font-size: 2rem; letter-spacing: 4px; text-align: center; margin-bottom: 40px; font-weight: 600; color: #4a3a35; }
 
+        /* 行程表 Grid 佈局 */
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
         .schedule-column { display: flex; flex-direction: column; gap: 60px; }
 
-        .divider-container { display: flex; flex-direction: column; align-items: center; height: 100%; }
-        .divider-line { width: 1px; flex-grow: 1; background: var(--light-gold); position: relative; }
-        .divider-line::after { content: '✶'; position: absolute; left: 50%; transform: translateX(-50%); color: var(--accent-gold); font-size: 18px; top: 40%; }
-        .divider-ring-img { width: 90px; height: auto; margin: 25px 0; z-index: 2; }
-
-        .event-group { text-align: center; }
-        .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
-        .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
-
-        /* 通用行程項目排版 */
-        .event-item { display: flex; align-items: center; gap: 5px; margin-bottom: 40px; }
-        .event-text-stack { display: flex; flex-direction: column; flex: 1; }
-        .event-icon-container { display: flex; flex: 1; }
-
-        /* --- 結婚典禮 (左欄)：文字靠左對齊，圖示靠左 (往中心靠) --- */
-        #ceremony-target .event-text-stack { align-items: center; } /* 保持原樣或依需求調整 */
-        #ceremony-target .event-icon-container { justify-content: flex-start; }
-
-        /* --- 結婚晚宴 (右欄)：文字在左但向右靠攏，圖示在右但向左靠攏 --- */
-        #banquet-target .event-item { flex-direction: row; } /* 確保是文字左、圖示右 */
-        
-        #banquet-target .event-text-stack { 
-            align-items: flex-end; /* 文字向右對齊，貼近右側的圖示 */
+        /* --- 核心修改：內部元素完美置中於紅線 --- */
+        .event-item { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; /* 讓整體組合在該欄位的紅線位置置中 */
+            gap: 5px; /* 文字與圖示的 5px 間距 */
+            margin-bottom: 40px; 
+            width: 100%;
         }
-        
-        #banquet-target .event-icon-container { 
-            justify-content: flex-start; /* 圖示向左靠攏，貼近左側的文字 */
+
+        .event-text-stack { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; /* 文字與金色線條內部置中 */
+            flex: none; /* 移除 flex: 1，不強行填滿空間，讓它往紅線靠近 */
+        }
+
+        .event-icon-container { 
+            display: flex; 
+            justify-content: center; 
+            flex: none; /* 移除 flex: 1，讓圖示緊貼文字區 */
+        }
+
+        /* 統一左右欄排版一致 */
+        #ceremony-target .event-item, 
+        #banquet-target .event-item { 
+            justify-content: center; 
         }
 
         .event-time { font-weight: 600; font-size: 1.5rem; color: #4a3a35; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
-        
-        /* CSS 繪製的金色線條 */
-        .gold-line-divider { width: 120px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; margin-top: 5px; }
-        .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: var(--accent-gold); background: rgba(255, 255, 255, 0.01); padding: 0 5px; }
-        
-        .event-icon-img { width: 110px; height: 110px; object-fit: contain; }
+
+        /* 金色分隔線 */
+        .gold-line-divider { 
+            width: 110px; 
+            height: 1px; 
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); 
+            position: relative; 
+            margin-top: 5px; 
+        }
+        .gold-line-divider::after { 
+            content: '✶'; 
+            position: absolute; 
+            top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-size: 16px; 
+            color: var(--accent-gold); 
+            background: rgba(255, 255, 255, 0.01); 
+            padding: 0 5px; 
+        }
+
+        .event-icon-img { width: 100px; height: 100px; object-fit: contain; }
+
+        /* 中央分隔戒指線 */
+        .divider-container { display: flex; flex-direction: column; align-items: center; height: 100%; }
+        .divider-line { width: 1px; flex-grow: 1; background: var(--light-gold); position: relative; }
+        .divider-line::after { content: '✶'; position: absolute; left: 50%; transform: translateX(-50%); color: var(--accent-gold); font-size: 18px; top: 40%; }
+        .divider-ring-img { width: 80px; height: auto; margin: 25px 0; z-index: 2; }
+
+        .event-group { text-align: center; }
+        .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
+        .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
 
         @media (max-width: 768px) {
             section { padding: 40px 10px; min-height: auto; }
@@ -207,11 +233,6 @@
             .divider-ring-img { width: 50px; }
             .event-icon-img { width: 70px; height: 70px; }
             .group-title { font-size: 1.4rem; }
-            .gold-line-divider { width: 100px; }
-            
-            /* 手機版建議統一置中 */
-            #banquet-target .event-text-stack { align-items: center; }
-            #ceremony-target .event-icon-container, #banquet-target .event-icon-container { justify-content: center; }
         }
     </style>
 </head>
@@ -271,7 +292,9 @@
                                             <p class="event-name">賓客入席</p>
                                             <div class="gold-line-divider"></div>
                                         </div>
-                                        <div class="event-icon-container"><img src="schedule/icon_church.png" class="event-icon-img"></div>
+                                        <div class="event-icon-container">
+                                            <img src="schedule/icon_church.png" class="event-icon-img">
+                                        </div>
                                     </div>
                                     <div class="event-item">
                                         <div class="event-text-stack">
@@ -279,7 +302,9 @@
                                             <p class="event-name">典禮開始</p>
                                             <div class="gold-line-divider"></div>
                                         </div>
-                                        <div class="event-icon-container"><img src="schedule/icon_doves.png" class="event-icon-img"></div>
+                                        <div class="event-icon-container">
+                                            <img src="schedule/icon_doves.png" class="event-icon-img">
+                                        </div>
                                     </div>
                                     <div class="event-item">
                                         <div class="event-text-stack">
@@ -287,7 +312,9 @@
                                             <p class="event-name">茶會慶祝</p>
                                             <div class="gold-line-divider"></div>
                                         </div>
-                                        <div class="event-icon-container"><img src="schedule/icon_cake.png" class="event-icon-img"></div>
+                                        <div class="event-icon-container">
+                                            <img src="schedule/icon_cake.png" class="event-icon-img">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -308,7 +335,9 @@
                                             <p class="event-name">晚宴簽到</p>
                                             <div class="gold-line-divider"></div>
                                         </div>
-                                        <div class="event-icon-container"><img src="schedule/icon_champagne.png" class="event-icon-img"></div>
+                                        <div class="event-icon-container">
+                                            <img src="schedule/icon_champagne.png" class="event-icon-img">
+                                        </div>
                                     </div>
                                     <div class="event-item">
                                         <div class="event-text-stack">
@@ -316,7 +345,9 @@
                                             <p class="event-name">晚宴開始</p>
                                             <div class="gold-line-divider"></div>
                                         </div>
-                                        <div class="event-icon-container"><img src="schedule/icon_bouquet.png" class="event-icon-img"></div>
+                                        <div class="event-icon-container">
+                                            <img src="schedule/icon_bouquet.png" class="event-icon-img">
+                                        </div>
                                     </div>
                                     <div class="event-item">
                                         <div class="event-text-stack">
@@ -324,7 +355,9 @@
                                             <p class="event-name">送客合影</p>
                                             <div class="gold-line-divider"></div>
                                         </div>
-                                        <div class="event-icon-container"><img src="schedule/icon_the_end.png" class="event-icon-img"></div>
+                                        <div class="event-icon-container">
+                                            <img src="schedule/icon_the_end.png" class="event-icon-img">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -350,7 +383,6 @@
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
-
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 document.body.classList.add('loaded');
