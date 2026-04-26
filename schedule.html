@@ -105,30 +105,37 @@
 
         .guide-img { width: 100%; height: auto; display: block; border-radius: 4px; }
         
-        /* 需求修正：小字與 guide-item 左邊對齊 */
         .view-detail-hint { 
             font-size: 0.9rem; color: #7a6a64; 
             margin-bottom: 10px; opacity: 0.8; 
             letter-spacing: 1px; 
-            align-self: flex-start; /* 核心：左對齊 */
+            align-self: flex-start;
         }
 
         .guide-item h3 { font-size: 1.5rem; margin-bottom: 8px; font-weight: 600; color: #4a3a35; }
         .guide-item p { font-size: 1.4rem; color: var(--accent-gold); font-family: initial; font-weight: 600; }
 
-        /* 其餘排版保持不變 */
+        /* --- RSVP 區域 --- */
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center; background-size: contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; transition: 0.3s; padding-bottom: 5px; }
         .rsvp-button:hover { transform: scale(1.05); }
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
 
+        /* --- 故事區 --- */
         .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; min-height: auto; }
-        .story-content { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; }
-        .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; }
-        .mobile-br { display: none; }
-        .desktop-comma { display: inline; }
+        .story-content { 
+            width: 100%; max-width: 800px; margin: 0 auto; 
+            display: grid; gap: 0; 
+            justify-items: center; 
+        }
+        
+        .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; width: 100%; }
+        .quote-left { text-align: left; margin-bottom: -5px; }
+        .quote-right { text-align: right; margin-top: -5px; justify-self: end; }
+        
         .merged-photo-img { width: 100%; height: auto; display: block; margin: 0 auto; -webkit-mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); mask-image: radial-gradient(circle, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); }
 
+        /* --- 行程表 --- */
         .schedule-content-wrapper { width: 100%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
         .schedule-main-title { font-size: 2rem; letter-spacing: 4px; text-align: center; margin-bottom: 40px; font-weight: 600; color: #4a3a35; }
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
@@ -167,16 +174,14 @@
             section { padding: 40px 10px; min-height: auto; }
             .hero-title { font-size: 1.6rem; }
             
-            /* 需求：引導頁面水平並排 */
             .guide-container { flex-direction: row; gap: 12px; width: 100%; padding: 0 5px; justify-content: center; align-items: flex-start; }
             .guide-img-wrapper { max-width: 160px; margin-bottom: 5px; padding: 5px; border-radius: 6px; }
             .view-detail-hint { font-size: 0.75rem; margin-bottom: 6px; }
             .guide-item h3 { font-size: 0.95rem; margin-bottom: 4px; }
             .guide-item p { font-size: 1rem; }
 
-            .mobile-br { display: block; }
-            .desktop-comma { display: none; }
             .hero-quote { font-size: 1rem; }
+            .quote-right { justify-self: end; }
 
             .schedule-grid { grid-template-columns: 1fr; gap: 0; }
             .schedule-content-wrapper { padding: 30px 15px; border-radius: 20px; }
@@ -230,7 +235,7 @@
 
                 <section class="story-section">
                     <div class="story-content">
-                        <p class="hero-quote quote-left">我們...沒有拍婚紗<span class="desktop-comma">，</span><br class="mobile-br">雖然結婚是個紀念</p>
+                        <p class="hero-quote quote-left">我們...沒有拍婚紗，結婚是個紀念</p>
                         <img src="schedule/main.png" alt="婚禮照片" class="merged-photo-img">
                         <p class="hero-quote quote-right">在一起的每一天，更值得留念</p>
                     </div>
@@ -313,7 +318,6 @@
                 element.classList.remove('is-clicked');
                 const target = document.getElementById(targetId);
                 if (target) {
-                    // 使用 start 定位，並留一點 padding-top 給標題
                     const top = target.getBoundingClientRect().top + window.pageYOffset - 20;
                     window.scrollTo({ top: top, behavior: 'smooth' });
                 }
