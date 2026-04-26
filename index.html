@@ -80,7 +80,7 @@
             padding: 0 20px;
         }
 
-        /* 文字元件：預設顯示 (會被窗簾擋住) */
+        /* 文字元件：預設顯示 */
         .welcome-text { font-size: 3.5rem; color: var(--text-color-index); margin-bottom: 5px; opacity: 1; }
         .date-text-index { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-color-index); opacity: 1; }
         .spacer-gap { width: 100%; height: 40vh; } 
@@ -92,7 +92,7 @@
             transition: opacity 0.8s ease-in-out; 
         }
 
-        /* 打開邀請函按鈕：1.5s 優雅浮現 */
+        /* 按鈕：最後浮現 */
         .enter-button {
             margin-top: 20px; padding: 12px 50px; background: white;
             border: 1px solid var(--accent-gold); color: var(--text-color-index);
@@ -117,13 +117,13 @@
         .seal { width: 90px; height: 90px; background: var(--accent-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: seal-breathe 2.5s infinite; }
         @keyframes seal-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-        /* 音樂組件 */
+        /* 音樂控制 */
         .music-toggle { position: fixed; bottom: 20px; right: 20px; z-index: 1000; width: 45px; height: 45px; background: rgba(255, 255, 255, 0.7); border: 1px solid var(--accent-gold); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.5s; }
         body.opened .music-toggle { opacity: 1; }
         .rotating { animation: music-rotate 3s linear infinite; }
         @keyframes music-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* --- 【下半部：Schedule 排版】 --- */
+        /* --- 【下半部：Schedule 排版還原】 --- */
         #schedule-section { background: transparent !important; opacity: 0; transition: opacity 1.5s ease-in-out; color: var(--text-color-schedule); overflow-y: auto; }
         body.show-schedule #schedule-section { opacity: 1; }
         .page-wrapper { width: 100%; min-height: 100vh; display: flex; justify-content: center; position: relative; z-index: 1; background: transparent !important; }
@@ -131,7 +131,7 @@
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-shadow: 0 0 10px white; font-weight: 500; text-align: center; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
-        /* Guide Item：水平平分空間 */
+        /* Guide Container 水平平分 */
         .guide-container { 
             display: flex; 
             justify-content: space-evenly; 
@@ -147,21 +147,26 @@
         .guide-img-wrapper { width: 100%; max-width: 350px; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; transition: all 0.3s ease; }
         .guide-img { width: 100%; border-radius: 4px; display: block; }
 
-        /* 小字置中對齊圖片 */
+        /* 小字置中對齊 */
         .view-detail-hint { 
             font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; 
             text-align: center; width: 100%; max-width: 350px; 
             opacity: 0.8; letter-spacing: 1px; 
         }
 
-        /* RSVP 區域 */
         .rsvp-container { text-align: center; margin-bottom: 80px; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; }
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.9; }
 
+        /* 故事區輪播 */
         .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(3px); width: 100%; max-width: 1000px; text-align: center; }
         .hero-quote { font-size: 1.2rem; opacity: 0.9; line-height: 2; width: 100%; text-shadow: 0 0 10px white; }
-        .merged-photo-img { width: 100%; max-width: 800px; margin: 20px auto; display: block; -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); mask-image: radial-gradient(circle, white 75%, transparent 100%); }
+        .merged-photo-img { 
+            width: 100%; max-width: 800px; margin: 20px auto; display: block; 
+            -webkit-mask-image: radial-gradient(circle, white 75%, transparent 100%); 
+            mask-image: radial-gradient(circle, white 75%, transparent 100%);
+            transition: opacity 1s ease-in-out; opacity: 1;
+        }
 
         /* 行程表結構 1fr 100px 1fr */
         .schedule-content-wrapper { width: 100%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
@@ -177,6 +182,7 @@
         .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: none; }
         .event-time { font-weight: 600; font-size: 1.8rem; color: #4a3a35; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
+
         .gold-line-divider { width: 110px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; margin-top: 5px; }
         .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: var(--accent-gold); padding: 0 5px; }
         .event-icon-img { width: 100px; height: 100px; object-fit: contain; }
@@ -188,7 +194,7 @@
         @media (max-width: 768px) {
             .welcome-text { font-size: 1.8rem; }
             .names-index { font-size: 1.6rem; }
-            .spacer-gap { height: 40dvh; }
+            .spacer-gap { height: 50dvh; }
             .hero-title { font-size: 1.6rem; }
             .guide-container { flex-direction: row; justify-content: space-evenly; width: 100%; padding: 0; }
             .guide-img-wrapper, .view-detail-hint { max-width: 160px; }
@@ -272,8 +278,8 @@
 
                     <div class="story-section">
                         <div style="display:grid; justify-items:center; width:100%;">
-                            <p class="hero-quote" style="text-align:left; width:100%; max-width:800px; margin-bottom:-5px;">我們...沒有拍婚紗，結婚是個紀念</p>
-                            <img src="schedule/main.png" class="merged-photo-img">
+                            <p class="hero-quote" style="text-align:left; width:100%; max-width:800px; margin-bottom:-5px;">我們沒有拍婚紗，結婚是個紀念</p>
+                            <img id="storyPhoto" src="story/story_phone_gallery_1.png" class="merged-photo-img">
                             <p class="hero-quote" style="text-align:right; width:100%; max-width:800px; margin-top:-5px;">在一起的每一天，更令人留念</p>
                         </div>
                     </div>
@@ -329,12 +335,18 @@
     </section>
 
     <script>
+        // --- 設定變數 ---
         const phrases = ["大家好～", "我們要結婚了！", "誠摯邀請大家參加我們的婚禮", "我們當天見，感謝大家的祝福"];
+        const desktopPhotoCount = 1; 
+        const mobilePhotoCount = 9;  
+        
         let currentIndex = 0;
+        let currentPhotoIndex = 1;
         const taglineEl = document.getElementById('dynamicTagline');
         const bgMusic = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
         const enterBtn = document.getElementById('enterBtn');
+        const storyImgEl = document.getElementById('storyPhoto');
 
         function preloadImage(url) {
             return new Promise((resolve) => {
@@ -346,6 +358,10 @@
         async function initWaterfall() {
             const isMobile = window.innerWidth <= 768;
             const s = isMobile ? '_mobile' : '';
+            
+            const storyInit = await preloadImage(`story/story_phone_gallery_1${isMobile ? '_mobile.png' : '.png'}`);
+            if(storyInit) storyImgEl.src = storyInit;
+
             const topImg = await preloadImage(`main-image-layer-top${s}.png`);
             if(topImg) document.getElementById('topLayer').style.backgroundImage = `url('${topImg}')`;
             const midImg = await preloadImage(`main-image-layer-mid${s}.png`);
@@ -375,6 +391,7 @@
             document.body.classList.add('opened');
             setTimeout(() => { document.body.classList.add('snap-mode'); }, 50);
             setTimeout(cycleTagline, 1300); 
+            cycleStoryPhotos();
             setTimeout(() => {
                 const curtain = document.getElementById('curtainLayer');
                 if (curtain) curtain.remove();
@@ -399,6 +416,24 @@
                     if (currentIndex < phrases.length - 1) { cycleTagline(); }
                 }, 850); 
             }, displayTime);
+        }
+
+        function cycleStoryPhotos() {
+            const isMobile = window.innerWidth <= 768;
+            const maxPhotos = isMobile ? mobilePhotoCount : desktopPhotoCount;
+            if (maxPhotos <= 1) return;
+            setTimeout(() => {
+                storyImgEl.style.opacity = 0;
+                setTimeout(() => {
+                    currentPhotoIndex = (currentPhotoIndex % maxPhotos) + 1;
+                    const suffix = isMobile ? '_mobile.png' : '.png';
+                    storyImgEl.src = `story/story_phone_gallery_${currentPhotoIndex}${suffix}`;
+                    storyImgEl.onload = () => {
+                        storyImgEl.style.opacity = 1;
+                        cycleStoryPhotos();
+                    };
+                }, 1000); 
+            }, 5000);
         }
 
         function goToSchedule() {
