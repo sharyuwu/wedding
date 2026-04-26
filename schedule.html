@@ -159,53 +159,26 @@
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; }
         .schedule-column { display: flex; flex-direction: column; gap: 60px; }
 
-        /* --- 修正：各自紅線處置中，並增加 15px Gap --- */
         .event-item { 
             display: flex; 
             align-items: center; 
-            justify-content: center; /* 在各區域紅線置中 */
-            gap: 50px; /* 增加 10px，總共 15px 的間隔 */
+            justify-content: center; 
+            gap: 15px; 
             margin-bottom: 40px; 
             width: 100%;
         }
 
-        .event-text-stack { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            flex: none; 
-        }
-
-        .event-icon-container { 
-            display: flex; 
-            justify-content: center; 
-            flex: none; 
-        }
+        .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: none; }
+        .event-icon-container { display: flex; justify-content: center; flex: none; }
 
         .event-time { font-weight: 600; font-size: 1.5rem; color: #4a3a35; font-family: initial; }
         .event-name { font-size: 1.3rem; margin: 5px 0 10px 0; letter-spacing: 2px; }
 
-        .gold-line-divider { 
-            width: 110px; 
-            height: 1px; 
-            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); 
-            position: relative; 
-            margin-top: 5px; 
-        }
-        .gold-line-divider::after { 
-            content: '✶'; 
-            position: absolute; 
-            top: 50%; left: 50%; 
-            transform: translate(-50%, -50%); 
-            font-size: 16px; 
-            color: var(--accent-gold); 
-            background: rgba(255, 255, 255, 0.01); 
-            padding: 0 5px; 
-        }
+        .gold-line-divider { width: 110px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); position: relative; margin-top: 5px; }
+        .gold-line-divider::after { content: '✶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: var(--accent-gold); background: rgba(255, 255, 255, 0.01); padding: 0 5px; }
 
         .event-icon-img { width: 100px; height: 100px; object-fit: contain; }
 
-        /* 中央分隔線 */
         .divider-container { display: flex; flex-direction: column; align-items: center; height: 100%; }
         .divider-line { width: 1px; flex-grow: 1; background: var(--light-gold); position: relative; }
         .divider-line::after { content: '✶'; position: absolute; left: 50%; transform: translateX(-50%); color: var(--accent-gold); font-size: 18px; top: 40%; }
@@ -215,17 +188,57 @@
         .group-title { font-size: 2rem; font-weight: 600; margin-bottom: 10px; color: #4a3a35; }
         .group-loc { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 50px; letter-spacing: 2px; }
 
+        /* --- 手機版本優化 (完全符合附圖垂直對齊效果) --- */
         @media (max-width: 768px) {
             section { padding: 40px 10px; min-height: auto; }
-            .hero-title { font-size: 1.8rem; }
+            .hero-title { font-size: 1.6rem; letter-spacing: 3px; }
+            .hero-date { font-size: 1.4rem; margin-bottom: 30px; }
+            
+            /* 引導頁面保持水平 */
+            .guide-container { flex-direction: row; gap: 15px; width: 100%; padding: 0 10px; justify-content: center; }
+            .guide-img-wrapper { max-width: 160px; margin-bottom: 15px; padding: 5px; }
+            .guide-item h3 { font-size: 1rem; }
+            .guide-item p { font-size: 1.1rem; }
+
+            /* 行程表改為垂直單欄 */
+            .schedule-grid { grid-template-columns: 1fr; gap: 0; }
+            .schedule-content-wrapper { padding: 30px 15px; border-radius: 20px; }
             .schedule-main-title { font-size: 1.6rem; margin-bottom: 30px; }
-            .guide-container { flex-direction: column; gap: 30px; align-items: center; }
-            .rsvp-button { width: 260px; height: 65px; font-size: 1.3rem; }
-            .schedule-grid { grid-template-columns: 1fr 40px 1fr; }
-            .divider-ring-img { width: 50px; }
-            .event-icon-img { width: 70px; height: 70px; }
-            .group-title { font-size: 1.4rem; }
-            .event-item { gap: 8px; }
+
+            /* 核心：中間戒指分隔線轉為水平排列 */
+            .divider-container { 
+                padding: 40px 0; 
+                flex-direction: row; /* 從垂直變水平 */
+                justify-content: center;
+                height: auto;
+                width: 100%;
+            }
+            .divider-line { 
+                width: 80px; /* 線條寬度 */
+                height: 1px; 
+                flex-grow: 0;
+                background: linear-gradient(90deg, transparent, var(--light-gold), var(--light-gold));
+            }
+            /* 右邊的線反轉顏色方向 */
+            .divider-container .divider-line:last-child {
+                background: linear-gradient(90deg, var(--light-gold), var(--light-gold), transparent);
+            }
+            .divider-line::after { display: none; } /* 隱藏手機版垂直星號 */
+            .divider-ring-img { width: 55px; margin: 0 15px; }
+
+            /* 行程項目內部對齊：文字左、圖示右，整體置中 */
+            .event-item { 
+                gap: 15px; 
+                margin-bottom: 40px; 
+                justify-content: center; 
+            }
+            .event-icon-img { width: 85px; height: 85px; }
+            .event-time { font-size: 1.3rem; }
+            .event-name { font-size: 1.1rem; }
+            .gold-line-divider { width: 100px; }
+
+            .group-title { font-size: 1.5rem; margin-bottom: 5px; }
+            .group-loc { font-size: 1rem; margin-bottom: 35px; }
         }
     </style>
 </head>
@@ -278,11 +291,11 @@
                             <div class="schedule-column" id="ceremony-target">
                                 <div class="event-group">
                                     <h3 class="group-title">結婚典禮</h3>
-                                    <p class="group-loc">汐止天主堂</p>
+                                    <p class="group-loc">地點：汐止天主堂</p>
                                     <div class="event-item">
                                         <div class="event-text-stack">
                                             <p class="event-time">13:00</p>
-                                            <p class="event-name">賓客入席</p>
+                                            <p class="event-name">賓客入場</p>
                                             <div class="gold-line-divider"></div>
                                         </div>
                                         <div class="event-icon-container">
@@ -321,7 +334,7 @@
                             <div class="schedule-column" id="banquet-target">
                                 <div class="event-group">
                                     <h3 class="group-title">結婚晚宴</h3>
-                                    <p class="group-loc">兄弟飯店，桂花廳</p>
+                                    <p class="group-loc">地點：兄弟飯店，桂花廳</p>
                                     <div class="event-item">
                                         <div class="event-text-stack">
                                             <p class="event-time">18:00</p>
@@ -373,10 +386,22 @@
         function scrollToId(id) {
             const element = document.getElementById(id);
             if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // 手機版改用 start 定位更直覺
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
+
         window.addEventListener('DOMContentLoaded', () => {
+            // 偵測是否為手機版，切換 _mobile 版本圖片
+            if (window.innerWidth <= 768) {
+                document.querySelectorAll('img').forEach(img => {
+                    let src = img.getAttribute('src');
+                    if (src && src.includes('.png') && !src.includes('_mobile')) {
+                        img.setAttribute('src', src.replace('.png', '_mobile.png'));
+                    }
+                });
+            }
+
             setTimeout(() => {
                 document.body.classList.add('loaded');
             }, 300);
