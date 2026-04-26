@@ -87,18 +87,31 @@
         .date-text-index { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-color-index); }
         .spacer-gap { width: 100%; height: 40vh; } 
         .names-index { font-weight: 600; font-size: 2.2rem; color: var(--text-color-index); }
-        .tagline { font-size: 1.4rem; margin-top: 10px; min-height: 1.6em; color: var(--text-color-index); opacity: 0; transition: 0.4s; }
+        
+        .tagline { 
+            font-size: 1.4rem; margin-top: 10px; min-height: 1.6em; 
+            color: var(--text-color-index); opacity: 0; transition: 0.8s; 
+        }
         .tagline.visible { opacity: 1; }
 
+        /* 按鈕預設隱藏，等待動態文字結束 */
         .enter-button {
             margin-top: 20px; padding: 12px 50px; background: white;
             border: 1px solid var(--accent-gold); color: var(--text-color-index);
             text-decoration: none; border-radius: 30px; font-size: 1.1rem;
-            transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             cursor: pointer; display: inline-block;
+            
+            opacity: 0; 
+            pointer-events: none; 
+            transition: opacity 1.5s ease-in-out; 
+        }
+        .enter-button.btn-visible {
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        /* --- 1. 窗簾與囍字 --- */
+        /* --- 窗簾與囍字 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { 
             flex: 1; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); 
@@ -129,7 +142,7 @@
         .rotating { animation: music-rotate 3s linear infinite; }
         @keyframes music-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* --- 【下半部：Schedule 排版】 --- */
+        /* --- 【下半部：Schedule 排版還原】 --- */
         #schedule-section {
             background: transparent !important;
             opacity: 0; transition: opacity 1.5s ease-in-out;
@@ -142,7 +155,6 @@
         .hero-title { font-size: 2.5rem; letter-spacing: 6px; margin-top: 60px; text-shadow: 0 0 10px white; font-weight: 500; text-align: center; }
         .hero-date { font-size: 2rem; color: var(--accent-gold); margin-bottom: 40px; font-family: initial; }
 
-        /* Guide Item 樣式 */
         .guide-container { display: flex; justify-content: center; gap: 40px; width: 100%; max-width: 900px; margin-bottom: 50px; }
         .guide-item { 
             flex: 1; text-align: center; cursor: pointer; 
@@ -251,7 +263,7 @@
             <div class="text-bottom-group">
                 <div class="names-index">凱翔 & 禹萱</div>
                 <div id="dynamicTagline" class="tagline"></div>
-                <a href="javascript:void(0)" class="enter-button" onclick="goToSchedule()">打開邀請函</a>
+                <a href="javascript:void(0)" class="enter-button" id="enterBtn" onclick="goToSchedule()">打開邀請函</a>
             </div>
         </div>
     </section>
@@ -351,6 +363,7 @@
         const taglineEl = document.getElementById('dynamicTagline');
         const bgMusic = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
+        const enterBtn = document.getElementById('enterBtn');
 
         // --- Waterfall Loading ---
         function preloadImage(url) {
@@ -408,7 +421,10 @@
 
         function showIndex() {
             const mainContent = document.getElementById('mainContent');
-            if (mainContent) { mainContent.classList.add('visible'); updateTagline(); }
+            if (mainContent) {
+                mainContent.classList.add('visible');
+                updateTagline();
+            }
         }
 
         function updateTagline() {
@@ -417,7 +433,17 @@
             setTimeout(() => {
                 taglineEl.innerText = phrases[currentIndex];
                 setTimeout(() => taglineEl.classList.add('visible'), 50);
-                if (currentIndex < phrases.length - 1) { currentIndex++; setTimeout(updateTagline, 4000); }
+                
+                // 判斷是否為最後一句話
+                if (currentIndex < phrases.length - 1) {
+                    currentIndex++;
+                    setTimeout(updateTagline, 4000);
+                } else {
+                    // 當最後一句顯示完後，延遲浮現按鈕
+                    setTimeout(() => {
+                        if (enterBtn) enterBtn.classList.add('btn-visible');
+                    }, 1200); 
+                }
             }, 500);
         }
 
