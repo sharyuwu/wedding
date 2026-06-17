@@ -51,6 +51,65 @@
         .enter-button { margin-top: 20px; padding: 12px 50px; background: white; border: 1px solid var(--accent-gold); color: var(--text-color-index); text-decoration: none; border-radius: 30px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); cursor: pointer; display: inline-block; opacity: 0; pointer-events: none; transition: opacity 1.5s ease-in-out; }
         .enter-button.btn-visible { opacity: 1; pointer-events: auto; }
 
+        /* --- 倒數計時器 --- */
+        .countdown-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 520px;
+            margin-top: 16px;
+            margin-bottom: 0;
+            opacity: 0;
+            transition: opacity 1.8s ease-in-out;
+        }
+        .countdown-wrapper.visible {
+            opacity: 1;
+        }
+        .countdown-deco-line {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .countdown-deco-line .line {
+            flex: 1;
+            height: 1px;
+            background: rgba(166, 124, 82, 0.35);
+        }
+        .countdown-deco-line .infinity {
+            font-size: 1rem;
+            color: rgba(166, 124, 82, 0.5);
+            line-height: 1;
+        }
+        .countdown-numbers {
+            display: flex;
+            align-items: flex-start;
+            gap: 28px;
+        }
+        .countdown-unit-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .countdown-num {
+            font-size: 3.6rem;
+            font-weight: 600;
+            color: #5a4a44;
+            line-height: 1;
+            letter-spacing: -1px;
+            min-width: 2ch;
+            text-align: center;
+        }
+        .countdown-label {
+            font-size: 0.78rem;
+            color: #9a8070;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+        }
+
         /* --- 窗簾動畫 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
         .curtain { flex: 1; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95); transition-delay: 0.4s; }
@@ -120,6 +179,11 @@
             .rsvp-button { width: 260px; height: 65px; background-image: url('schedule/respond_button_mobile.png'); }
             .rsvp-subtext { font-size: 0.85rem; }
             .quote-container { text-align: center; } .quote-left, .quote-right { text-align: center; }
+
+            /* 手機版倒數計時調整 */
+            .countdown-num { font-size: 2.2rem; }
+            .countdown-numbers { gap: 16px; }
+            .countdown-wrapper { max-width: 340px; }
         }
     </style>
 </head>
@@ -155,6 +219,39 @@
         <div class="content-layer" id="mainContent">
             <h1 class="welcome-text">歡迎參加我們的婚禮</h1>
             <div class="date-text-index">10 - 10 - 2026</div>
+
+            <!-- 倒數計時器 -->
+            <div class="countdown-wrapper" id="countdownWrapper">
+                <div class="countdown-deco-line">
+                    <div class="line"></div>
+                    <div class="infinity">∞</div>
+                    <div class="line"></div>
+                </div>
+                <div class="countdown-numbers">
+                    <div class="countdown-unit-block">
+                        <span class="countdown-num" id="cdDays">--</span>
+                        <span class="countdown-label">days</span>
+                    </div>
+                    <div class="countdown-unit-block">
+                        <span class="countdown-num" id="cdHours">--</span>
+                        <span class="countdown-label">hours</span>
+                    </div>
+                    <div class="countdown-unit-block">
+                        <span class="countdown-num" id="cdMinutes">--</span>
+                        <span class="countdown-label">minutes</span>
+                    </div>
+                    <div class="countdown-unit-block">
+                        <span class="countdown-num" id="cdSeconds">--</span>
+                        <span class="countdown-label">seconds</span>
+                    </div>
+                </div>
+                <div class="countdown-deco-line" style="margin-top: 18px; margin-bottom: 0;">
+                    <div class="line"></div>
+                    <div class="infinity">∞</div>
+                    <div class="line"></div>
+                </div>
+            </div>
+
             <div class="spacer-gap"></div>
             <div class="names-index">凱翔 & 禹萱</div>
             <div id="dynamicTagline" class="tagline">大家好～</div>
@@ -235,6 +332,37 @@
         const enterBtn = document.getElementById('enterBtn');
         const storyImgEl = document.getElementById('storyPhoto');
 
+        // --- 倒數計時 ---
+        function updateCountdown() {
+            const weddingDate = new Date('2026-10-10T13:00:00');
+            const now = new Date();
+            const diffMs = weddingDate - now;
+
+            const elD = document.getElementById('cdDays');
+            const elH = document.getElementById('cdHours');
+            const elM = document.getElementById('cdMinutes');
+            const elS = document.getElementById('cdSeconds');
+            if (!elD) return;
+
+            if (diffMs <= 0) {
+                elD.textContent = '0'; elH.textContent = '0';
+                elM.textContent = '0'; elS.textContent = '0';
+                return;
+            }
+            const totalSec = Math.floor(diffMs / 1000);
+            const days    = Math.floor(totalSec / 86400);
+            const hours   = Math.floor((totalSec % 86400) / 3600);
+            const minutes = Math.floor((totalSec % 3600) / 60);
+            const seconds = totalSec % 60;
+
+            elD.textContent = days;
+            elH.textContent = String(hours).padStart(2, '0');
+            elM.textContent = String(minutes).padStart(2, '0');
+            elS.textContent = String(seconds).padStart(2, '0');
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
         function preloadImage(url) { return new Promise((resolve) => { const img = new Image(); img.src = url; img.onload = () => resolve(url); img.onerror = () => resolve(null); }); }
 
         async function initWaterfall() {
@@ -258,6 +386,11 @@
             if (bgMusic) { bgMusic.play().then(() => musicToggle.classList.add('rotating')).catch(e => console.log("Music blocked")); }
             document.body.classList.add('opened');
             setTimeout(() => { document.body.classList.add('snap-mode'); }, 50);
+            // 窗簾打開後顯示倒數計時器
+            setTimeout(() => {
+                const cw = document.getElementById('countdownWrapper');
+                if (cw) cw.classList.add('visible');
+            }, 1500);
             setTimeout(cycleTagline, 1300); cycleStoryPhotos();
             setTimeout(() => { const curtain = document.getElementById('curtainLayer'); if (curtain) curtain.remove(); }, 3500);
         }
