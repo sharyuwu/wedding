@@ -19,25 +19,19 @@
             --main-fade: 1.5s ease-in-out;
         }
 
-        /* --- 基礎設定 --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { width: 100%; height: 100%; font-family: var(--handwriting); background-color: #fdfaf7; scroll-behavior: smooth; }
-        
-        /* 初始狀態強制隱藏溢出，直到窗簾拉開 */
         body { overflow: hidden; } 
         body.snap-mode { overflow-y: auto; }
 
-        /* --- 背景系統 --- */
         .index-bg-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #fdfaf7; z-index: -2; transition: opacity var(--main-fade); }
         .fixed-schedule-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #ece5df; background-position: center center; background-size: cover; background-repeat: no-repeat; z-index: -1; opacity: 0; transition: opacity var(--main-fade); pointer-events: none; }
         body.show-bg .index-bg-base { opacity: 0; }
         body.show-bg .fixed-schedule-bg { opacity: 1; }
 
-        /* --- 區塊設定 --- */
         .hero-snap-section { width: 100%; height: 100dvh; position: relative; overflow: hidden; background: transparent !important; }
         .content-snap-section { width: 100%; min-height: 100vh; position: relative; background: transparent !important; }
 
-        /* --- 上半部 Index --- */
         .layer-base, .layer-mid, .layer-top { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center center; background-repeat: no-repeat; transition: opacity var(--main-fade); }
         .content-layer { position: relative; z-index: 10; height: 100dvh; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; transition: opacity var(--main-fade); }
 
@@ -63,9 +57,7 @@
             opacity: 0;
             transition: opacity 1.8s ease-in-out;
         }
-        .countdown-wrapper.visible {
-            opacity: 1;
-        }
+        .countdown-wrapper.visible { opacity: 1; }
         .countdown-deco-line {
             display: flex;
             align-items: center;
@@ -73,42 +65,12 @@
             gap: 5px;
             margin-bottom: 12px;
         }
-        .countdown-deco-line .line {
-            flex: 1;
-            height: 1px;
-            background: rgba(166, 124, 82, 0.35);
-        }
-        .countdown-deco-line .infinity {
-            font-size: 1rem;
-            color: rgba(166, 124, 82, 0.5);
-            line-height: 1;
-        }
-        .countdown-numbers {
-            display: flex;
-            align-items: flex-start;
-            gap: 28px;
-        }
-        .countdown-unit-block {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-        .countdown-num {
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: #5a4a44;
-            line-height: 1;
-            letter-spacing: -1px;
-            min-width: 2ch;
-            text-align: center;
-        }
-        .countdown-label {
-            font-size: 0.78rem;
-            color: #9a8070;
-            letter-spacing: 2px;
-            text-transform: lowercase;
-        }
+        .countdown-deco-line .line { flex: 1; height: 1px; background: rgba(166, 124, 82, 0.35); }
+        .countdown-deco-line .infinity { font-size: 1rem; color: rgba(166, 124, 82, 0.5); line-height: 1; }
+        .countdown-numbers { display: flex; align-items: flex-start; gap: 28px; }
+        .countdown-unit-block { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .countdown-num { font-size: 2.2rem; font-weight: 600; color: #5a4a44; line-height: 1; letter-spacing: -1px; min-width: 2ch; text-align: center; }
+        .countdown-label { font-size: 0.78rem; color: #9a8070; letter-spacing: 2px; text-transform: lowercase; }
 
         /* --- 窗簾動畫 --- */
         .curtain-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; }
@@ -138,12 +100,12 @@
         .guide-img { width: 100%; border-radius: 4px; display: block; }
         .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; text-align: center; width: 100%; opacity: 0.8; letter-spacing: 1px; }
 
-        /* RSVP 區域與還原小字 */
-        .rsvp-container { text-align: center; margin-bottom: 80px; }
+        /* RSVP */
+        .rsvp-container { text-align: center; margin-top: 50px; margin-bottom: 80px; width: 100%; display: flex; flex-direction: column; align-items: center; }
         .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; }
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.8; letter-spacing: 1px; }
 
-        /* 故事區：文字對齊校正 */
+        /* 故事區 */
         .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 60px 40px; margin-bottom: 80px; backdrop-filter: blur(3px); width: 95%; max-width: 1100px; text-align: center; }
         .quote-container { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; }
         .hero-quote { font-size: 1.3rem; opacity: 0.9; line-height: 1.8; text-shadow: 0 0 10px white; }
@@ -179,8 +141,6 @@
             .rsvp-button { width: 260px; height: 65px; background-image: url('schedule/respond_button_mobile.png'); }
             .rsvp-subtext { font-size: 0.85rem; }
             .quote-container { text-align: center; } .quote-left, .quote-right { text-align: center; }
-
-            /* 手機版倒數計時調整 */
             .countdown-num { font-size: 2.2rem; }
             .countdown-numbers { gap: 16px; }
             .countdown-wrapper { max-width: 340px; }
@@ -273,7 +233,6 @@
                     </div>
                 </div>
 
-                
                 <div class="story-section">
                     <div class="quote-container">
                         <p class="hero-quote quote-left">我們沒有拍婚紗，結婚是個紀念</p>
@@ -304,19 +263,18 @@
                         </div>
                     </div>
                 </div>
-                <footer style="padding: 60px 0; opacity: 0.5; text-align: center;">2026.10.10 | 凱翔 & 禹萱</footer>
+
+                <!-- RSVP 移至此處，緊接行程表下方，置中 -->
+                <div class="rsvp-container">
+                    <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdX0pTRn6Xgd2ync0EHPiqUqXZl9hgQm8tBAS4sDOxQ8FcLFA/viewform')">回覆出席</button>
+                    <p class="rsvp-subtext">填寫 Google 表單，統計參加人數</p>
+                </div>
+
             </div>
         </div>
-        
-        <div class="rsvp-container">
-            <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdX0pTRn6Xgd2ync0EHPiqUqXZl9hgQm8tBAS4sDOxQ8FcLFA/viewform')">回覆出席</button>
-            <p class="rsvp-subtext">填寫 Google 表單，統計參加人數</p>
-        </div>
-        
     </section>
 
     <script>
-        // --- 初始化重置 ---
         window.onbeforeunload = function () { window.scrollTo(0, 0); };
 
         const phrases = ["大家好～", "我們要結婚了！", "誠摯邀請大家參加我們的婚禮", "我們當天見，感謝大家的祝福"];
@@ -334,13 +292,11 @@
             const weddingDate = new Date('2026-10-10T13:00:00');
             const now = new Date();
             const diffMs = weddingDate - now;
-
             const elD = document.getElementById('cdDays');
             const elH = document.getElementById('cdHours');
             const elM = document.getElementById('cdMinutes');
             const elS = document.getElementById('cdSeconds');
             if (!elD) return;
-
             if (diffMs <= 0) {
                 elD.textContent = '0'; elH.textContent = '0';
                 elM.textContent = '0'; elS.textContent = '0';
@@ -351,7 +307,6 @@
             const hours   = Math.floor((totalSec % 86400) / 3600);
             const minutes = Math.floor((totalSec % 3600) / 60);
             const seconds = totalSec % 60;
-
             elD.textContent = days;
             elH.textContent = String(hours).padStart(2, '0');
             elM.textContent = String(minutes).padStart(2, '0');
@@ -383,7 +338,6 @@
             if (bgMusic) { bgMusic.play().then(() => musicToggle.classList.add('rotating')).catch(e => console.log("Music blocked")); }
             document.body.classList.add('opened');
             setTimeout(() => { document.body.classList.add('snap-mode'); }, 50);
-            // 窗簾打開後顯示倒數計時器
             setTimeout(() => {
                 const cw = document.getElementById('countdownWrapper');
                 if (cw) cw.classList.add('visible');
