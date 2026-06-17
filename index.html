@@ -129,6 +129,21 @@
         .divider-line { width: 1px; flex-grow: 1; background: var(--light-gold); }
         .divider-ring-img { width: 80px; margin: 30px 0; }
 
+        /* 停車／交通提示 */
+        .parking-tip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+            color: #7a6a64;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+        .parking-icon { font-size: 1rem; flex-shrink: 0; }
+        .parking-text { line-height: 1.4; }
+        .group-title { font-size: 1.5rem; font-weight: 700; color: #4a3a35; letter-spacing: 2px; margin-bottom: 4px; }
+        .group-loc { font-size: 1.15rem; font-weight: 700; color: #4a3a35; letter-spacing: 1px; margin-bottom: 2px; }
+
         @media (max-width: 768px) {
             .welcome-text { font-size: 1.8rem; } .names-index { font-size: 1.6rem; } .spacer-gap { height: 40dvh; } .hero-title { font-size: 1.6rem; }
             .guide-container { flex-direction: row; justify-content: space-evenly; width: 100%; padding: 0; }
@@ -246,7 +261,12 @@
                     <div class="schedule-grid">
                         <div class="schedule-column">
                             <div class="event-group">
-                                <h3 class="group-title">結婚典禮</h3><p class="group-loc">地點：汐止天主堂</p>
+                                <h3 class="group-title">結婚典禮</h3>
+                                <p class="group-loc">地點：汐止天主堂</p>
+                                <div class="parking-tip">
+                                    <span class="parking-icon">🅿</span>
+                                    <span class="parking-text">教堂附設停車場</span>
+                                </div>
                                 <div class="event-item"><div class="event-text-stack"><p class="event-time">13:00</p><p class="event-name">賓客入場</p><div class="gold-line-divider"></div></div><img src="schedule/icon_church.png" class="event-icon-img"></div>
                                 <div class="event-item"><div class="event-text-stack"><p class="event-time">13:30</p><p class="event-name">典禮開始</p><div class="gold-line-divider"></div></div><img src="schedule/icon_doves.png" class="event-icon-img"></div>
                                 <div class="event-item"><div class="event-text-stack"><p class="event-time">15:00</p><p class="event-name">茶會慶祝</p><div class="gold-line-divider"></div></div><img src="schedule/icon_cake.png" class="event-icon-img"></div>
@@ -255,7 +275,12 @@
                         <div class="divider-container"><div class="divider-line"></div><img src="schedule/icon_ring.png" class="divider-ring-img"><div class="divider-line"></div></div>
                         <div class="schedule-column">
                             <div class="event-group">
-                                <h3 class="group-title" id="banquet-title-target">結婚晚宴</h3><p class="group-loc">地點：兄弟飯店，桂花廳</p>
+                                <h3 class="group-title" id="banquet-title-target">結婚晚宴</h3>
+                                <p class="group-loc">地點：兄弟飯店，桂花廳</p>
+                                <div class="parking-tip">
+                                    <span class="parking-icon">🚇</span>
+                                    <span class="parking-text">建議搭捷運至南京復興站</span>
+                                </div>
                                 <div class="event-item"><div class="event-text-stack"><p class="event-time">18:00</p><p class="event-name">晚宴簽到</p><div class="gold-line-divider"></div></div><img src="schedule/icon_champagne.png" class="event-icon-img"></div>
                                 <div class="event-item"><div class="event-text-stack"><p class="event-time">18:30</p><p class="event-name">晚宴開始</p><div class="gold-line-divider"></div></div><img src="schedule/icon_bouquet.png" class="event-icon-img"></div>
                                 <div class="event-item"><div class="event-text-stack"><p class="event-time">20:30</p><p class="event-name">送客合影</p><div class="gold-line-divider"></div></div><img src="schedule/icon_the_end.png" class="event-icon-img"></div>
