@@ -69,7 +69,7 @@
         .countdown-deco-line .infinity { font-size: 1rem; color: rgba(166, 124, 82, 0.5); line-height: 1; }
         .countdown-numbers { display: flex; align-items: flex-start; gap: 28px; }
         .countdown-unit-block { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        .countdown-num { font-size: 2.2rem; font-weight: 600; color: #5a4a44; line-height: 1; letter-spacing: -1px; min-width: 2ch; text-align: center; }
+        .countdown-num { font-size: 1.5rem; font-weight: 600; color: #5a4a44; line-height: 1; letter-spacing: -1px; min-width: 2ch; text-align: center; }
         .countdown-label { font-size: 0.78rem; color: #9a8070; letter-spacing: 2px; text-transform: lowercase; }
 
         /* --- 窗簾動畫 --- */
@@ -144,6 +144,23 @@
         .group-title { font-size: 1.5rem; font-weight: 700; color: #4a3a35; letter-spacing: 2px; margin-bottom: 4px; }
         .group-loc { font-size: 1.15rem; font-weight: 700; color: #4a3a35; letter-spacing: 1px; margin-bottom: 2px; }
 
+        /* Google Map 連結樣式 */
+        .map-link {
+            color: #4a3a35;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: 1px;
+            border-bottom: 1px dashed var(--accent-gold);
+            transition: color 0.2s, border-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 2px;
+        }
+        .map-link:hover { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
+        .map-pin-icon { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+
         @media (max-width: 768px) {
             .welcome-text { font-size: 1.8rem; } .names-index { font-size: 1.6rem; } .spacer-gap { height: 40dvh; } .hero-title { font-size: 1.6rem; }
             .guide-container { flex-direction: row; justify-content: space-evenly; width: 100%; padding: 0; }
@@ -156,7 +173,7 @@
             .rsvp-button { width: 260px; height: 65px; background-image: url('schedule/respond_button_mobile.png'); }
             .rsvp-subtext { font-size: 0.85rem; }
             .quote-container { text-align: center; } .quote-left, .quote-right { text-align: center; }
-            .countdown-num { font-size: 1.8rem; }
+            .countdown-num { font-size: 1.5rem; }
             .countdown-numbers { gap: 16px; }
             .countdown-wrapper { max-width: 280px; }
         }
@@ -198,6 +215,10 @@
             <!-- 倒數計時器 -->
             <div class="countdown-wrapper" id="countdownWrapper">
                 <div class="countdown-numbers">
+                    <div class="countdown-unit-block" id="cdMonthsBlock">
+                        <span class="countdown-num" id="cdMonths">--</span>
+                        <span class="countdown-label">months</span>
+                    </div>
                     <div class="countdown-unit-block">
                         <span class="countdown-num" id="cdDays">--</span>
                         <span class="countdown-label">days</span>
@@ -262,7 +283,9 @@
                         <div class="schedule-column">
                             <div class="event-group">
                                 <h3 class="group-title">結婚典禮</h3>
-                                <p class="group-loc">地點：汐止天主堂</p>
+                                <a href="https://maps.app.goo.gl/pZ5EkuKybRGfa3SGA" target="_blank" rel="noopener noreferrer" class="map-link">
+                                    <img src="schedule/icon_googlemap.png" class="map-pin-icon googlemap-icon">地點：汐止天主堂
+                                </a>
                                 <div class="parking-tip">
                                     <span class="parking-icon">🅿</span>
                                     <span class="parking-text">教堂附設停車場</span>
@@ -276,7 +299,9 @@
                         <div class="schedule-column">
                             <div class="event-group">
                                 <h3 class="group-title" id="banquet-title-target">結婚晚宴</h3>
-                                <p class="group-loc">地點：兄弟飯店，桂花廳</p>
+                                <a href="https://maps.app.goo.gl/Y2XLoLq32WDFCCYK7" target="_blank" rel="noopener noreferrer" class="map-link">
+                                    <img src="schedule/icon_googlemap.png" class="map-pin-icon googlemap-icon">地點：兄弟飯店，桂花廳
+                                </a>
                                 <div class="parking-tip">
                                     <img src="schedule/icon_MRT.png" class="parking-mrt-icon">
                                     <span class="parking-text">建議搭捷運至南京復興站</span>
@@ -317,25 +342,59 @@
             const weddingDate = new Date('2026-10-10T13:00:00');
             const now = new Date();
             const diffMs = weddingDate - now;
+            const elMo = document.getElementById('cdMonths');
+            const elMoBlock = document.getElementById('cdMonthsBlock');
             const elD = document.getElementById('cdDays');
             const elH = document.getElementById('cdHours');
             const elM = document.getElementById('cdMinutes');
             const elS = document.getElementById('cdSeconds');
             if (!elD) return;
+
             if (diffMs <= 0) {
-                elD.textContent = '0'; elH.textContent = '0';
-                elM.textContent = '0'; elS.textContent = '0';
+                if (elMoBlock) elMoBlock.style.display = 'none';
+                elD.textContent = '0'; elH.textContent = '00';
+                elM.textContent = '00'; elS.textContent = '00';
                 return;
             }
-            const totalSec = Math.floor(diffMs / 1000);
-            const days    = Math.floor(totalSec / 86400);
-            const hours   = Math.floor((totalSec % 86400) / 3600);
-            const minutes = Math.floor((totalSec % 3600) / 60);
-            const seconds = totalSec % 60;
-            elD.textContent = days;
-            elH.textContent = String(hours).padStart(2, '0');
-            elM.textContent = String(minutes).padStart(2, '0');
-            elS.textContent = String(seconds).padStart(2, '0');
+
+            // 計算剩餘月份（以當月1日為基準）
+            const nowY = now.getFullYear(), nowMo = now.getMonth(), nowD = now.getDate();
+            const wedY = weddingDate.getFullYear(), wedMo = weddingDate.getMonth(), wedD = weddingDate.getDate();
+            let months = (wedY - nowY) * 12 + (wedMo - nowMo);
+            if (wedD < nowD) months--; // 當月日期還未到婚禮日，月份要減1
+            if (months < 0) months = 0;
+
+            const showMonths = months >= 1;
+
+            // 顯示或隱藏 months 欄
+            if (elMoBlock) elMoBlock.style.display = showMonths ? 'flex' : 'none';
+
+            if (showMonths) {
+                // months 模式：days 顯示扣除整月後的剩餘天數
+                const monthStart = new Date(nowY, nowMo + months, wedD, weddingDate.getHours(), weddingDate.getMinutes());
+                const remainMs = weddingDate - monthStart;
+                const remainSec = Math.floor(remainMs / 1000);
+                const remDays    = Math.floor(remainSec / 86400);
+                const remHours   = Math.floor((remainSec % 86400) / 3600);
+                const remMinutes = Math.floor((remainSec % 3600) / 60);
+                const remSeconds = remainSec % 60;
+                elMo.textContent = months;
+                elD.textContent  = remDays;
+                elH.textContent  = String(remHours).padStart(2, '0');
+                elM.textContent  = String(remMinutes).padStart(2, '0');
+                elS.textContent  = String(remSeconds).padStart(2, '0');
+            } else {
+                // 不足1個月：純天數模式
+                const totalSec = Math.floor(diffMs / 1000);
+                const days    = Math.floor(totalSec / 86400);
+                const hours   = Math.floor((totalSec % 86400) / 3600);
+                const minutes = Math.floor((totalSec % 3600) / 60);
+                const seconds = totalSec % 60;
+                elD.textContent = days;
+                elH.textContent = String(hours).padStart(2, '0');
+                elM.textContent = String(minutes).padStart(2, '0');
+                elS.textContent = String(seconds).padStart(2, '0');
+            }
         }
         updateCountdown();
         setInterval(updateCountdown, 1000);
@@ -344,6 +403,9 @@
         if (isMobile) {
             document.querySelectorAll('.parking-mrt-icon').forEach(img => {
                 img.src = 'schedule/icon_MRT_mobile.png';
+            });
+            document.querySelectorAll('.googlemap-icon').forEach(img => {
+                img.src = 'schedule/icon_googlemap_mobile.png';
             });
         }
 
