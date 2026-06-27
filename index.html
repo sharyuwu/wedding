@@ -180,6 +180,20 @@
         .map-link:hover { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
         .map-pin-icon { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
 
+        /* RSVP 彈窗淡入動畫 */
+        @keyframes rsvp-fadein {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes rsvp-fadeout {
+            from { opacity: 1; transform: translateY(0); }
+            to   { opacity: 0; transform: translateY(16px); }
+        }
+        #rsvpModal { opacity: 0; transition: opacity 0.6s ease; }
+        #rsvpModal.modal-show { animation: rsvp-fadein 1.5s ease forwards; }
+        #rsvpModal.modal-hide { animation: rsvp-fadeout 0.5s ease forwards; }
+        #rsvpModal .modal-card { animation: none; }
+
         @media (max-width: 768px) {
             .welcome-text { font-size: 1.8rem; } .names-index { font-size: 1.6rem; } .spacer-gap { height: 40dvh; } .hero-title { font-size: 1.6rem; }
             .guide-container { flex-direction: row; justify-content: space-evenly; width: 100%; padding: 0; }
@@ -345,7 +359,7 @@
 
     <!-- RSVP 提醒彈窗 -->
     <div id="rsvpModal" style="display:none; position:fixed; inset:0; z-index:2000; background:rgba(0,0,0,0.45); backdrop-filter:blur(4px); justify-content:center; align-items:center;">
-        <div style="background:#fdfaf7; border-radius:24px; padding:40px 32px; max-width:340px; width:90%; text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.18); font-family:var(--handwriting);">
+        <div class="modal-card" style="background:#fdfaf7; border-radius:24px; padding:40px 32px; max-width:340px; width:90%; text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.18); font-family:var(--handwriting);">
             <div style="font-size:2rem; margin-bottom:12px;">💌</div>
             <p style="font-size:1.2rem; font-weight:600; color:#4a3a35; letter-spacing:2px; margin-bottom:28px;">請記得要填寫回覆出席</p>
             <button onclick="rsvpModalOk()" style="padding:12px 48px; background:var(--accent-gold); color:white; border:none; border-radius:30px; font-size:1rem; font-family:var(--handwriting); cursor:pointer; letter-spacing:4px;">OK</button>
@@ -518,12 +532,21 @@
         function showRsvpModal() {
             if (rsvpClicked) return;
             const modal = document.getElementById('rsvpModal');
-            if (modal) modal.style.display = 'flex';
+            if (!modal) return;
+            modal.style.display = 'flex';
+            // 觸發 reflow 後加上動畫 class
+            requestAnimationFrame(() => {
+                modal.classList.remove('modal-hide');
+                modal.classList.add('modal-show');
+            });
         }
 
         function rsvpModalOk() {
             const modal = document.getElementById('rsvpModal');
-            if (modal) modal.style.display = 'none';
+            if (!modal) return;
+            modal.classList.remove('modal-show');
+            modal.classList.add('modal-hide');
+            setTimeout(() => { modal.style.display = 'none'; }, 500);
         }
 
         // 第一次捲到頁底立即彈出（桌機＋手機通用）
