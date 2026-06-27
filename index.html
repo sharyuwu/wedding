@@ -99,6 +99,7 @@
         .guide-img-wrapper { width: 100%; padding: 10px; border: 1px solid rgba(166, 124, 82, 0.3); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin-bottom: 10px; }
         .guide-img { width: 100%; border-radius: 4px; display: block; }
         .view-detail-hint { font-size: 0.9rem; color: #7a6a64; margin-bottom: 10px; text-align: center; width: 100%; opacity: 0.8; letter-spacing: 1px; }
+        .guide-session-label { font-size: 1rem; color: var(--accent-gold); letter-spacing: 2px; margin-bottom: 4px; font-weight: 600; }
 
         /* RSVP */
         .rsvp-container { text-align: center; margin-top: 50px; margin-bottom: 80px; width: 100%; display: flex; flex-direction: column; align-items: center; }
@@ -115,7 +116,8 @@
 
         /* 行程表結構 */
         .schedule-content-wrapper { width: 95%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
-        .schedule-main-title { font-size: 2.2rem; letter-spacing: 4px; text-align: center; margin-bottom: 60px; font-weight: 600; color: #4a3a35; }
+        .schedule-main-title { font-size: 2.2rem; letter-spacing: 4px; text-align: center; margin-bottom: 8px; font-weight: 600; color: #4a3a35; }
+        .schedule-map-hint { text-align: center; font-size: 0.9rem; color: #9a8070; letter-spacing: 2px; margin-bottom: 50px; opacity: 0.8; }
         .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; align-items: start; }
         .schedule-column { display: flex; flex-direction: column; gap: 30px; text-align: center; }
         .event-item { display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 30px; width: 100%; }
@@ -260,11 +262,13 @@
                     <div class="guide-item" onclick="handleGuideClick('ceremony', this)">
                         <div class="guide-img-wrapper"><img src="schedule/main-church.png" class="guide-img"></div>
                         <span class="view-detail-hint">點擊看行程</span>
+                        <p class="guide-session-label">下午－結婚典禮</p>
                         <h3>教堂婚禮彌撒</h3><p style="color:var(--accent-gold); font-weight:600;">13 : 00</p>
                     </div>
                     <div class="guide-item" onclick="handleGuideClick('banquet', this)">
                         <div class="guide-img-wrapper"><img src="schedule/main-bouquet.png" class="guide-img"></div>
                         <span class="view-detail-hint">點擊看行程</span>
+                        <p class="guide-session-label">晚宴－吃飯慶祝</p>
                         <h3>餐廳婚禮晚宴</h3><p style="color:var(--accent-gold); font-weight:600;">18 : 00</p>
                     </div>
                 </div>
@@ -279,6 +283,7 @@
 
                 <div class="schedule-content-wrapper">
                     <h2 class="schedule-main-title" id="schedule-title-target">我們特別的日子</h2>
+                    <p class="schedule-map-hint">點擊地點資訊</p>
                     <div class="schedule-grid">
                         <div class="schedule-column">
                             <div class="event-group">
@@ -370,19 +375,18 @@
             if (elMoBlock) elMoBlock.style.display = showMonths ? 'flex' : 'none';
 
             if (showMonths) {
-                // months 模式：days 顯示扣除整月後的剩餘天數
-                const monthStart = new Date(nowY, nowMo + months, wedD, weddingDate.getHours(), weddingDate.getMinutes());
-                const remainMs = weddingDate - monthStart;
-                const remainSec = Math.floor(remainMs / 1000);
-                const remDays    = Math.floor(remainSec / 86400);
-                const remHours   = Math.floor((remainSec % 86400) / 3600);
-                const remMinutes = Math.floor((remainSec % 3600) / 60);
-                const remSeconds = remainSec % 60;
+                // months 模式：時分秒用總毫秒計算（真實倒數）；days 扣掉整月後的剩餘天數
+                const totalSec = Math.floor(diffMs / 1000);
+                const hours   = Math.floor((totalSec % 86400) / 3600);
+                const minutes = Math.floor((totalSec % 3600) / 60);
+                const seconds = totalSec % 60;
+                const afterMonths = new Date(nowY, nowMo + months, nowD, now.getHours(), now.getMinutes(), now.getSeconds());
+                const remDays = Math.floor((weddingDate - afterMonths) / 1000 / 86400);
                 elMo.textContent = months;
                 elD.textContent  = remDays;
-                elH.textContent  = String(remHours).padStart(2, '0');
-                elM.textContent  = String(remMinutes).padStart(2, '0');
-                elS.textContent  = String(remSeconds).padStart(2, '0');
+                elH.textContent  = String(hours).padStart(2, '0');
+                elM.textContent  = String(minutes).padStart(2, '0');
+                elS.textContent  = String(seconds).padStart(2, '0');
             } else {
                 // 不足1個月：純天數模式
                 const totalSec = Math.floor(diffMs / 1000);
