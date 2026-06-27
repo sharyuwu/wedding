@@ -133,10 +133,11 @@
 
         /* 停車／交通提示 */
         .parking-tip {
-            display: inline-flex;
+            display: flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
-            margin-top: 6px;
+            margin-top: 0;
             color: #7a6a64;
             font-size: 0.95rem;
             letter-spacing: 0.5px;
@@ -145,6 +146,15 @@
         .parking-mrt-icon { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
         .group-title { font-size: 1.5rem; font-weight: 700; color: #4a3a35; letter-spacing: 2px; margin-bottom: 4px; }
         .group-loc { font-size: 1.15rem; font-weight: 700; color: #4a3a35; letter-spacing: 1px; margin-bottom: 2px; }
+
+        /* 地點區塊：電腦版上下排列 */
+        .location-info-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 2px;
+        }
 
         /* Google Map 連結樣式 */
         .map-link {
@@ -288,12 +298,14 @@
                         <div class="schedule-column">
                             <div class="event-group">
                                 <h3 class="group-title">結婚典禮</h3>
-                                <a href="https://maps.app.goo.gl/pZ5EkuKybRGfa3SGA" target="_blank" rel="noopener noreferrer" class="map-link">
-                                    <img src="schedule/icon_googlemap.png" class="map-pin-icon googlemap-icon">地點：汐止天主堂
-                                </a>
-                                <div class="parking-tip">
-                                    <span class="parking-icon">🅿</span>
-                                    <span class="parking-text">教堂附設停車場</span>
+                                <div class="location-info-block">
+                                    <a href="https://maps.app.goo.gl/pZ5EkuKybRGfa3SGA" target="_blank" rel="noopener noreferrer" class="map-link">
+                                        <img src="schedule/icon_googlemap.png" class="map-pin-icon googlemap-icon">地點：汐止天主堂
+                                    </a>
+                                    <div class="parking-tip">
+                                        <span class="parking-icon">🅿</span>
+                                        <span class="parking-text">教堂附設停車場</span>
+                                    </div>
                                 </div>
                                 <div class="event-item"><div class="event-text-stack"><p class="event-time">13:00</p><p class="event-name">賓客入場</p><div class="gold-line-divider"></div></div><img src="schedule/icon_church.png" class="event-icon-img"></div>
                                 <div class="event-item"><div class="event-text-stack"><p class="event-time">13:30</p><p class="event-name">典禮開始</p><div class="gold-line-divider"></div></div><img src="schedule/icon_doves.png" class="event-icon-img"></div>
@@ -304,12 +316,14 @@
                         <div class="schedule-column">
                             <div class="event-group">
                                 <h3 class="group-title" id="banquet-title-target">結婚晚宴</h3>
-                                <a href="https://maps.app.goo.gl/Y2XLoLq32WDFCCYK7" target="_blank" rel="noopener noreferrer" class="map-link">
-                                    <img src="schedule/icon_googlemap.png" class="map-pin-icon googlemap-icon">地點：兄弟飯店，桂花廳
-                                </a>
-                                <div class="parking-tip">
-                                    <img src="schedule/icon_MRT.png" class="parking-mrt-icon">
-                                    <span class="parking-text">建議搭捷運至南京復興站</span>
+                                <div class="location-info-block">
+                                    <a href="https://maps.app.goo.gl/Y2XLoLq32WDFCCYK7" target="_blank" rel="noopener noreferrer" class="map-link">
+                                        <img src="schedule/icon_googlemap.png" class="map-pin-icon googlemap-icon">地點：兄弟飯店，桂花廳
+                                    </a>
+                                    <div class="parking-tip">
+                                        <img src="schedule/icon_MRT.png" class="parking-mrt-icon">
+                                        <span class="parking-text">建議搭捷運至南京復興站</span>
+                                    </div>
                                 </div>
                                 <div class="event-item"><div class="event-text-stack"><p class="event-time">18:00</p><p class="event-name">晚宴簽到</p><div class="gold-line-divider"></div></div><img src="schedule/icon_champagne.png" class="event-icon-img"></div>
                                 <div class="event-item"><div class="event-text-stack"><p class="event-time">18:30</p><p class="event-name">晚宴開始</p><div class="gold-line-divider"></div></div><img src="schedule/icon_bouquet.png" class="event-icon-img"></div>
@@ -321,9 +335,22 @@
 
                 <!-- RSVP 移至此處，緊接行程表下方，置中 -->
                 <div class="rsvp-container">
-                    <button class="rsvp-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdX0pTRn6Xgd2ync0EHPiqUqXZl9hgQm8tBAS4sDOxQ8FcLFA/viewform')">回覆出席</button>
+                    <button class="rsvp-button" onclick="markRsvpClicked(); window.open('https://docs.google.com/forms/d/e/1FAIpQLSdX0pTRn6Xgd2ync0EHPiqUqXZl9hgQm8tBAS4sDOxQ8FcLFA/viewform')">回覆出席</button>
                     <p class="rsvp-subtext">填寫 Google 表單，統計參加人數</p>
                 </div>
+
+    <!-- RSVP 提醒彈窗 -->
+    <div id="rsvpModal" style="display:none; position:fixed; inset:0; z-index:2000; background:rgba(0,0,0,0.45); backdrop-filter:blur(4px); justify-content:center; align-items:center;">
+        <div style="background:#fdfaf7; border-radius:24px; padding:40px 32px; max-width:340px; width:90%; text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.18); font-family:var(--handwriting);">
+            <div style="font-size:2rem; margin-bottom:12px;">💌</div>
+            <p style="font-size:1.25rem; font-weight:600; color:#4a3a35; letter-spacing:2px; margin-bottom:10px;">請問你回覆出席了嗎？</p>
+            <p style="font-size:0.9rem; color:#9a8070; margin-bottom:28px; letter-spacing:1px;">記得填寫表單讓我們知道你會來喔！</p>
+            <div style="display:flex; gap:16px; justify-content:center;">
+                <button onclick="rsvpModalYes()" style="flex:1; padding:12px 0; background:var(--accent-gold); color:white; border:none; border-radius:30px; font-size:1rem; font-family:var(--handwriting); cursor:pointer; letter-spacing:2px;">是，已填寫</button>
+                <button onclick="rsvpModalNo()" style="flex:1; padding:12px 0; background:white; color:#4a3a35; border:1px solid var(--accent-gold); border-radius:30px; font-size:1rem; font-family:var(--handwriting); cursor:pointer; letter-spacing:2px;">還沒</button>
+            </div>
+        </div>
+    </div>
 
             </div>
         </div>
@@ -482,9 +509,53 @@
         function toggleMusic() { if (bgMusic.paused) { bgMusic.play(); musicToggle.classList.add('rotating'); } else { bgMusic.pause(); musicToggle.classList.remove('rotating'); } }
         function goToSchedule() { document.body.classList.add('is-fading', 'show-bg'); document.getElementById('schedule-section').scrollIntoView({ behavior: 'smooth' }); }
 
+        // --- RSVP 提醒彈窗邏輯 ---
+        let rsvpClicked = false;
+        let bottomTimer = null;
+        let bottomReached = false;
+
+        function markRsvpClicked() { rsvpClicked = true; }
+
+        function showRsvpModal() {
+            if (rsvpClicked) return;
+            const modal = document.getElementById('rsvpModal');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function rsvpModalYes() {
+            rsvpClicked = true;
+            const modal = document.getElementById('rsvpModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function rsvpModalNo() {
+            const modal = document.getElementById('rsvpModal');
+            if (modal) modal.style.display = 'none';
+            const rsvpEl = document.querySelector('.rsvp-container');
+            if (rsvpEl) rsvpEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // 捲到頁底後 90 秒觸發彈窗（桌機＋手機通用）
         window.addEventListener('scroll', () => {
-            if (window.scrollY < window.innerHeight * 0.3) { document.body.classList.remove('show-bg', 'is-fading'); }
-            else { document.body.classList.add('show-bg', 'is-fading'); }
+            if (window.scrollY < window.innerHeight * 0.3) {
+                document.body.classList.remove('show-bg', 'is-fading');
+            } else {
+                document.body.classList.add('show-bg', 'is-fading');
+            }
+
+            const scrollBottom = window.scrollY + window.innerHeight;
+            const pageHeight = document.documentElement.scrollHeight;
+            const nearBottom = scrollBottom >= pageHeight - 60;
+
+            if (nearBottom && !bottomReached) {
+                bottomReached = true;
+                bottomTimer = setTimeout(showRsvpModal, 90000); // 90 秒
+            }
+            if (!nearBottom && bottomReached) {
+                // 使用者捲回去，重置計時器
+                bottomReached = false;
+                clearTimeout(bottomTimer);
+            }
         });
     </script>
 </body>
