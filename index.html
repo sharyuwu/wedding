@@ -58,6 +58,13 @@
             transition: opacity 1.8s ease-in-out;
         }
         .countdown-wrapper.visible { opacity: 1; }
+        .countdown-title {
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
         .countdown-deco-line {
             display: flex;
             align-items: center;
@@ -226,6 +233,7 @@
 
             <!-- 倒數計時器 -->
             <div class="countdown-wrapper" id="countdownWrapper">
+                <p class="countdown-title">距婚禮還有</p>
                 <div class="countdown-numbers">
                     <div class="countdown-unit-block" id="cdMonthsBlock">
                         <span class="countdown-num" id="cdMonths">--</span>
@@ -248,11 +256,7 @@
                         <span class="countdown-label">seconds</span>
                     </div>
                 </div>
-                <div class="countdown-deco-line" style="margin-top: 12px; margin-bottom: 0;">
-                    <div class="line"></div>
-                    <div class="infinity">∞</div>
-                    <div class="line"></div>
-                </div>
+
             </div>
 
             <div class="spacer-gap"></div>
