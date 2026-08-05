@@ -110,7 +110,7 @@
 
         /* RSVP */
         .rsvp-container { text-align: center; margin-top: 50px; margin-bottom: 80px; width: 100%; display: flex; flex-direction: column; align-items: center; }
-        .rsvp-button { width: 320px; height: 80px; background: url('schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; }
+        .rsvp-button { width: 320px; height: 80px; background: url('../schedule/respond_button.png') no-repeat center / contain; border: none; cursor: pointer; font-family: var(--handwriting); font-size: 1.6rem; color: #5d4a44; display: flex; justify-content: center; align-items: center; }
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.8; letter-spacing: 1px; }
 
         /* 故事區 */
@@ -125,7 +125,7 @@
         .schedule-content-wrapper { width: 95%; max-width: 1100px; background: rgba(255, 255, 255, 0.5); border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(5px); margin: 20px auto; }
         .schedule-main-title { font-size: 2.2rem; letter-spacing: 4px; text-align: center; margin-bottom: 8px; font-weight: 600; color: #4a3a35; }
         .schedule-map-hint { text-align: center; font-size: 0.9rem; color: #9a8070; letter-spacing: 2px; margin-bottom: 50px; opacity: 0.8; }
-        .schedule-grid { display: grid; grid-template-columns: 1fr 100px 1fr; width: 100%; align-items: start; }
+        .schedule-grid { display: grid; grid-template-columns: 1fr; width: 100%; align-items: start; }
         .schedule-column { display: flex; flex-direction: column; gap: 30px; text-align: center; }
         .event-item { display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 30px; width: 100%; }
         .event-text-stack { display: flex; flex-direction: column; align-items: center; flex: none; }
@@ -203,7 +203,7 @@
             .divider-container { flex-direction: row; padding: 40px 0; min-height: auto; width: 100%; justify-content: center; }
             .divider-line { width: 60px; height: 1px; flex-grow: 0; } .divider-ring-img { width: 50px; margin: 0 10px; }
             .event-item { gap: 20px; }
-            .rsvp-button { width: 260px; height: 65px; background-image: url('schedule/respond_button_mobile.png'); }
+            .rsvp-button { width: 260px; height: 65px; background-image: url('../schedule/respond_button_mobile.png'); }
             .rsvp-subtext { font-size: 0.85rem; }
             .quote-container { text-align: center; } .quote-left, .quote-right { text-align: center; }
             .countdown-num { font-size: 1.5rem; }
@@ -223,7 +223,7 @@
     <div class="index-bg-base"></div>
     <div class="fixed-schedule-bg" id="fixedScheduleBg"></div>
 
-    <audio id="bgMusic" src="music/backgroud_music.mp3" preload="none" loop></audio>
+    <audio id="bgMusic" src="../music/backgroud_music.mp3" preload="none" loop></audio>
     <div class="music-toggle" id="musicToggle" onclick="toggleMusic()">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="#a67c52"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
     </div>
@@ -286,21 +286,6 @@
                 <h1 class="hero-title">凱翔與禹萱的婚禮</h1>
                 <p class="hero-date">10.10.2026</p>
 
-                <div class="guide-container">
-                    <div class="guide-item" onclick="handleGuideClick('ceremony', this)">
-                        <div class="guide-img-wrapper"><img src="schedule/main-church.png" class="guide-img"></div>
-                        <span class="view-detail-hint">點擊看行程</span>
-                        <p class="guide-session-label">下午－結婚典禮</p>
-                        <h3>教堂婚禮彌撒</h3><p style="color:var(--accent-gold); font-weight:600;">14 : 30</p>
-                    </div>
-                    <div class="guide-item" onclick="handleGuideClick('banquet', this)">
-                        <div class="guide-img-wrapper"><img src="schedule/main-bouquet.png" class="guide-img"></div>
-                        <span class="view-detail-hint">點擊看行程</span>
-                        <p class="guide-session-label">晚宴－吃飯慶祝</p>
-                        <h3>餐廳婚禮晚宴</h3><p style="color:var(--accent-gold); font-weight:600;">18 : 00</p>
-                    </div>
-                </div>
-
                 <div class="story-section">
                     <div class="quote-container">
                         <p class="hero-quote quote-left">我們沒有拍婚紗，結婚是個紀念</p>
@@ -318,42 +303,25 @@
                                 <h3 class="group-title">結婚典禮</h3>
                                 <div class="location-info-block">
                                     <a href="https://maps.app.goo.gl/pZ5EkuKybRGfa3SGA" target="_blank" rel="noopener noreferrer" class="map-link">
-                                        <img src="schedule/icon_googlemap.png" class="map-pin-icon googlemap-icon">地點：汐止天主堂
+                                        <img src="../schedule/icon_googlemap.png" class="map-pin-icon googlemap-icon">地點：汐止天主堂
                                     </a>
                                     <div class="parking-tip">
                                         <span class="parking-icon">🅿</span>
                                         <span class="parking-text">教堂附設停車場</span>
                                     </div>
                                 </div>
-                                <div class="event-item"><div class="event-text-stack"><p class="event-time">14:30</p><p class="event-name">賓客入場</p><div class="gold-line-divider"></div></div><img src="schedule/icon_church.png" class="event-icon-img"></div>
-                                <div class="event-item"><div class="event-text-stack"><p class="event-time">15:00</p><p class="event-name">典禮開始</p><div class="gold-line-divider"></div></div><img src="schedule/icon_doves.png" class="event-icon-img"></div>
-                                <div class="event-item"><div class="event-text-stack"><p class="event-time">16:00</p><p class="event-name">典禮結束</p><div class="gold-line-divider"></div></div><img src="schedule/icon_cake.png" class="event-icon-img"></div>
+                                <div class="event-item"><div class="event-text-stack"><p class="event-time">14:30</p><p class="event-name">賓客入場</p><div class="gold-line-divider"></div></div><img src="../schedule/icon_church.png" class="event-icon-img"></div>
+                                <div class="event-item"><div class="event-text-stack"><p class="event-time">15:00</p><p class="event-name">典禮開始</p><div class="gold-line-divider"></div></div><img src="../schedule/icon_doves.png" class="event-icon-img"></div>
+                                <div class="event-item"><div class="event-text-stack"><p class="event-time">16:00</p><p class="event-name">典禮結束</p><div class="gold-line-divider"></div></div><img src="../schedule/icon_cake.png" class="event-icon-img"></div>
                             </div>
                         </div>
-                        <div class="divider-container"><div class="divider-line"></div><img src="schedule/icon_ring.png" class="divider-ring-img"><div class="divider-line"></div></div>
-                        <div class="schedule-column">
-                            <div class="event-group">
-                                <h3 class="group-title" id="banquet-title-target">結婚晚宴</h3>
-                                <div class="location-info-block">
-                                    <a href="https://maps.app.goo.gl/Y2XLoLq32WDFCCYK7" target="_blank" rel="noopener noreferrer" class="map-link">
-                                        <img src="schedule/icon_googlemap.png" class="map-pin-icon googlemap-icon">地點：兄弟飯店，桂花廳
-                                    </a>
-                                    <div class="parking-tip">
-                                        <img src="schedule/icon_MRT.png" class="parking-mrt-icon">
-                                        <span class="parking-text">建議搭捷運至南京復興站</span>
-                                    </div>
-                                </div>
-                                <div class="event-item"><div class="event-text-stack"><p class="event-time">18:00</p><p class="event-name">晚宴簽到</p><div class="gold-line-divider"></div></div><img src="schedule/icon_champagne.png" class="event-icon-img"></div>
-                                <div class="event-item"><div class="event-text-stack"><p class="event-time">18:30</p><p class="event-name">晚宴開始</p><div class="gold-line-divider"></div></div><img src="schedule/icon_bouquet.png" class="event-icon-img"></div>
-                                <div class="event-item"><div class="event-text-stack"><p class="event-time">20:30</p><p class="event-name">送客合影</p><div class="gold-line-divider"></div></div><img src="schedule/icon_the_end.png" class="event-icon-img"></div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 
                 <!-- RSVP 移至此處，緊接行程表下方，置中 -->
                 <div class="rsvp-container">
-                    <button class="rsvp-button" onclick="markRsvpClicked(); window.open('https://en-vite-app.com/rsvp/form/96cda071-2998-4fc4-a73c-463775921736?v=1783269723')">回覆出席</button>
+                    <button class="rsvp-button" onclick="markRsvpClicked(); window.open('https://docs.google.com/forms/d/e/1FAIpQLSfRxUm8_-P4gTaEHcQgUXtgki0pdwPU2I23zwjmuOQJphnIEw/viewform')">回覆出席</button>
                     <p class="rsvp-subtext">填寫 Google 表單，統計參加人數</p>
                 </div>
 
@@ -444,13 +412,13 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // 手機版 MRT 圖示切換
+        // 手機版圖示切換
         if (isMobile) {
             document.querySelectorAll('.parking-mrt-icon').forEach(img => {
-                img.src = 'schedule/icon_MRT_mobile.png';
+                img.src = '../schedule/icon_MRT_mobile.png';
             });
             document.querySelectorAll('.googlemap-icon').forEach(img => {
-                img.src = 'schedule/icon_googlemap_mobile.png';
+                img.src = '../schedule/icon_googlemap_mobile.png';
             });
         }
 
@@ -459,15 +427,15 @@
         async function initWaterfall() {
             const s = isMobile ? '_mobile' : '';
             const suffix = isMobile ? '_mobile.png' : '.png';
-            const storyInit = await preloadImage(`story/story_phone_gallery_1${suffix}`);
+            const storyInit = await preloadImage(`../story/story_phone_gallery_1${suffix}`);
             if(storyInit) { storyImgEl.src = storyInit; storyImgEl.style.opacity = 1; }
-            const topImg = await preloadImage(`main-image-layer-top${s}.png`);
+            const topImg = await preloadImage(`../main-image-layer-top${s}.png`);
             if(topImg) document.getElementById('topLayer').style.backgroundImage = `url('${topImg}')`;
-            const midImg = await preloadImage(`main-image-layer-mid${s}.png`);
+            const midImg = await preloadImage(`../main-image-layer-mid${s}.png`);
             if(midImg) document.getElementById('midLayer').style.backgroundImage = `url('${midImg}')`;
-            const baseImg = await preloadImage(`base-background-V1${s}.png`);
+            const baseImg = await preloadImage(`../base-background-V1${s}.png`);
             if(baseImg) document.getElementById('baseLayer').style.backgroundImage = `url('${baseImg}')`;
-            const bgSched = await preloadImage(isMobile ? 'schedule/background_mobile.jpg' : 'schedule/background.jpg');
+            const bgSched = await preloadImage(isMobile ? '../schedule/background_mobile.jpg' : '../schedule/background.jpg');
             if(bgSched) document.getElementById('fixedScheduleBg').style.backgroundImage = `url('${bgSched}')`;
         }
 
@@ -506,7 +474,7 @@
                 setTimeout(async () => {
                     currentPhotoIndex = (currentPhotoIndex % maxPhotos) + 1;
                     const suffix = isMobile ? '_mobile.png' : '.png';
-                    const nextUrl = `story/story_phone_gallery_${currentPhotoIndex}${suffix}`;
+                    const nextUrl = `../story/story_phone_gallery_${currentPhotoIndex}${suffix}`;
                     const loadedUrl = await preloadImage(nextUrl);
                     if(loadedUrl) { storyImgEl.src = loadedUrl; storyImgEl.style.opacity = 1; cycleStoryPhotos(); }
                 }, 1200);
