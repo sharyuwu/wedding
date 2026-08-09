@@ -114,7 +114,7 @@
         .rsvp-subtext { font-size: 1rem; color: #5d4a44; margin-top: 15px; opacity: 0.8; letter-spacing: 1px; }
 
         /* 故事區 */
-        .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 60px 40px; margin-bottom: 80px; backdrop-filter: blur(3px); width: 95%; max-width: 1100px; text-align: center; }
+        .story-section { background: rgba(255, 255, 255, 0.2); border-radius: 40px; padding: 20px 40px 20px; margin-bottom: 80px; backdrop-filter: blur(3px); width: 95%; max-width: 1100px; text-align: center; }
         .quote-container { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; }
         .hero-quote { font-size: 1.3rem; opacity: 0.9; line-height: 1.8; text-shadow: 0 0 10px white; }
         .quote-left { text-align: left; }
@@ -319,20 +319,7 @@
                     </div>
                 </div>
 
-                <!-- RSVP 移至此處，緊接行程表下方，置中 -->
-                <div class="rsvp-container">
-                    <button class="rsvp-button" onclick="markRsvpClicked(); window.open('https://docs.google.com/forms/d/e/1FAIpQLSfRxUm8_-P4gTaEHcQgUXtgki0pdwPU2I23zwjmuOQJphnIEw/viewform')">回覆出席</button>
-                    <p class="rsvp-subtext">填寫 Google 表單，統計參加人數</p>
-                </div>
 
-    <!-- RSVP 提醒彈窗 -->
-    <div id="rsvpModal" style="display:none; position:fixed; inset:0; z-index:2000; background:rgba(0,0,0,0.45); backdrop-filter:blur(4px); justify-content:center; align-items:center;">
-        <div class="modal-card" style="background:#fdfaf7; border-radius:24px; padding:40px 32px; max-width:340px; width:90%; text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.18); font-family:var(--handwriting);">
-            <div style="font-size:2rem; margin-bottom:12px;">💌</div>
-            <p style="font-size:1.2rem; font-weight:600; color:#4a3a35; letter-spacing:2px; margin-bottom:28px;">請記得要填寫回覆出席</p>
-            <button onclick="rsvpModalOk()" style="padding:12px 48px; background:var(--accent-gold); color:white; border:none; border-radius:30px; font-size:1rem; font-family:var(--handwriting); cursor:pointer; letter-spacing:4px;">OK</button>
-        </div>
-    </div>
 
             </div>
         </div>
@@ -491,46 +478,11 @@
         function toggleMusic() { if (bgMusic.paused) { bgMusic.play(); musicToggle.classList.add('rotating'); } else { bgMusic.pause(); musicToggle.classList.remove('rotating'); } }
         function goToSchedule() { document.body.classList.add('is-fading', 'show-bg'); document.getElementById('schedule-section').scrollIntoView({ behavior: 'smooth' }); }
 
-        // --- RSVP 提醒彈窗邏輯 ---
-        let rsvpClicked = false;
-        let bottomTriggered = false;
-
-        function markRsvpClicked() { rsvpClicked = true; }
-
-        function showRsvpModal() {
-            if (rsvpClicked) return;
-            const modal = document.getElementById('rsvpModal');
-            if (!modal) return;
-            modal.style.display = 'flex';
-            // 觸發 reflow 後加上動畫 class
-            requestAnimationFrame(() => {
-                modal.classList.remove('modal-hide');
-                modal.classList.add('modal-show');
-            });
-        }
-
-        function rsvpModalOk() {
-            const modal = document.getElementById('rsvpModal');
-            if (!modal) return;
-            modal.classList.remove('modal-show');
-            modal.classList.add('modal-hide');
-            setTimeout(() => { modal.style.display = 'none'; }, 500);
-        }
-
-        // 第一次捲到頁底立即彈出（桌機＋手機通用）
         window.addEventListener('scroll', () => {
             if (window.scrollY < window.innerHeight * 0.3) {
                 document.body.classList.remove('show-bg', 'is-fading');
             } else {
                 document.body.classList.add('show-bg', 'is-fading');
-            }
-
-            if (bottomTriggered) return;
-            const scrollBottom = window.scrollY + window.innerHeight;
-            const pageHeight = document.documentElement.scrollHeight;
-            if (scrollBottom >= pageHeight - 60) {
-                bottomTriggered = true;
-                showRsvpModal();
             }
         });
     </script>
